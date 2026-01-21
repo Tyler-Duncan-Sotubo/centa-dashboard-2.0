@@ -104,11 +104,11 @@ const isDivider = (i: MenuItem): i is Extract<MenuItem, { type: "divider" }> =>
 // Overloads preserve the union type of your input
 export function withBasePerm(
   menu: readonly MenuItem[],
-  basePerm: string
+  basePerm: string,
 ): MenuItem[];
 export function withBasePerm<M extends MenuItem>(
   menu: readonly M[],
-  basePerm: string
+  basePerm: string,
 ): M[];
 
 // Impl
@@ -120,7 +120,7 @@ export function withBasePerm(menu: readonly MenuItem[], basePerm: string) {
     }
 
     const permissions = Array.from(
-      new Set([...(item.permissions ?? []), basePerm])
+      new Set([...(item.permissions ?? []), basePerm]),
     );
     const subItems = item.subItems
       ? // recurse; input is readonly, return a mutable copy (ok for rendering)
@@ -144,7 +144,7 @@ export function withBasePerm(menu: readonly MenuItem[], basePerm: string) {
  */
 export function filterMenu(
   menu: readonly MenuItem[],
-  userPermissions: readonly string[]
+  userPermissions: readonly string[],
 ): MenuItem[] {
   const filtered = menu
     .map<MenuItem | null>((item) => {
@@ -163,7 +163,7 @@ export function filterMenu(
       // If parent has no link and ends up with no visible, non-divider children, drop it
       if (!item.link) {
         const hasClickableChild = (visibleSubs ?? []).some(
-          (s) => !isDivider(s)
+          (s) => !isDivider(s),
         );
         if (!hasClickableChild) return null;
       }
@@ -275,7 +275,7 @@ export const main: readonly MenuItem[] = [
   {
     title: "Staff",
     icon: <FaUsers size={20} />,
-    link: "/dashboard/employees/onboarding",
+    link: "/dashboard/employees",
     permissions: ["dashboard.login", "employees.manage"],
     subItems: [
       {
