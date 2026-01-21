@@ -76,19 +76,19 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   // Flatten all sub-items with a reference to their parent menu
   const flatSubs = filteredMenu.flatMap(
-    (menu) => menu.subItems?.map((sub) => ({ parent: menu, sub })) ?? []
+    (menu) => menu.subItems?.map((sub) => ({ parent: menu, sub })) ?? [],
   );
 
   // Find all sub-items whose link is a prefix of the current path
   const matches = flatSubs.filter(
     ({ sub }) =>
       sub.link != null &&
-      (pathname === sub.link || pathname.startsWith(sub.link + "/"))
+      (pathname === sub.link || pathname.startsWith(sub.link + "/")),
   );
 
   // Pick the most specific match (longest link)
   const bestMatch = matches.sort(
-    (a, b) => (b.sub.link?.length ?? 0) - (a.sub.link?.length ?? 0)
+    (a, b) => (b.sub.link?.length ?? 0) - (a.sub.link?.length ?? 0),
   )[0];
 
   const activeMenu: MenuItem | null = bestMatch?.parent ?? null;
@@ -110,8 +110,8 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               }
               src={
                 isCollapsed
-                  ? "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757584746/logo-icon_ig26ee.png"
-                  : "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757584747/logo-white_zveolj.png"
+                  ? "https://centa-hr.s3.eu-west-3.amazonaws.com/company-files/55df5e55-f3e0-44c6-a39f-390ef8466d56/9a3be800-ca54-4bf9-a3ed-72b68baf52f7/1768989575869-Centa%20Logo%20DesignArtboard%201%20copy%209@3x.png"
+                  : "https://centa-hr.s3.eu-west-3.amazonaws.com/company-files/55df5e55-f3e0-44c6-a39f-390ef8466d56/9a3be800-ca54-4bf9-a3ed-72b68baf52f7/1768990158119-Centa%20Logo%20DesignArtboard%201%20copy%208@3x.png"
               }
               alt="Company Logo"
               link="/dashboard"
@@ -200,8 +200,8 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                                   ? // Always secondary, ignore hover/active color swaps
                                     "text-monzo-secondary font-medium"
                                   : sub.link === activeSubLink
-                                  ? "text-monzo-monzoGreen font-medium"
-                                  : "hover:bg-monzo-brand"
+                                    ? "text-monzo-monzoGreen font-medium"
+                                    : "hover:bg-monzo-brand"
                               }${isCollapsed ? "mt-3" : ""}
 `}
                             >
@@ -221,7 +221,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
                         {/* ↑↑↑ Added tooltip for submenu items ↑↑↑ */}
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>

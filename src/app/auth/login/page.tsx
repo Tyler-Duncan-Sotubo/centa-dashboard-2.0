@@ -53,7 +53,7 @@ function LoginForm() {
 
     if (data.tempToken) {
       router.push(
-        `/auth/2fa?token=${data.tempToken}&email=${encodeURIComponent(email)}`
+        `/auth/2fa?token=${data.tempToken}&email=${encodeURIComponent(email)}`,
       );
       return;
     }
@@ -134,7 +134,7 @@ function LoginForm() {
             <div className="flex items-center justify-center">
               <ApplicationLogo
                 className="h-16 w-32 ml-2"
-                src="https://res.cloudinary.com/dw1ltt9iz/image/upload/v1760181502/favicon_bp8qfr.svg"
+                src="https://centa-hr.s3.eu-west-3.amazonaws.com/company-files/55df5e55-f3e0-44c6-a39f-390ef8466d56/9a3be800-ca54-4bf9-a3ed-72b68baf52f7/1768990436384-logo-CqG_6WrI.svg"
                 alt="Logo"
               />
             </div>
