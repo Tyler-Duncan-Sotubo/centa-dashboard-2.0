@@ -1,13 +1,13 @@
 "use client";
 
 import { AuditTable } from "./_components/audit.table";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { AuditLog } from "@/types/audit.type";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const AuditPage = () => {
   const { data: session, status } = useSession();
@@ -27,7 +27,7 @@ const AuditPage = () => {
   const { data, isLoading } = useQuery<AuditLog[] | undefined>({
     queryKey: ["audit"],
     queryFn: fetchAudit,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

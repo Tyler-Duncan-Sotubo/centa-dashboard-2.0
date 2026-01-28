@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
 import { useState } from "react";
 import CompetencyModal from "./CompetencyModal";
 import { FaEdit } from "react-icons/fa";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import { Competency } from "@/types/performance/question-competency.type";
 
 type Props = {

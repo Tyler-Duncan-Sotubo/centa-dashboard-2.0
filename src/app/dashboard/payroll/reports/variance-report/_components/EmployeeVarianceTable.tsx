@@ -7,7 +7,7 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import React from "react";
 
 interface EmployeeVarianceRow {
@@ -26,23 +26,26 @@ export default function EmployeeVarianceTable({
   };
 }) {
   const previousDate = data.columns.find((c) =>
-    c.title?.startsWith("Previous")
+    c.title?.startsWith("Previous"),
   )?.field;
   const currentDate = data.columns.find((c) =>
-    c.title?.startsWith("Current")
+    c.title?.startsWith("Current"),
   )?.field;
 
-  const grouped = data.rows.reduce((acc, row) => {
-    const name = row.employee;
-    if (!acc[name]) acc[name] = [];
-    acc[name].push(row);
-    return acc;
-  }, {} as Record<string, EmployeeVarianceRow[]>);
+  const grouped = data.rows.reduce(
+    (acc, row) => {
+      const name = row.employee;
+      if (!acc[name]) acc[name] = [];
+      acc[name].push(row);
+      return acc;
+    },
+    {} as Record<string, EmployeeVarianceRow[]>,
+  );
 
   return (
     <div className="my-8">
       <h2 className="text-xl font-semibold mb-4">Employee Payroll Variance</h2>
-      <Table className="text-md border shadow-sm rounded-md">
+      <Table className="text-md border shadow-2xs rounded-md">
         <TableHeader className="bg-monzo-primary">
           <TableRow>
             <TableHead />

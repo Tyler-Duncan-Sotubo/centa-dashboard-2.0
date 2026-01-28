@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -14,29 +14,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import { LocationModal } from "@/components/LocationModal";
-import { PayGroupModal } from "@/components/PayGroupModal";
-import { Input } from "@/components/ui/input";
+import { LocationModal } from "@/features/company/offices/ui/LocationModal";
+import { PayGroupModal } from "@/features/payroll/settings/pay-group/ui/PayGroupModal";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import DepartmentModal from "@/app/dashboard/company/departments/_components/DepartmentModal";
-import JobRoleModal from "@/app/dashboard/company/job-roles/_components/JobRoleModal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+} from "@/shared/ui/select";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { FaUserCheck } from "react-icons/fa6";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { CostCenterModal } from "@/app/dashboard/payroll/settings/cost-centers/_components/CostCenterModal";
-import { DateInput } from "@/components/ui/date-input";
+import { DateInput } from "@/shared/ui/date-input";
+import DepartmentModal from "@/features/company/departments/ui/DepartmentModal";
+import JobRoleModal from "@/features/company/job-roles/ui/JobRoleModal";
 
 export const employeeProfile = z.object({
   employeeNumber: z.string().min(1),
@@ -97,7 +97,7 @@ export const SendOnboardingInviteSheet = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["company-elements"],
     queryFn: fetchCompanyElements,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: !!session?.backendTokens?.accessToken,
   });
 
   const createEmployeeId = useCreateMutation({
@@ -202,12 +202,12 @@ export const SendOnboardingInviteSheet = () => {
                           id: string;
                           name: string;
                         },
-                        index: number
+                        index: number,
                       ) => (
                         <SelectItem key={index} value={role.id}>
                           {role.name}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>
@@ -237,7 +237,7 @@ export const SendOnboardingInviteSheet = () => {
                           } catch (error) {
                             console.error(
                               "Failed to generate employee number:",
-                              error
+                              error,
                             );
                           }
                         }}
@@ -313,7 +313,7 @@ export const SendOnboardingInviteSheet = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {data.roles
-                          .filter((role: { name: string }) => {
+                          ?.filter((role: { name: string }) => {
                             return (
                               role.name !== "super_admin" &&
                               role.name !== "admin"
@@ -331,11 +331,11 @@ export const SendOnboardingInviteSheet = () => {
                                   .map(
                                     (word) =>
                                       word.charAt(0).toUpperCase() +
-                                      word.slice(1)
+                                      word.slice(1),
                                   )
                                   .join(" ")}
                               </SelectItem>
-                            )
+                            ),
                           )}
                       </SelectContent>
                     </Select>
@@ -364,12 +364,12 @@ export const SendOnboardingInviteSheet = () => {
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={department.id}>
                               {department.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -399,12 +399,12 @@ export const SendOnboardingInviteSheet = () => {
                               id: string;
                               title: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={role.id}>
                               {role.title}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -434,12 +434,12 @@ export const SendOnboardingInviteSheet = () => {
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={group.id}>
                               {group.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -469,12 +469,12 @@ export const SendOnboardingInviteSheet = () => {
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={group.id}>
                               {group.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -504,12 +504,12 @@ export const SendOnboardingInviteSheet = () => {
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={role.id}>
                               {role.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>

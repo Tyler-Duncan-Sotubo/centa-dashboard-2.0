@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/shared/ui/badge";
+import { Progress } from "@/shared/ui/progress";
 import { Goal } from "@/types/performance/goals.type";
 import Image from "next/image";
 
@@ -10,7 +10,7 @@ export default function EmployeeCard({ goal }: { goal: Goal }) {
   const progress = goal.updates?.[0]?.progress ?? 0;
 
   return (
-    <div className="border rounded-lg p-5 bg-white shadow-sm flex justify-between">
+    <div className="border rounded-lg p-5 bg-white shadow-2xs flex justify-between">
       <div>
         <div className="flex items-center gap-4">
           {/* Avatar */}
@@ -47,8 +47,8 @@ export default function EmployeeCard({ goal }: { goal: Goal }) {
           {progress < 100 && goal.status === "active"
             ? `In Progress`
             : goal.status === "draft"
-            ? "Draft"
-            : "Completed"}
+              ? "Draft"
+              : "Completed"}
         </Badge>
         <div className="space-y-4 mt-4 text-center bg-gray-100 p-4 rounded-lg">
           <h2>Progress</h2>

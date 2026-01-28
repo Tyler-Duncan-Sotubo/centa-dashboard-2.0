@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { Eye } from "lucide-react";
 import { OfferTemplatesResponse } from "@/types/offer.type";
 import { FaCirclePlus, FaClone, FaGlobe, FaTrash } from "react-icons/fa6";
@@ -19,15 +19,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+} from "@/shared/ui/alert-dialog";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 import { FaBuilding } from "react-icons/fa";
 import { OfferTemplatePreviewModal } from "../offers/_components/OfferTemplatePreviewModal";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 
 export default function OfferLetterTemplates() {
   const { data: session } = useSession();
@@ -45,7 +45,7 @@ export default function OfferLetterTemplates() {
   const { data, isLoading, isError } = useQuery<OfferTemplatesResponse>({
     queryKey: ["offer-letter-templates"],
     queryFn: fetchTemplates,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   /* --- Clone system template → company template --- */
@@ -170,7 +170,9 @@ export default function OfferLetterTemplates() {
                       </p>
                     </div>
                     <Badge
-                      variant={tpl.isSystemTemplate ? "completed" : "outline"}
+                      variant={
+                        tpl.isSystemTemplate ? "completed" : "outline"
+                      }
                     >
                       <FaBuilding className="mr-1" />
                       {tpl.isSystemTemplate ? "System" : "Company"}

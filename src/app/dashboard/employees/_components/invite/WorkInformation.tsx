@@ -4,24 +4,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { Department, EmployeeGroup } from "@/types/employees.type";
 import React from "react";
 import { FormType } from "./EmployeeInvite";
 import { JobRole } from "@/types/job-roles.type";
-import { Button } from "@/components/ui/button";
-import JobRoleModal from "@/app/dashboard/company/job-roles/_components/JobRoleModal";
-import DepartmentModal from "@/app/dashboard/company/departments/_components/DepartmentModal";
-import { PayGroupModal } from "@/components/PayGroupModal";
-import { LocationModal } from "@/components/LocationModal";
+import { Button } from "@/shared/ui/button";
+import { PayGroupModal } from "@/features/payroll/settings/pay-group/ui/PayGroupModal";
+import { LocationModal } from "@/features/company/offices/ui/LocationModal";
+import JobRoleModal from "@/features/company/job-roles/ui/JobRoleModal";
+import DepartmentModal from "@/features/company/departments/ui/DepartmentModal";
 
 export const WorkInformation = ({
   form,

@@ -8,16 +8,16 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Button } from "@/shared/ui/button";
+import { Separator } from "@/shared/ui/separator";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileUploader } from "@/components/common/FileUploader";
-import FormError from "@/components/ui/form-error";
+import { FileUploader } from "@/shared/ui/file-uploader";
+import FormError from "@/shared/ui/form-error";
 
 function generateSchema(fields: any[], questions: any[]) {
   const shape: Record<string, any> = {};
@@ -98,10 +98,10 @@ export function ApplicationForm({ data, onSubmit, error }: Props) {
               {field.label === "Skills"
                 ? "Skills (enter multiple skills separated by commas)"
                 : field.label === "Resume/CV"
-                ? "Resume/CV (PDF only)"
-                : field.label === "Cover Letter"
-                ? "Cover Letter (PDF only, optional)"
-                : field.label}
+                  ? "Resume/CV (PDF only)"
+                  : field.label === "Cover Letter"
+                    ? "Cover Letter (PDF only, optional)"
+                    : field.label}
             </FormLabel>
             <FormControl>
               {field.fieldType === "textarea" ? (

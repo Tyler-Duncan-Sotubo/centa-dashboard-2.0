@@ -2,15 +2,15 @@
 
 import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
-import { DataTable } from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
+import Loading from "@/shared/ui/loading";
+import { DataTable } from "@/shared/ui/data-table";
+import { Button } from "@/shared/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import { ReportFilters } from "../_components/ReportFilters";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -83,7 +83,7 @@ export default function GoalReportPage() {
       }) =>
         row.employeeName?.toLowerCase().includes(q) ||
         row.jobRoleName?.toLowerCase().includes(q) ||
-        row.departmentName?.toLowerCase().includes(q)
+        row.departmentName?.toLowerCase().includes(q),
     );
   }, [report, filters.search]);
 

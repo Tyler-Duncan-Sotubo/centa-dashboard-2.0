@@ -6,34 +6,34 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Mustache from "mustache";
-import { RichTextEditor } from "@/components/RichTextEditor";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { useSession } from "next-auth/react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import Link from "next/link";
-import { OFFER_LETTER_VARIABLES } from "@/constants/offerLetterVariables";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
-import RenderHtml from "@/components/ui/render-html";
+import { OFFER_LETTER_VARIABLES } from "@/shared/constants/offerLetterVariables";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
+import RenderHtml from "@/shared/ui/render-html";
 import { buildTemplatePreviewData } from "../../offers/_components/buildTemplatePreviewData";
 
 const templateSchema = z
@@ -43,7 +43,7 @@ const templateSchema = z
   })
   .superRefine((val, ctx) => {
     const usedVars = Array.from(val.content.matchAll(/{{\s*(.*?)\s*}}/g)).map(
-      ([, varName]) => varName
+      ([, varName]) => varName,
     );
 
     const allowed = new Set<string>(OFFER_LETTER_VARIABLES);
@@ -65,7 +65,7 @@ export default function OfferTemplateEditPage() {
   const { data: session } = useSession();
   const axiosInstance = useAxiosAuth();
   const [activeTab, setActiveTab] = useState<"create" | "preview" | "raw">(
-    "create"
+    "create",
   );
 
   const form = useForm({
@@ -92,11 +92,11 @@ export default function OfferTemplateEditPage() {
     queryKey: ["offer-template", templateId],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/api/offer-letter/template/${templateId}`
+        `/api/offer-letter/template/${templateId}`,
       );
       return res.data.data;
     },
-    enabled: !!templateId && !!session?.backendTokens.accessToken,
+    enabled: !!templateId && Boolean(session?.backendTokens?.accessToken),
   });
 
   useEffect(() => {
@@ -168,8 +168,7 @@ export default function OfferTemplateEditPage() {
                       <FormItem>
                         <FormLabel>Body</FormLabel>
                         <RichTextEditor
-                          key={form.watch("content")} // forces re-render when value changes
-                          value={field.value}
+                          value={field.value ?? ""}
                           onChange={field.onChange}
                         />
                         <FormMessage />

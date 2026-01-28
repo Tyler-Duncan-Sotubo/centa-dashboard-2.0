@@ -2,26 +2,26 @@
 
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
+import { Form } from "@/shared/ui/form";
 import { employeeProfileUpdateSchema } from "@/schema/employee";
-import FormError from "@/components/ui/form-error";
+import FormError from "@/shared/ui/form-error";
 import { useEffect, useState } from "react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { z } from "zod";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import BasicInformation from "./BasicInformation";
 import { WorkInformation } from "./WorkInformation";
 import { PersonalInformation } from "./PersonalInformation";
 import FinancialInformation from "./FinancialInformation";
 import DependentsForm from "./DependentsForm";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { EmployeeALL } from "@/types/employees.type";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 // Modified to support both create and edit
 type EmployeeModalProps = {
@@ -86,7 +86,7 @@ export const EmployeeModal = ({ employee }: EmployeeModalProps) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["company-elements"],
     queryFn: fetchCompanyElements,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const createEmployee = useCreateMutation({
@@ -110,7 +110,7 @@ export const EmployeeModal = ({ employee }: EmployeeModalProps) => {
   });
 
   const onSubmit = async (
-    values: z.infer<typeof employeeProfileUpdateSchema>
+    values: z.infer<typeof employeeProfileUpdateSchema>,
   ) => {
     setError(""); // Reset error before submitting
     if (employee) {

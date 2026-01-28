@@ -4,24 +4,24 @@ import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch"; // Add this import
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+} from "@/shared/ui/select";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import { Switch } from "@/shared/ui/switch"; // Add this import
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { Competency } from "@/types/performance/question-competency.type";
 
 const questionSchema = z.object({
@@ -104,7 +104,7 @@ export default function QuestionModal({
       const res = await axios.get("/api/performance-seed/only-competencies");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

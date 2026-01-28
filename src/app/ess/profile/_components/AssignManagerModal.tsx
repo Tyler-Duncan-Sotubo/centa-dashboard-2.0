@@ -5,27 +5,27 @@ import { useForm } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/select";
+import FormError from "@/shared/ui/form-error";
 import { Employee } from "@/types/employees.type";
-import Loading from "@/components/ui/loading";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import Loading from "@/shared/ui/loading";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export const managerSchema = z.object({
   managerId: z.string().min(0).optional(),
@@ -56,7 +56,7 @@ const AssignMangerModal = ({
   const fetchEmployees = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/employees/company-managers/all"
+        "/api/employees/company-managers/all",
       );
       return res.data.data;
     } catch (error) {

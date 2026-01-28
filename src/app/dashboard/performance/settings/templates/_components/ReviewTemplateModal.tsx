@@ -5,21 +5,21 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
 import {
   Form,
   FormDescription,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+} from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { ReviewTemplate } from "./PerformanceTemplates";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/shared/ui/checkbox";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -29,7 +29,7 @@ import {
   AlertDialogDescription,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -249,7 +249,7 @@ export default function ReviewTemplateModal({
               onClick={() => {
                 if (newId)
                   router.push(
-                    `/dashboard/performance/settings/templates/${newId}`
+                    `/dashboard/performance/settings/templates/${newId}`,
                   );
                 setConfirmRedirect(false);
               }}

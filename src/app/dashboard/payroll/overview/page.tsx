@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { OverviewCards } from "@/components/common/cards/dashboard.card";
-import { Bars } from "@/components/common/charts/bar";
+import { OverviewCards } from "@/features/payroll/core/ui/dashboard.card";
 import { PayrollDashboard } from "@/types/payroll.type";
-import Loading from "@/components/ui/loading";
-import { Button } from "@/components/ui/button";
+import Loading from "@/shared/ui/loading";
+import { Button } from "@/shared/ui/button";
 import { CalendarDays, FileText, UserPlus } from "lucide-react";
 import { format, formatDate, parse, subMonths } from "date-fns";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import { YtdSummary } from "@/components/common/cards/YtdSummary";
-import PageHeader from "@/components/pageHeader";
+import { YtdSummary } from "@/features/payroll/core/ui/YtdSummary";
+import PageHeader from "@/shared/ui/page-header";
 import { PiExportBold } from "react-icons/pi";
 import {
   Select,
@@ -21,11 +20,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { FaCalendarAlt } from "react-icons/fa";
-import AnnouncementBanner from "@/components/common/AnnouncementBanner";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import AnnouncementBanner from "@/features/home/dashboard/AnnouncementBanner";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
+import Bars from "@/features/payroll/core/ui/bar";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   const now = new Date();
   const defaultMonth = `${now.getFullYear()}-${String(
-    now.getMonth() + 1
+    now.getMonth() + 1,
   ).padStart(2, "0")}`;
   const [selectedMonth, setSelectedMonth] = useState<string>(defaultMonth);
   const [allRuns, setAllRuns] = useState<PayrollDashboard["runSummaries"]>([]);
@@ -47,7 +47,7 @@ const Dashboard = () => {
         "/api/payroll-report/company-payroll",
         {
           params: month ? { month } : {},
-        }
+        },
       );
       return res.data.data;
     } catch (error) {
@@ -96,7 +96,7 @@ const Dashboard = () => {
     if (dashboard) {
       setAllRuns(dashboard.runSummaries);
       setMonthlyRuns(
-        dashboard.runSummaries.filter((r) => r.payrollMonth === defaultMonth)
+        dashboard.runSummaries.filter((r) => r.payrollMonth === defaultMonth),
       );
     }
   }, [dashboard, defaultMonth]);
@@ -111,14 +111,14 @@ const Dashboard = () => {
   if (isError || isErrorNextPayDate) return <p>Error fetching data</p>;
 
   const recentMonths = Array.from({ length: 12 }, (_, i) =>
-    format(subMonths(new Date(), i), "yyyy-MM")
+    format(subMonths(new Date(), i), "yyyy-MM"),
   );
 
   const allMonths = Array.from(
     new Set([
       ...recentMonths,
       ...(dashboard?.runSummaries?.map((r) => r.payrollMonth) || []),
-    ])
+    ]),
   ).sort((a, b) => b.localeCompare(a)); // Deduplicate and sort
 
   return (
@@ -146,7 +146,7 @@ const Dashboard = () => {
             value={selectedMonth}
             onValueChange={(val) => setSelectedMonth(val)}
           >
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-50">
               <FaCalendarAlt className="mr-2" size={20} />
               <SelectValue placeholder="Select month" />
             </SelectTrigger>
@@ -154,7 +154,7 @@ const Dashboard = () => {
               {allMonths.map((m) => {
                 const label = format(
                   parse(m, "yyyy-MM", new Date()),
-                  "MMMM yyyy"
+                  "MMMM yyyy",
                 );
                 return (
                   <SelectItem key={m} value={m}>
@@ -172,12 +172,12 @@ const Dashboard = () => {
 
         <p className="p-2 text-xl font-bold">Payroll Cost Overview</p>
 
-        <section className="md:flex my-6 md:space-x-4">
+        <section className="md:flex my-6 md:space-x-4 gap-4">
           <div className="md:w-[35%] flex flex-col space-y-4 gap-4 md:mt-0 mt-10 mx-auto">
             {/* Pay Date */}
             <section className="space-y-4">
               <section className="flex text-sm space-x-4">
-                <div className="rounded-xl shadow-xs border border-background w-full p-2">
+                <div className="rounded-xl shadow-2xs border border-background w-full p-2">
                   <p className="text-textSecondary">Next Pay Day</p>
                   <p className="font-semibold">
                     {nextPayDate && !isNaN(new Date(nextPayDate).getTime())
@@ -185,28 +185,28 @@ const Dashboard = () => {
                       : "N/A"}
                   </p>
                 </div>
-                <div className="rounded-xl shadow-xs border border-background w-full p-2">
+                <div className="rounded-xl shadow-2xs border border-background w-full p-2">
                   <p className="text-textSecondary">Status</p>
                   <p className="font-semibold text-brand">Scheduled</p>
                 </div>
               </section>
 
               <section className="flex text-sm space-x-4">
-                <div className="rounded-xl shadow-xs border border-background w-full p-2">
+                <div className="rounded-xl shadow-2xs border border-background w-full p-2">
                   <p className="text-textSecondary">Total Employees</p>
                   <p className="font-semibold ">{dashboard?.headcount}</p>
                 </div>
-                <div className="rounded-xl shadow-xs border border-background w-full p-2">
+                <div className="rounded-xl shadow-2xs border border-background w-full p-2">
                   <p className="text-textSecondary">Tax File Date</p>
                   <p className="font-semibold ">
                     {nextPayDate && !isNaN(new Date(nextPayDate).getTime())
                       ? formatDate(
                           new Date(
                             new Date(nextPayDate).setDate(
-                              new Date(nextPayDate).getDate() + 10
-                            )
+                              new Date(nextPayDate).getDate() + 10,
+                            ),
                           ),
-                          "dd MMMM yyyy"
+                          "dd MMMM yyyy",
                         )
                       : "N/A"}
                   </p>
@@ -244,7 +244,7 @@ const Dashboard = () => {
               </div>
             </section>
           </div>
-          <div className="rounded-xl shadow-xs border border-background md:w-[65%] md:p-4">
+          <div className="rounded-xl shadow-2xs border border-background md:w-[65%] md:p-4 ">
             <Bars runSummaries={dashboard?.runSummaries} />
           </div>
         </section>

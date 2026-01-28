@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { FaClone, FaGlobe } from "react-icons/fa6";
 
 interface TemplateSummary {

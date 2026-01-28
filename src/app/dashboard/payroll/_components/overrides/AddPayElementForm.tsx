@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormControl,
@@ -11,21 +11,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+} from "@/shared/ui/form";
+import { Textarea } from "@/shared/ui/textarea";
+import { Switch } from "@/shared/ui/switch";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import FormError from "@/components/ui/form-error";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import { Button } from "@/shared/ui/button";
+import FormError from "@/shared/ui/form-error";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 const payElementConfigs = [
   {
@@ -158,7 +158,7 @@ export default function AddPayElementForm({
         recurring: values.recurring,
       },
       setError,
-      form.reset
+      form.reset,
     );
   };
 
@@ -194,7 +194,7 @@ export default function AddPayElementForm({
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select element type" />
                 </SelectTrigger>
-                <SelectContent className="z-[100]">
+                <SelectContent className="z-100">
                   {payElementConfigs.map((config) => (
                     <SelectItem key={config.type} value={config.type}>
                       {config.label}

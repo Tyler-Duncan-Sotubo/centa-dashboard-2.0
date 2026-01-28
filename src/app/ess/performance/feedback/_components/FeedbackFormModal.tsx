@@ -3,14 +3,14 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
+import Modal from "@/shared/ui/modal";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Form,
   FormControl,
@@ -18,14 +18,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+} from "@/shared/ui/form";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import DynamicFeedbackForm from "./DynamicFeedbackForm";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 import { FaLock } from "react-icons/fa6";
 import { useState } from "react";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
-import { useToast } from "@/hooks/use-toast";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
+import { useToast } from "@/shared/hooks/use-toast";
 
 // Schema matching your DTO
 const feedbackSchema = z.object({
@@ -65,7 +65,7 @@ export default function FeedbackFormModal({ open, setOpen, type }: Props) {
       ([questionId, answer]) => ({
         questionId,
         answer,
-      })
+      }),
     );
 
     if (formattedResponses.length === 0) {

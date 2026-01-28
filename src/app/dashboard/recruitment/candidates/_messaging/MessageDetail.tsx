@@ -1,7 +1,7 @@
 import { Message } from "./thread.type";
-import { Separator } from "@/components/ui/separator";
-import { formatDateHumanReadable } from "@/utils/formatDateHumanReadable";
-import { Avatars } from "@/components/avatars";
+import { Separator } from "@/shared/ui/separator";
+import { formatDateHumanReadable } from "@/shared/utils/formatDateHumanReadable";
+import { Avatars } from "@/shared/ui/avatars";
 
 interface MessageDetailProps {
   message: Message;
@@ -43,7 +43,7 @@ export default function MessageDetail({ message }: MessageDetailProps) {
           border-gray-200
           rounded-lg
           p-4
-          shadow-sm
+          shadow-2xs
           overflow-auto
         "
       >

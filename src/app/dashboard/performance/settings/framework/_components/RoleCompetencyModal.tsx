@@ -4,22 +4,22 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@/components/ui/label";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Label } from "@/shared/ui/label";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import Modal from "@/components/ui/modal";
+} from "@/shared/ui/select";
+import Modal from "@/shared/ui/modal";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 const schema = z.object({
   competencyId: z.string().uuid({ message: "Required" }),
@@ -83,7 +83,7 @@ export default function RoleCompetencyModal({
       const res = await axios.get("/api/performance-seed/framework-fields");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && open,
+    enabled: Boolean(session?.backendTokens?.accessToken) && open,
   });
 
   const onSubmit = async (data: ExpectationFormInput) => {
@@ -138,7 +138,7 @@ export default function RoleCompetencyModal({
                         <SelectItem key={c.id} value={c.id}>
                           {c.name}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>
@@ -163,7 +163,7 @@ export default function RoleCompetencyModal({
                         <SelectItem key={lvl.id} value={lvl.id}>
                           {lvl.name}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>

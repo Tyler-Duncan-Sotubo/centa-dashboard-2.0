@@ -13,9 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   Table,
   TableBody,
@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { format, parseISO } from "date-fns";
 import {
   Select,
@@ -31,9 +31,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/select";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { Badge } from "@/shared/ui/badge";
 import { EmployeeDetail } from "@/types/payRunDetails";
 
 export const columns: ColumnDef<EmployeeDetail>[] = [
@@ -111,8 +111,8 @@ export const columns: ColumnDef<EmployeeDetail>[] = [
               status === "approved"
                 ? "approved"
                 : status === "rejected"
-                ? "rejected"
-                : "pending"
+                  ? "rejected"
+                  : "pending"
             }
             className="capitalize"
           >
@@ -131,7 +131,7 @@ export function EmployeeSalaryBreakdown({
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -148,7 +148,7 @@ export function EmployeeSalaryBreakdown({
   // Optimize dropdown options by caching unique months
   const availableMonths = React.useMemo(() => {
     const months = new Set(
-      data.map((entry) => format(parseISO(entry.payrollMonth), "yyyy-MM"))
+      data.map((entry) => format(parseISO(entry.payrollMonth), "yyyy-MM")),
     );
     return Array.from(months);
   }, [data]);
@@ -157,9 +157,9 @@ export function EmployeeSalaryBreakdown({
   const filteredData = React.useMemo(
     () =>
       data.filter(
-        (entry) => format(entry.payrollMonth, "yyyy-MM") === monthFilter
+        (entry) => format(entry.payrollMonth, "yyyy-MM") === monthFilter,
       ),
-    [data, monthFilter]
+    [data, monthFilter],
   );
 
   const table = useReactTable({
@@ -229,7 +229,7 @@ export function EmployeeSalaryBreakdown({
                   <TableHead key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableHead>
                 ))}
@@ -247,7 +247,7 @@ export function EmployeeSalaryBreakdown({
                     <TableCell key={cell.id} className="py-5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

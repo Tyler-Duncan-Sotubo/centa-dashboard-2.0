@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { OffCycleType } from "./PayrollOffCyclePicker";
 import {
   AlertDialog,
@@ -19,10 +19,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/alert-dialog";
+import { Button } from "@/shared/ui/button";
 import { Trash2 } from "lucide-react";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 import { useEffect } from "react";
 
 export function OffCyclePayrollTable({
@@ -60,12 +60,12 @@ export function OffCyclePayrollTable({
           try {
             const parsed = JSON.parse(stored);
             const updated = parsed.filter(
-              (entry: { id: string }) => entry.id !== id
+              (entry: { id: string }) => entry.id !== id,
             );
             if (updated.length > 0) {
               localStorage.setItem(
                 "offCycleEmployees",
-                JSON.stringify(updated)
+                JSON.stringify(updated),
               );
             } else {
               localStorage.removeItem("offCycleEmployees");
@@ -105,7 +105,7 @@ export function OffCyclePayrollTable({
   }
 
   return (
-    <div className="rounded-lg border shadow-sm mt-6">
+    <div className="rounded-lg border shadow-2xs mt-6">
       <Table>
         <TableHeader className="bg-sidebar text-md">
           <TableRow>

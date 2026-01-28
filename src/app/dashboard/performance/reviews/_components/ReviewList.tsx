@@ -1,13 +1,13 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { DataTable } from "@/shared/ui/data-table";
+import { StatusBadge } from "@/shared/ui/status-badge";
 import { Review } from "@/types/performance/review.type";
 import { format } from "date-fns";
 import { FaCheck } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import Link from "next/link";
 import AssessmentModal from "./AssessmentModal";
 import { FaEye } from "react-icons/fa6";

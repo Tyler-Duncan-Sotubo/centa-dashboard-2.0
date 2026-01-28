@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import RoleList from "../framework/_components/RoleList";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import { JobRole } from "@/types/job-roles.type";
 import RoleCompetencyModal from "./_components/RoleCompetencyModal";
 import { Expectation } from "@/types/performance/framework.type";

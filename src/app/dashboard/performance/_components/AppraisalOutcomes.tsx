@@ -7,15 +7,15 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
-import { COLORS } from "@/utils/colors";
+import { COLORS } from "@/shared/utils/colors";
 
 interface AppraisalOutcomesProps {
   avgScore: number;

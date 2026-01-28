@@ -1,7 +1,7 @@
-import Modal from "@/components/ui/modal";
-import { Slider } from "@/components/ui/slider";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import Modal from "@/shared/ui/modal";
+import { Slider } from "@/shared/ui/slider";
+import { Textarea } from "@/shared/ui/textarea";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useForm } from "react-hook-form";
 
 interface ProgressModalProps {
@@ -19,7 +19,7 @@ export function ProgressModal({ isOpen, onClose, goalId }: ProgressModalProps) {
   const { register, handleSubmit, setValue, watch } = useForm<ProgressFormData>(
     {
       defaultValues: { progress: 0, note: "" },
-    }
+    },
   );
 
   const progress = watch("progress");

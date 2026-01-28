@@ -1,11 +1,11 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronsUpDown } from "lucide-react";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { Avatars } from "@/components/avatars";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { Avatars } from "@/shared/ui/avatars";
 
 export interface ReimbursementRow {
   id: string;
@@ -81,10 +81,10 @@ export const ReimbursementColumns: ColumnDef<ReimbursementRow>[] = [
           row.original.status === "paid"
             ? "approved"
             : row.original.status === "rejected"
-            ? "rejected"
-            : row.original.status === "pending"
-            ? "pending"
-            : "ongoing"
+              ? "rejected"
+              : row.original.status === "pending"
+                ? "pending"
+                : "ongoing"
         }
       >
         {row.original.status}

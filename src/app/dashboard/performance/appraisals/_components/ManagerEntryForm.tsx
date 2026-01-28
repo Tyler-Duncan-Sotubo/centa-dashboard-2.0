@@ -7,19 +7,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/select";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import { AppraisalEntry } from "@/types/performance/appraisal.type";
 import { useState } from "react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 
 interface Props {
   entries: AppraisalEntry[];
@@ -37,7 +37,7 @@ export default function ManagerEntryForm({
       ...entry,
       managerLevelId: entry.managerLevelId ?? "",
       notes: entry.notes ?? "",
-    }))
+    })),
   );
 
   const [isLoading, setIsLoading] = useState(false);
@@ -45,12 +45,12 @@ export default function ManagerEntryForm({
   const handleChange = (
     id: string,
     field: keyof Pick<AppraisalEntry, "managerLevelId" | "notes">,
-    value: string
+    value: string,
   ) => {
     setFormData((prev) =>
       prev.map((entry) =>
-        entry.competencyId === id ? { ...entry, [field]: value } : entry
-      )
+        entry.competencyId === id ? { ...entry, [field]: value } : entry,
+      ),
     );
   };
 
@@ -104,7 +104,7 @@ export default function ManagerEntryForm({
                           handleChange(
                             entry.competencyId,
                             "managerLevelId",
-                            val
+                            val,
                           )
                         }
                       >
@@ -128,7 +128,7 @@ export default function ManagerEntryForm({
                           handleChange(
                             entry.competencyId,
                             "notes",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       />

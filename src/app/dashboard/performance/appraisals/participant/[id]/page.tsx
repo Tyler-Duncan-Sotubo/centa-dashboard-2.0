@@ -1,15 +1,15 @@
 "use client";
 
-import BackButton from "@/components/ui/back-button";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import BackButton from "@/shared/ui/back-button";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { use, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { FaUser, FaUserTie } from "react-icons/fa";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import ManagerAssignmentModal from "../../_components/ManagerAssignmentModal";
 import { MdAssignmentAdd } from "react-icons/md";
 import EntryForm from "../../_components/EmployeeEntryForm";
@@ -19,12 +19,12 @@ import CompletedAppraisalResult from "../../_components/CompletedAppraisalResult
 import { FaBriefcase, FaBuilding } from "react-icons/fa6";
 import { RestartAppraisalButton } from "../../_components/RestartAppraisalButton";
 
-interface PageProps {
-  params: { id: string };
-}
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
 
 export default function ParticipantsPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = use(params);
   const { data: session, status } = useSession();
   const role = session?.user?.role;
   const axios = useAxiosAuth();
@@ -60,7 +60,7 @@ export default function ParticipantsPage({ params }: PageProps) {
       const res = await axios.get("/api/performance-seed/competency-levels");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading || isLoadingEntries || isLoadingLevels)

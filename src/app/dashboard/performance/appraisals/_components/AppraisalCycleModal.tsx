@@ -1,20 +1,20 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { DateInput } from "@/components/ui/date-input";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { DateInput } from "@/shared/ui/date-input";
 import { useEffect } from "react";
 import {
   Select,
@@ -22,7 +22,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { AppraisalCycle } from "@/types/performance/appraisal.type";
 
 const schema = z.object({

@@ -1,5 +1,4 @@
-import React from "react";
-import BlockedDays from "./BlockedDays";
+import BlockedDays from "@/features/leave/settings/blocked-days/BlockedDays";
 
 const page = () => {
   return (

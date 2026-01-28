@@ -2,15 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/DataTable";
+import { Button } from "@/shared/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
 import { FaEdit } from "react-icons/fa";
 // import { DeleteIconDialog } from "@/components/DeleteIconDialog";
 import { format } from "date-fns";
 import AppraisalCycleModal from "./AppraisalCycleModal";
 import { AppraisalCycle } from "@/types/performance/appraisal.type";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { StatusBadge } from "@/shared/ui/status-badge";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import Link from "next/link";
 
 export default function AppraisalCycleList({
@@ -87,7 +87,7 @@ export default function AppraisalCycleList({
         ),
       },
     ],
-    []
+    [],
   );
 
   return (

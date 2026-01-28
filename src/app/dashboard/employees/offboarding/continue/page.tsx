@@ -7,18 +7,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Button } from "@/components/ui/button";
-import Loading from "@/components/ui/loading";
-import FormError from "@/components/ui/form-error";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Button } from "@/shared/ui/button";
+import Loading from "@/shared/ui/loading";
+import FormError from "@/shared/ui/form-error";
 import { useRouter } from "next/navigation";
 import { IoLogOutOutline } from "react-icons/io5";
 
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { format, parseISO } from "date-fns";
-import { Separator } from "@/components/ui/separator";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Separator } from "@/shared/ui/separator";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 
@@ -93,7 +93,7 @@ const ContinueOffboardingPage = () => {
     queryFn: async () => {
       if (!employeeId) return null;
       const res = await axiosInstance.get(
-        `/api/offboarding/employee/${employeeId}`
+        `/api/offboarding/employee/${employeeId}`,
       );
       return res.data.data as SessionResponse;
     },
@@ -240,7 +240,7 @@ const ContinueOffboardingPage = () => {
                           )}
                         </div>
                       </label>
-                    )
+                    ),
                   )}
                 </div>
                 <FormMessage />

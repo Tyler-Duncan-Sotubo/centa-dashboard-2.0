@@ -1,4 +1,4 @@
-import JobRoles from "./_components/JobRoles";
+import JobRoles from "@/features/company/job-roles/ui/JobRoles";
 
 const JobRolesPage = () => {
   return <JobRoles />;

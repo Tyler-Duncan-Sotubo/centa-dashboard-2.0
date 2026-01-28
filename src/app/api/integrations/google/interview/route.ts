@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   // Fetch user's Google account info
   const res = await axiosInstance.get(`/api/google`, {
     headers: {
-      Authorization: `Bearer ${session.backendTokens.accessToken}`,
+      Authorization: `Bearer ${session.backendTokens?.accessToken}`,
     },
   });
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       } Organized by ${userInfo.name || userInfo.email}`,
       startTime: body.scheduledFor,
       endTime: new Date(
-        new Date(body.scheduledFor).getTime() + body.durationMins * 60000
+        new Date(body.scheduledFor).getTime() + body.durationMins * 60000,
       ).toISOString(),
       attendees: body.interviewerEmails,
       timezone: "UTC",
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
           description: `Interview for Application ${body.applicationId}`,
           startTime: body.scheduledFor,
           endTime: new Date(
-            new Date(body.scheduledFor).getTime() + body.durationMins * 60000
+            new Date(body.scheduledFor).getTime() + body.durationMins * 60000,
           ).toISOString(),
           attendees: body.interviewerEmails,
           timezone: "UTC",
@@ -98,9 +98,9 @@ export async function POST(req: NextRequest) {
           { accessToken: refreshedAccessToken },
           {
             headers: {
-              Authorization: `Bearer ${session.backendTokens.accessToken}`,
+              Authorization: `Bearer ${session.backendTokens?.accessToken}`,
             },
-          }
+          },
         );
       } catch (refreshErr) {
         console.error("Token refresh failed:", refreshErr);

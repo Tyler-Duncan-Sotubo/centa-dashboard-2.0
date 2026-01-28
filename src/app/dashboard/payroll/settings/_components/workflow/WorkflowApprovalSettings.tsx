@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const availableRoles = [
   { label: "Super Admin", value: "super_admin" },
@@ -35,7 +35,7 @@ export default function WorkflowApprovalSettings() {
   async function fetchProrationSetting() {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-settings/approval-proration"
+        "/api/payroll-settings/approval-proration",
       );
       return res.data.data;
     } catch (error) {
@@ -67,7 +67,7 @@ export default function WorkflowApprovalSettings() {
 
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key: "multi_level_approval", value: newValue }
+        { key: "multi_level_approval", value: newValue },
       );
 
       toast({
@@ -92,7 +92,7 @@ export default function WorkflowApprovalSettings() {
 
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key: "approver_chain", value: updated }
+        { key: "approver_chain", value: updated },
       );
 
       toast({
@@ -114,7 +114,7 @@ export default function WorkflowApprovalSettings() {
 
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key: "approval_fallback", value: updated }
+        { key: "approval_fallback", value: updated },
       );
 
       toast({

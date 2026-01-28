@@ -2,11 +2,11 @@
 
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { OfferTemplatesResponse } from "@/types/offer.type";
 import { Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Modal from "@/components/ui/modal";
+import { Button } from "@/shared/ui/button";
+import Modal from "@/shared/ui/modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { OfferTemplatePreviewModal } from "./OfferTemplatePreviewModal";
@@ -34,16 +34,16 @@ export const TemplateSelectionModal = ({
     queryKey: ["offer-letter-templates"],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        "/api/offer-letter/company-templates"
+        "/api/offer-letter/company-templates",
       );
       return res.data.data;
     },
-    enabled: isOpen && !!session?.backendTokens.accessToken,
+    enabled: isOpen && Boolean(session?.backendTokens?.accessToken),
   });
 
   const handleSelect = (templateId: string) => {
     router.push(
-      `/dashboard/recruitment/offers/create?applicationId=${applicationId}&templateId=${templateId}&newStageId=${newStageId}`
+      `/dashboard/recruitment/offers/create?applicationId=${applicationId}&templateId=${templateId}&newStageId=${newStageId}`,
     );
   };
 
@@ -70,7 +70,7 @@ export const TemplateSelectionModal = ({
                   {data?.companyTemplates.map((tpl) => (
                     <div
                       key={tpl.id}
-                      className="border rounded p-4 shadow-sm flex flex-col gap-2"
+                      className="border rounded p-4 shadow-2xs flex flex-col gap-2"
                     >
                       <div>
                         <h4 className="font-medium">{tpl.name}</h4>
@@ -109,7 +109,7 @@ export const TemplateSelectionModal = ({
                   {data?.systemTemplates.map((tpl) => (
                     <div
                       key={tpl.id}
-                      className="border rounded p-4 shadow-sm flex flex-col gap-2"
+                      className="border rounded p-4 shadow-2xs flex flex-col gap-2"
                     >
                       <div>
                         <h4 className="font-medium">{tpl.name}</h4>

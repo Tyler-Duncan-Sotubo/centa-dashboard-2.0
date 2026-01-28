@@ -3,18 +3,17 @@
 import React from "react";
 import Approval from "./Approval";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
-type Params = {
-  params: {
-    id: string;
-  };
+type PageProps = {
+  params: Promise<{ id: string }>;
 };
 
-const ApprovalPage = ({ params }: Params) => {
+const ApprovalPage = ({ params }: PageProps) => {
+  const { id } = React.use(params);
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
 
@@ -34,10 +33,9 @@ const ApprovalPage = ({ params }: Params) => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["payRun", params.id],
-    queryFn: () =>
-      params.id ? fetchPayslip(params.id) : Promise.resolve(null),
-    enabled: !!params.id && !!session?.backendTokens.accessToken,
+    queryKey: ["payRun", id],
+    queryFn: () => (id ? fetchPayslip(id) : Promise.resolve(null)),
+    enabled: !!id && Boolean(session?.backendTokens?.accessToken),
     retry: 2,
   });
 

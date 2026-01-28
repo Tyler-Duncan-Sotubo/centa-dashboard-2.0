@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Label } from "@/shared/ui/label";
 import { Trash, ChevronDown } from "lucide-react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -14,16 +14,16 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/shared/ui/collapsible";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Skeleton } from "@/shared/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import PageHeader from "@/components/pageHeader";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import PageHeader from "@/shared/ui/page-header";
 import Link from "next/link";
 import { FaChevronCircleLeft } from "react-icons/fa";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import ChecklistGenerator from "../../onboarding/_components/ChecklistGenerator";
 
 interface Field {
@@ -212,11 +212,14 @@ export default function TemplateEditPage() {
   const [fields, setFields] = useState<Field[]>([]);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
 
-  const groupedFields = SYSTEM_FIELDS.reduce((acc, field) => {
-    if (!acc[field.tag]) acc[field.tag] = [];
-    acc[field.tag].push(field);
-    return acc;
-  }, {} as Record<string, Field[]>);
+  const groupedFields = SYSTEM_FIELDS.reduce(
+    (acc, field) => {
+      if (!acc[field.tag]) acc[field.tag] = [];
+      acc[field.tag].push(field);
+      return acc;
+    },
+    {} as Record<string, Field[]>,
+  );
 
   const moveField = (from: number, to: number) => {
     const updated = [...fields];
@@ -233,11 +236,11 @@ export default function TemplateEditPage() {
     queryKey: ["template", templateId],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/api/onboarding-seeder/single-template/${templateId}`
+        `/api/onboarding-seeder/single-template/${templateId}`,
       );
       return res.data.data;
     },
-    enabled: !!templateId && !!session?.backendTokens.accessToken,
+    enabled: !!templateId && Boolean(session?.backendTokens?.accessToken),
   });
 
   const updateTemplate = useUpdateMutation({
@@ -327,7 +330,7 @@ export default function TemplateEditPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {group.map((field) => {
                         const isChecked = fields.some(
-                          (f) => f.fieldKey === field.fieldKey
+                          (f) => f.fieldKey === field.fieldKey,
                         );
                         return (
                           <div
@@ -343,8 +346,8 @@ export default function TemplateEditPage() {
                                 } else {
                                   setFields(
                                     fields.filter(
-                                      (f) => f.fieldKey !== field.fieldKey
-                                    )
+                                      (f) => f.fieldKey !== field.fieldKey,
+                                    ),
                                   );
                                 }
                               }}

@@ -5,19 +5,19 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 
 interface Props {
   payslipSummary: Payslip[];
 }
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { FaDownload } from "react-icons/fa";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import LastPayslipCard from "./LastPayslipCard";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
 
 export type Payslip = {
   payslip_id: string;
@@ -181,8 +181,8 @@ export default function PayslipDetailsTable({ payslipSummary }: Props) {
   const years = useMemo(() => {
     const uniqueYears = new Set(
       payslipSummary.map((p) =>
-        new Date(p.payroll_date + "-01").getFullYear().toString()
-      )
+        new Date(p.payroll_date + "-01").getFullYear().toString(),
+      ),
     );
     return Array.from(uniqueYears).sort((a, b) => Number(b) - Number(a));
   }, [payslipSummary]);
@@ -193,7 +193,7 @@ export default function PayslipDetailsTable({ payslipSummary }: Props) {
       : payslipSummary.filter(
           (p) =>
             new Date(p.payroll_date + "-01").getFullYear().toString() ===
-            selectedYear
+            selectedYear,
         );
   }, [payslipSummary, selectedYear]);
 

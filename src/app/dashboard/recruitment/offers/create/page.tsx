@@ -3,20 +3,20 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { formatSource } from "@/utils/formatSource";
+import Loading from "@/shared/ui/loading";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
+import { formatSource } from "@/shared/utils/formatSource";
 import Mustache from "mustache";
-import { useToast } from "@/hooks/use-toast";
-import { DateInput } from "@/components/ui/date-input";
+import { useToast } from "@/shared/hooks/use-toast";
+import { DateInput } from "@/shared/ui/date-input";
 import { useSession } from "next-auth/react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import FormError from "@/components/ui/form-error";
-import { Switch } from "@/components/ui/switch";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import FormError from "@/shared/ui/form-error";
+import { Switch } from "@/shared/ui/switch";
 
 const SIGNATURE_FIELDS = new Set([
   "sig_emp",
@@ -28,7 +28,7 @@ const SIGNATURE_FIELDS = new Set([
 type InputValue = string | number | boolean;
 
 function inferFieldType(
-  fieldName: string
+  fieldName: string,
 ): "string" | "number" | "date" | "boolean" {
   const lower = fieldName.toLowerCase();
   if (lower.includes("date")) return "date";
@@ -80,7 +80,9 @@ export default function OfferCreatePage() {
       };
     },
     enabled:
-      !!session?.backendTokens.accessToken && !!applicationId && !!templateId,
+      Boolean(session?.backendTokens?.accessToken) &&
+      !!applicationId &&
+      !!templateId,
   });
 
   const handleChange = (key: string, value: InputValue) => {
@@ -92,13 +94,13 @@ export default function OfferCreatePage() {
 
     const allData = { ...userInput, ...data.autoFilled };
     const missing = data.variables.filter(
-      (key) => !allData[key] && !SIGNATURE_FIELDS.has(key)
+      (key) => !allData[key] && !SIGNATURE_FIELDS.has(key),
     );
     if (missing.length > 0) {
       toast({
         title: "Missing Fields",
         description: `Please fill in the following fields: ${missing.join(
-          ", "
+          ", ",
         )}`,
         variant: "destructive",
       });
@@ -114,7 +116,7 @@ export default function OfferCreatePage() {
           newStageId,
           pdfData: allData,
         },
-        setError
+        setError,
       );
     } catch (error) {
       console.error("Error creating offer:", error);
@@ -190,12 +192,12 @@ export default function OfferCreatePage() {
                           ? userValue
                             ? "true"
                             : ""
-                          : userValue ?? ""
+                          : (userValue ?? "")
                       }
                       onChange={(e) =>
                         handleChange(
                           key,
-                          e.target.value ? parseFloat(e.target.value) : ""
+                          e.target.value ? parseFloat(e.target.value) : "",
                         )
                       }
                     />
@@ -211,7 +213,7 @@ export default function OfferCreatePage() {
                           ? userValue
                             ? "true"
                             : ""
-                          : userValue ?? ""
+                          : (userValue ?? "")
                       }
                       onChange={(e) => handleChange(key, e.target.value)}
                     />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaFileAlt, FaCloudUploadAlt } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { ProgressModal } from "./ProgressModal";
 import { AttachmentModal } from "./AttachmentModal";
 

@@ -12,9 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormField,
@@ -22,9 +22,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { FaEdit } from "react-icons/fa";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/shared/ui/textarea";
 
 const composeSchema = z.object({
   to: z.string().email({ message: "Invalid email address" }),

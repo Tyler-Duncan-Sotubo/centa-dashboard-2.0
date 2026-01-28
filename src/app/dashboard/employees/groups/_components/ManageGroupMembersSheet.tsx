@@ -8,17 +8,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import GenericSheet from "@/components/ui/generic-sheet";
-import FormError from "@/components/ui/form-error";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/form";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Button } from "@/shared/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import FormError from "@/shared/ui/form-error";
+import Loading from "@/shared/ui/loading";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { Employee } from "@/types/employees.type";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { Users } from "lucide-react";
 
 interface Props {
@@ -46,7 +46,7 @@ export default function ManageGroupMembersSheet({ groupId, groupName }: Props) {
       const res = await axiosInstance.get("/api/employees/all/summary");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && open,
+    enabled: Boolean(session?.backendTokens?.accessToken) && open,
   });
 
   // Prefill selected employees in the group

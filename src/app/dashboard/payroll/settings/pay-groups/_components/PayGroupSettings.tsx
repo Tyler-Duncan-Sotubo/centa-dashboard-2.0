@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { EmployeeGroupsTable } from "@/components/common/tables/groups.table";
+import { EmployeeGroupsTable } from "@/features/payroll/settings/pay-group/ui/groups.table";
 import { EmployeeGroup } from "@/types/employees.type";
 import GroupModal from "./GroupModal";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const PayGroupSettings = () => {
   const { data: session, status } = useSession();
@@ -34,7 +34,7 @@ const PayGroupSettings = () => {
   } = useQuery<EmployeeGroup[]>({
     queryKey: ["pay-group"],
     queryFn: fetchGroups,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

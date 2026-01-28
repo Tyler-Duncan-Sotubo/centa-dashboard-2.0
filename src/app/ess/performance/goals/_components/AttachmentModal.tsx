@@ -1,11 +1,11 @@
-import { FileUploader } from "@/components/common/FileUploader";
-import Modal from "@/components/ui/modal";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { FileUploader } from "@/shared/ui/file-uploader";
+import Modal from "@/shared/ui/modal";
+import { Textarea } from "@/shared/ui/textarea";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/shared/hooks/use-toast";
 
 type AttachmentFormData = {
   file: FileList;

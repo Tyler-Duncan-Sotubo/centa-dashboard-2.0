@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormField,
@@ -13,15 +13,15 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import FormError from "@/shared/ui/form-error";
 import { UploadCloud } from "lucide-react";
 import { Company } from "@/types/company.type";
 import Image from "next/image";
 import { OnboardingSchema } from "@/schema/onboarding.schema";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import PageHeader from "@/components/pageHeader";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import PageHeader from "@/shared/ui/page-header";
 import { FaBuilding } from "react-icons/fa";
 
 function Onboarding({ company }: { company: Company }) {
@@ -67,7 +67,7 @@ function Onboarding({ company }: { company: Company }) {
       };
       reader.readAsDataURL(file);
     },
-    [form]
+    [form],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

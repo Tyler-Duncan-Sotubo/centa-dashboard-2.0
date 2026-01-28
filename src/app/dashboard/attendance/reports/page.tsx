@@ -1,9 +1,9 @@
 import React from "react";
-import { timeOffReportData } from "@/data/report.data"; // Import report data
+import { timeOffReportData } from "@/features/reports/config/report.data"; // Import report data
 import { FaChevronRight } from "react-icons/fa"; // Import Chevron Down icon
 import Link from "next/link";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 
 const ReportsPage = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/shared/ui/badge";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { FiCalendar, FiCheckCircle, FiXCircle, FiClock } from "react-icons/fi";
 
@@ -51,8 +51,8 @@ const attendanceColumns: ColumnDef<AttendanceEntry>[] = [
             status === "present"
               ? "approved"
               : status === "absent"
-              ? "rejected"
-              : "pending"
+                ? "rejected"
+                : "pending"
           }
         >
           {status}

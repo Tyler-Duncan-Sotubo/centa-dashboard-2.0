@@ -1,24 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { use, useState } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import JobPipelineBoard from "../_components/JobPipelineBoard";
 import { MdPeople, MdDescription } from "react-icons/md";
 import { FaChevronCircleLeft, FaEdit } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import JobPreview from "../_components/JobPreview";
 import { FaPlus } from "react-icons/fa6";
 import { PiKanban, PiListDashesBold } from "react-icons/pi";
 import JobListView from "../_components/JobListView";
 
-interface JobPipelinePageProps {
-  params: {
-    id: string;
-  };
-}
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
 
-export default function JobPipelinePage({ params }: JobPipelinePageProps) {
+export default function JobPipelinePage({ params }: PageProps) {
+  const { id } = use(params);
   const [tab, setTab] = useState("candidates");
   const [viewMode, setViewMode] = useState<"kanban" | "list">("kanban");
 
@@ -33,14 +32,14 @@ export default function JobPipelinePage({ params }: JobPipelinePageProps) {
         </Link>
 
         {tab === "candidates" ? (
-          <Link href={`/dashboard/recruitment/jobs/apply/${params.id}`}>
+          <Link href={`/dashboard/recruitment/jobs/apply/${id}`}>
             <Button>
               <FaPlus />
               Add Candidate
             </Button>
           </Link>
         ) : (
-          <Link href={`/dashboard/recruitment/jobs/edit/${params.id}`}>
+          <Link href={`/dashboard/recruitment/jobs/edit/${id}`}>
             <Button>
               <FaEdit />
               Edit Job
@@ -100,14 +99,14 @@ export default function JobPipelinePage({ params }: JobPipelinePageProps) {
         </TabsList>
 
         <TabsContent value="description">
-          <JobPreview jobId={params.id} />
+          <JobPreview jobId={id} />
         </TabsContent>
 
         <TabsContent value="candidates">
           {viewMode === "kanban" ? (
-            <JobPipelineBoard jobId={params.id} />
+            <JobPipelineBoard jobId={id} />
           ) : (
-            <JobListView jobId={params.id} />
+            <JobListView jobId={id} />
           )}
         </TabsContent>
       </Tabs>

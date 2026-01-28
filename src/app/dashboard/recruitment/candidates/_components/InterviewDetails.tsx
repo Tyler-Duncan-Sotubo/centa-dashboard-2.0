@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { ApplicationDetails } from "@/types/application";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { ScheduleInterviewModal } from "../../interviews/_components/ScheduleInterviewModal";
 
 const InterviewDetails = ({
@@ -23,7 +23,7 @@ const InterviewDetails = ({
   const InfoRow = ({ label, value }: InfoRowProps) => (
     <div className="space-y-1 capitalize">
       <p className="text-md text-muted-foreground">{label}</p>
-      <p className="text-lg font-medium break-words">{value}</p>
+      <p className="text-lg font-medium wrap-break-word">{value}</p>
     </div>
   );
 

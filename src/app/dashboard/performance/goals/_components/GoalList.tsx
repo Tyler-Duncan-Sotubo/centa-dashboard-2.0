@@ -2,17 +2,17 @@
 
 import { Goal } from "@/types/performance/goals.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable"; // assumes a reusable wrapper
-import { Button } from "@/components/ui/button";
+import { DataTable } from "@/shared/ui/data-table"; // assumes a reusable wrapper
+import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { ChevronsUpDown } from "lucide-react";
-import { Avatars } from "@/components/avatars";
-import { DeleteWithTwoIdsDialog } from "@/components/DeleteWithTwoIdsDialog";
+import { Avatars } from "@/shared/ui/avatars";
+import { DeleteWithTwoIdsDialog } from "@/shared/ui/delete-with-two-Ids-dialog";
 import { FaCheck, FaEdit } from "react-icons/fa";
 import Link from "next/link";
 import GoalModal from "./GoalFormModal";
 import { useState } from "react";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { StatusBadge } from "@/shared/ui/status-badge";
 
 interface GoalTableProps {
   goals: Goal[];

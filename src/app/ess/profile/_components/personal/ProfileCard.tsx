@@ -30,14 +30,9 @@ interface InfoItemProps {
 
 function InfoItem({ icon, value }: InfoItemProps) {
   return (
-    <div className="flex items-center space-x-2 text-md">
-      {/* If value is empty, show "N/A" */}
-      {value ? (
-        <span className="text-muted-foreground">{icon}</span>
-      ) : (
-        <span className="text-red-500"></span>
-      )}
-      <span>{value}</span>
+    <div className="flex items-center gap-2 text-sm sm:text-md">
+      <span className="text-muted-foreground shrink-0">{icon}</span>
+      <span className="truncate">{value || "N/A"}</span>
     </div>
   );
 }
@@ -48,11 +43,16 @@ interface KeyValueCardProps {
 
 export function KeyValueCard({ items }: KeyValueCardProps) {
   return (
-    <div className="space-y-3 text-md">
+    <div className="space-y-4 text-sm sm:text-md">
       {items.map((item) => (
-        <div key={item.label} className="flex items-center gap-10">
-          <p className="w-[30%] font-semibold">{item.label}</p>
-          <p>{item.value ? item.value : "N/A"}</p>
+        <div
+          key={item.label}
+          className="flex flex-col sm:flex-row sm:items-center sm:gap-10 gap-1"
+        >
+          <p className="sm:w-[35%] font-semibold text-muted-foreground">
+            {item.label}
+          </p>
+          <p className="wrap-break-word">{item.value ? item.value : "N/A"}</p>
         </div>
       ))}
     </div>
@@ -67,7 +67,6 @@ interface ProfileCardProps {
 }
 
 export function ProfileCard({ profile, core, avatarUrl }: ProfileCardProps) {
-  // determine if we have any existing profile data
   const hasData =
     !!profile.dateOfBirth ||
     !!profile.gender ||
@@ -79,7 +78,6 @@ export function ProfileCard({ profile, core, avatarUrl }: ProfileCardProps) {
     !!profile.state ||
     !!profile.country;
 
-  // only include the fields we care about
   const initialData: Partial<ProfileForm> = hasData
     ? {
         dateOfBirth: profile.dateOfBirth!,
@@ -95,39 +93,46 @@ export function ProfileCard({ profile, core, avatarUrl }: ProfileCardProps) {
     : {};
 
   return (
-    <div className="bg-white rounded-lg p-6 mt-10 border">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="capitalize font-semibold mb-6 text-xl">
+    <div className="bg-white rounded-lg p-4 sm:p-6 mt-6 sm:mt-10 border">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <h2 className="capitalize font-semibold text-lg sm:text-xl">
           Personal Information
         </h2>
-        <EntitySheet
-          entityType="profile"
-          initialData={hasData ? initialData : undefined}
-          employeeId={core.id}
-        />
+
+        <div className="self-start sm:self-auto">
+          <EntitySheet
+            entityType="profile"
+            initialData={hasData ? initialData : undefined}
+            employeeId={core.id}
+          />
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
         {/* Left: Avatar + Major Details */}
-        <div className="flex items-center space-x-6 md::mb-0 mb-6">
-          <div className="w-44 h-44 relative flex-shrink-0">
-            {avatarUrl && profile.firstName ? (
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+          <div className="w-28 h-28 sm:w-36 sm:h-36 lg:w-44 lg:h-44 relative shrink-0">
+            {avatarUrl && (profile.firstName || core?.firstName) ? (
               <Image
                 src={avatarUrl}
-                alt={`${profile.firstName} ${profile.lastName}`}
+                alt={`${core?.firstName ?? profile.firstName} ${
+                  core?.lastName ?? profile.lastName
+                }`}
                 fill
                 className="rounded-full object-cover"
               />
             ) : (
               <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-                <FiUser size={48} className="text-gray-500" />
+                <FiUser size={42} className="text-gray-500" />
               </div>
             )}
           </div>
-          <div>
-            <h2 className="text-xl font-semibold">
+
+          <div className="min-w-0 text-center sm:text-left">
+            <h2 className="text-lg sm:text-xl font-semibold truncate">
               {core.firstName} {core.lastName}
             </h2>
-            <p className="text-md text-muted-foreground mb-5">
+            <p className="text-sm text-muted-foreground mb-4 truncate">
               {core.employeeNumber}
             </p>
 
@@ -148,24 +153,15 @@ export function ProfileCard({ profile, core, avatarUrl }: ProfileCardProps) {
                 ? format(new Date(profile.dateOfBirth), "MMM dd, yyyy")
                 : "N/A",
             },
-            { label: "Marital Status", value: profile.maritalStatus },
-            {
-              label: "Address",
-              value: `${profile.address ? profile.address : "N/A"}`,
-            },
-            {
-              label: "State",
-              value: `${profile.state ? profile.state : "N/A"}`,
-            },
-            {
-              label: "Address",
-              value: `${profile.country ? profile.country : "N/A"}`,
-            },
+            { label: "Marital Status", value: profile.maritalStatus || "N/A" },
+            { label: "Address", value: profile.address || "N/A" },
+            { label: "State", value: profile.state || "N/A" },
+            { label: "Country", value: profile.country || "N/A" },
             {
               label: "Emergency Contact",
-              value: `${
-                profile?.emergencyName ? profile.emergencyName : "N/A"
-              } ${profile?.emergencyPhone ? profile.emergencyPhone : ""}`,
+              value: `${profile?.emergencyName || "N/A"}${
+                profile?.emergencyPhone ? ` • ${profile.emergencyPhone}` : ""
+              }`,
             },
           ]}
         />

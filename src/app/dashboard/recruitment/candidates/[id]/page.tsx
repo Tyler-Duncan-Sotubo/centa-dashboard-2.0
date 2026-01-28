@@ -1,38 +1,36 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
 import { ApplicationDetails } from "@/types/application";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { CandidateApplicationView } from "../_components/CandidateApplicationView";
 import ResumeScoreSection from "../_components/ResumeScoreSection";
 import InterviewDetails from "../_components/InterviewDetails";
 import GradingSection from "../_components/GradingSection";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import StageHistorySection from "../_components/StageHistorySection";
 import MessagingUI from "../_messaging/MessagingUI";
-import { CentaAIBot } from "@/components/ui/CentaAIBot";
+import { CentaAIBot } from "@/shared/ui/CentaAIBot";
+import { use } from "react";
 
 interface Props {
-  id: string;
+  params: Promise<{ id: string }>;
 }
-
-const CandidateViewPage = (params: { params: Props }) => {
+const CandidateViewPage = ({ params }: Props) => {
+  const { id } = use(params);
   const axiosInstance = useAxiosAuth();
   const { data: session, status } = useSession();
 
   const fetchCandidateApplication = async () => {
     try {
-      const res = await axiosInstance.get(
-        `/api/applications/${params.params.id}`
-      );
+      const res = await axiosInstance.get(`/api/applications/${id}`);
       return res.data.data;
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -42,9 +40,9 @@ const CandidateViewPage = (params: { params: Props }) => {
   };
 
   const { data, isLoading, isError } = useQuery<ApplicationDetails>({
-    queryKey: ["candidate-application", params.params.id],
+    queryKey: ["candidate-application", id],
     queryFn: () => fetchCandidateApplication(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     refetchOnMount: true,
   });
 
@@ -54,7 +52,7 @@ const CandidateViewPage = (params: { params: Props }) => {
   const currentUserId = session?.user?.id;
 
   const currentInterviewer = data?.interview?.interviewers.find(
-    (interviewer) => interviewer.id === currentUserId
+    (interviewer) => interviewer.id === currentUserId,
   );
 
   return (

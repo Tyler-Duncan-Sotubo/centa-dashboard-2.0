@@ -1,4 +1,4 @@
-import { StatusBadge } from "@/components/ui/status-badge";
+import { StatusBadge } from "@/shared/ui/status-badge";
 import { Review } from "@/types/performance/review.type";
 import { format } from "date-fns";
 

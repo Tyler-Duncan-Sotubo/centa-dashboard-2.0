@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { FaDownload } from "react-icons/fa";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 
 interface PayslipEntry {
   payroll_date: string;
@@ -47,7 +47,7 @@ export default function LastPayslipCard({ lastPayslip }: Props) {
     {
       year: "numeric",
       month: "long",
-    }
+    },
   );
 
   const others =

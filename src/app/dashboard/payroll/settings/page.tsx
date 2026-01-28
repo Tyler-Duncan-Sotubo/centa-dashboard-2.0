@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { RemittanceSettings } from "./_components/statutory-deductions/RemittanceSettings";
 import AllowanceSettings from "./_components/allowances/AllowanceSettings";
 import WorkflowApprovalSettings from "./_components/workflow/WorkflowApprovalSettings";
 import ProrationSettings from "./_components/proration/ProrationSettings";
 import ThirteenthMonthSettings from "./_components/thirtenthMonth/ThirteenthMonthSettings";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const page = () => {
   return (

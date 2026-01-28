@@ -16,9 +16,9 @@ const refreshAccessToken = async (oauthClient: any, session: any) => {
       { accessToken: credentials.access_token },
       {
         headers: {
-          Authorization: `Bearer ${session.backendTokens.accessToken}`,
+          Authorization: `Bearer ${session.backendTokens?.accessToken}`,
         },
-      }
+      },
     );
 
     return credentials.access_token;
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
   const res = await axiosInstance.get(`/api/google`, {
     headers: {
-      Authorization: `Bearer ${session.backendTokens.accessToken}`,
+      Authorization: `Bearer ${session.backendTokens?.accessToken}`,
     },
   });
 
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
           snippet,
           body: decodedBody,
         };
-      })
+      }),
     );
 
     return {

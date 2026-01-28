@@ -2,11 +2,11 @@
 
 import React from "react";
 import InterviewCalendar from "./_components/InterviewCalendar";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const InterviewPage = () => {
   const axiosInstance = useAxiosAuth();
@@ -26,7 +26,7 @@ const InterviewPage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["interviews"],
     queryFn: () => fetchInterviews(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     refetchOnMount: true,
   });
 

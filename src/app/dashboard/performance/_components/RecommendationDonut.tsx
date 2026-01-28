@@ -10,14 +10,14 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { COLORS } from "@/utils/colors";
+} from "@/shared/ui/chart";
+import { COLORS } from "@/shared/utils/colors";
 
 interface RecommendationDonutProps {
   recommendationCounts: Record<string, number>;
@@ -36,8 +36,8 @@ export function RecommendationDonut({
     fill: name.toLowerCase().includes("promote")
       ? COLORS.monzoGreen
       : name.toLowerCase().includes("hold")
-      ? COLORS.monzoOrange
-      : COLORS.error,
+        ? COLORS.monzoOrange
+        : COLORS.error,
   }));
 
   // ChartConfig drives tooltip colors

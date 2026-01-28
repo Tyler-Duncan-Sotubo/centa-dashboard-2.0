@@ -1,6 +1,6 @@
 "use client";
 
-import BackButton from "@/components/ui/back-button";
+import BackButton from "@/shared/ui/back-button";
 import React from "react";
 import { usePathname } from "next/navigation";
 

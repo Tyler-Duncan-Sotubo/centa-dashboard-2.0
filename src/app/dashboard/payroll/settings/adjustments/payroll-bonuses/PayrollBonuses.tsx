@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { Trash, PlusCircle } from "lucide-react";
 import {
   AlertDialog,
@@ -21,17 +21,17 @@ import {
   AlertDialogAction,
   AlertDialogTitle,
   AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import BonusModal from "./_components/BonusModal";
 import { Bonus } from "@/types/bonus.type";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import PageHeader from "@/components/pageHeader";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const BonusSettings = () => {
   const [isBonusOpen, setIsBonusOpen] = useState(false);
@@ -56,7 +56,7 @@ const BonusSettings = () => {
   } = useQuery({
     queryKey: ["bonus"],
     queryFn: fetchBonus,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   function formatPayrollMonth(payrollMonth: string): string {

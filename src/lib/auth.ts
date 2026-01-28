@@ -1,18 +1,17 @@
-// File: src/lib/authOptions.ts
-import { NextAuthOptions, DefaultSession } from "next-auth";
-import { getServerSession } from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import NextAuth, { type DefaultSession } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
-// ──────────────────────────────────────────────────────────────────────────────
-// 1) Define “BackendTokens” shape ‒ this is exactly what your backend returns
-// ──────────────────────────────────────────────────────────────────────────────
-interface BackendTokens {
-  accessToken: string; // e.g. JWT string used for API calls
-  refreshToken: string; // e.g. refresh token string
-  expiresIn: number; // how many seconds until accessToken expires
-}
+/**
+ * Backend shape your API returns
+ */
+export type BackendTokens = {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number; // seconds until access token expires
+};
 
-type Checklist = {
+export type Checklist = {
   staff: boolean;
   payroll: boolean;
   performance: boolean;
@@ -21,110 +20,75 @@ type Checklist = {
   leave: boolean;
 };
 
-// ──────────────────────────────────────────────────────────────────────────────
-// 2) Define exactly what “CustomUser” looks like.
-//    This should match whatever your backend is returning under `user`.
-// ──────────────────────────────────────────────────────────────────────────────
-interface CustomUser {
+export type Workspace = "employee" | "manager";
+
+export type CustomUser = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   companyId: string;
   role: string;
-  avatar: string; // if your backend sends an “avatar” URL
+  avatar: string;
   employmentStatus: string;
+
+  // optional account user id for manager workspace switching
+  userId?: string | null;
+
   backendTokens: BackendTokens;
-  permissions: string[]; // e.g. ["view_users", "edit_posts"]
+  permissions: string[];
   checklist?: Checklist;
-}
+};
 
-type Workspace = "employee" | "manager";
+const DEFAULT_CHECKLIST: Checklist = {
+  staff: false,
+  payroll: false,
+  performance: false,
+  hiring: false,
+  attendance: false,
+  leave: false,
+};
 
-// ──────────────────────────────────────────────────────────────────────────────
-// 3) Module Augmentation: extend NextAuth’s Session & JWT types
-//    so that TypeScript knows exactly what lives on `session.user` and `token`.
-// ──────────────────────────────────────────────────────────────────────────────
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-      companyId: string;
-      role: string;
-      avatar: string;
-      employmentStatus: string;
-    };
-    employeeId?: string | null;
-    userAccountId?: string | null;
-    activeWorkspace: "employee" | "manager";
-    backendTokens: BackendTokens;
-    permissions: string[]; // e.g. ["view_users", "edit_posts"]
-    checklist: Checklist;
-  }
-
-  /** When you call `signIn("credentials", { user, backendTokens })`,
-   *  NextAuth will pass that “user” object into callbacks as `User`. */
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    /** copy of `CustomUser` minus the tokens themselves */
-    user: {
-      id: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-      companyId: string;
-      role: string;
-      avatar: string;
-      employmentStatus: string;
-    };
-    employeeId?: string | null;
-    userAccountId?: string | null;
-    backendTokens: BackendTokens;
-    permissions: string[]; // e.g. ["view_users", "edit_posts"]
-    accessTokenExpires: number;
-    checklist: Checklist;
-  }
-}
-
-export const authOptions: NextAuthOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/auth/login",
   },
   session: {
     strategy: "jwt",
   },
+
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: "Credentials",
-      credentials: {}, // no built‐in fields; we pass user+tokens manually at signIn()
-      async authorize(credentials: unknown) {
+      credentials: {},
+
+      async authorize(credentials) {
         const { user, backendTokens, permissions, checklist } = credentials as {
-          user: string;
-          backendTokens: string;
-          permissions: string[];
+          user?: string;
+          backendTokens?: string;
+          permissions?: string[]; // may come as array already
           checklist?: string | Checklist;
         };
 
-        const parsedUser = JSON.parse(user);
-        const parsedBackendTokens = JSON.parse(backendTokens);
-        const parsedChecklist =
-          typeof checklist === "string"
-            ? JSON.parse(checklist)
-            : checklist ?? undefined;
+        if (!user || !backendTokens) return null;
 
-        if (!parsedUser || !parsedBackendTokens) return null;
+        const parsedUser = JSON.parse(user) as Omit<
+          CustomUser,
+          "backendTokens"
+        >;
+        const parsedBackendTokens = JSON.parse(backendTokens) as BackendTokens;
+
+        const parsedChecklist: Checklist | undefined =
+          typeof checklist === "string"
+            ? (JSON.parse(checklist) as Checklist)
+            : (checklist ?? undefined);
 
         return {
           ...parsedUser,
           backendTokens: parsedBackendTokens,
-          permissions,
+          permissions: permissions ?? [],
           checklist: parsedChecklist,
-        };
+        } as any;
       },
     }),
   ],
@@ -133,18 +97,17 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       // Initial sign-in
       if (user) {
-        const u = user as CustomUser & { userId?: string | null };
+        const u = user as CustomUser;
 
-        const employeeId = u.id ?? null; // always present
-        const userAccountId = u.userId ?? null; // may be null
+        const employeeId = u.id ?? null;
+        const userAccountId = u.userId ?? null;
 
-        // Set default workspace and ID without a comparison
-        token.activeWorkspace = "employee";
+        token.activeWorkspace = "employee" as Workspace;
         token.employeeId = employeeId;
         token.userAccountId = userAccountId;
 
         token.user = {
-          id: employeeId!, // default expose employee id
+          id: employeeId!,
           email: u.email,
           firstName: u.firstName,
           lastName: u.lastName,
@@ -156,50 +119,57 @@ export const authOptions: NextAuthOptions = {
 
         token.backendTokens = u.backendTokens;
         token.permissions = u.permissions ?? [];
-        token.accessTokenExpires = u.backendTokens.expiresIn;
+        token.checklist = u.checklist ?? DEFAULT_CHECKLIST;
 
-        token.checklist = u.checklist ?? {
-          staff: false,
-          payroll: false,
-          performance: false,
-          hiring: false,
-          attendance: false,
-          leave: false,
-        };
+        // store as an absolute timestamp in ms (recommended)
+        token.accessTokenExpires =
+          Date.now() + (u.backendTokens?.expiresIn ?? 0) * 1000;
 
         return token;
       }
 
-      // Workspace switcher update
+      // Workspace switch update (client calls `useSession().update({ activeWorkspace: ... })`)
       if (trigger === "update") {
-        const ws = session.activeWorkspace; // typed in your module augmentation
+        const ws = (session as any)?.activeWorkspace as Workspace | undefined;
+
         if (ws) {
-          token.activeWorkspace = ws as Workspace;
+          token.activeWorkspace = ws;
 
           const nextId =
             ws === "manager" && token.userAccountId
               ? token.userAccountId
-              : token.employeeId ?? token.user.id;
+              : (token.employeeId ?? (token.user as any)?.id);
 
-          token.user = { ...token.user, id: nextId };
+          token.user = { ...(token.user as any), id: nextId };
         }
       }
 
       return token;
     },
 
-    async session({ token, session }) {
-      session.user = token.user;
-      session.backendTokens = token.backendTokens;
-      session.permissions = token.permissions;
-      session.expires = new Date(token.accessTokenExpires).toISOString();
-      session.activeWorkspace = token.activeWorkspace as Workspace;
-      session.employeeId = token.employeeId ?? null;
-      session.userAccountId = token.userAccountId ?? null;
-      session.checklist = token.checklist;
+    async session({ session, token }) {
+      // user shape
+      (session as any).user = token.user;
+
+      // custom fields
+      (session as any).backendTokens = token.backendTokens;
+      (session as any).permissions = token.permissions;
+      (session as any).checklist = token.checklist;
+      (session as any).activeWorkspace = token.activeWorkspace as Workspace;
+      (session as any).employeeId = token.employeeId ?? null;
+      (session as any).userAccountId = token.userAccountId ?? null;
+
+      // keep session.expires aligned (string ISO)
+      session.expires = (token as any).accessTokenExpires;
+
       return session;
     },
   },
-};
+});
 
-export const getServerAuthSession = () => getServerSession(authOptions);
+/**
+ * v5 replacement for `getServerSession(authOptions)`
+ * Usage (Server Component / Route Handler):
+ *   const session = await getServerAuthSession()
+ */
+export const getServerAuthSession = () => auth();

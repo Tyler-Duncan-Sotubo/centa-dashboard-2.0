@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Label } from "@/shared/ui/label";
 
 interface Field {
   fieldKey: string;
@@ -120,7 +120,7 @@ export default function ChecklistGenerator({
                     setSelectedOptional([...selectedOptional, task.title]);
                   } else {
                     setSelectedOptional(
-                      selectedOptional.filter((t) => t !== task.title)
+                      selectedOptional.filter((t) => t !== task.title),
                     );
                   }
                 }}

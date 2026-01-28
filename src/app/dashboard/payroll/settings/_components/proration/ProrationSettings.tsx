@@ -3,19 +3,19 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { Switch } from "@/components/ui/switch";
+import Loading from "@/shared/ui/loading";
+import { Switch } from "@/shared/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+} from "@/shared/ui/select";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function ProrationSettings() {
   const { data: session, status } = useSession();
@@ -24,13 +24,13 @@ export default function ProrationSettings() {
 
   const [enabled, setEnabled] = useState(false);
   const [method, setMethod] = useState<"calendar_days" | "working_days" | null>(
-    null
+    null,
   );
 
   async function fetchProrationSetting() {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-settings/approval-proration"
+        "/api/payroll-settings/approval-proration",
       );
       return res.data.data;
     } catch (error) {
@@ -61,7 +61,7 @@ export default function ProrationSettings() {
 
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key: "enable_proration", value: newValue }
+        { key: "enable_proration", value: newValue },
       );
 
       toast({
@@ -83,7 +83,7 @@ export default function ProrationSettings() {
       setMethod(value);
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key: "proration_method", value }
+        { key: "proration_method", value },
       );
 
       toast({

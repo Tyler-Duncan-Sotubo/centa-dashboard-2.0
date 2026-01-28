@@ -10,8 +10,9 @@ import PayGroupSettings from "../settings/pay-groups/_components/PayGroupSetting
 import AllowanceSettings from "../settings/_components/allowances/AllowanceSettings";
 import { RemittanceSettings } from "../settings/_components/statutory-deductions/RemittanceSettings";
 import CostCenterSettings from "../settings/cost-centers/_components/CostCenterSettings";
-import OnboardingModule, { StepMetaItem } from "@/components/OnboardingModule";
+import OnboardingModule from "@/features/admin-onboarding/ui/OnboardingModule";
 import { JSX } from "react";
+import { StepMetaItem } from "@/features/admin-onboarding/types/onboarding.types";
 
 const payrollMeta: Record<string, StepMetaItem> = {
   pay_schedule: {

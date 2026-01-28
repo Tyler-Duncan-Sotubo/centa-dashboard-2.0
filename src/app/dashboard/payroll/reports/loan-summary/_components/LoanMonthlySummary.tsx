@@ -11,15 +11,15 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { formatCurrency } from "@/utils/formatCurrency";
+} from "@/shared/ui/card";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 
 // Data types from API
 interface MonthlySummary {

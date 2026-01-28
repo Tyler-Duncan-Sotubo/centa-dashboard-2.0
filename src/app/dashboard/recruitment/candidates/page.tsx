@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { CandidateCard } from "./_components/CandidateCard";
 import { Candidate } from "@/types/candidate";
 import {
@@ -14,9 +14,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/select";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 
 export default function CandidateList() {
   const { data: session } = useSession();

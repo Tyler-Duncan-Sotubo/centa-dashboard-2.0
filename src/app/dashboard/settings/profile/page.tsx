@@ -4,11 +4,11 @@ import React from "react";
 import UserProfile from "./UserProfile";
 import { User } from "@/types/user.type";
 // import { fetchUserProfile } from "@/server/actions/fetch/user";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const UserProfilePage = () => {
   const { data: session, status } = useSession();
@@ -32,7 +32,7 @@ const UserProfilePage = () => {
   } = useQuery<User>({
     queryKey: ["user", "profile"],
     queryFn: fetchUserProfile,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

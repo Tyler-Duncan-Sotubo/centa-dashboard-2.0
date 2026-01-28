@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import PageHeader from "@/components/pageHeader";
+import { JSX, useState } from "react";
+import { Button } from "@/shared/ui/button";
+import PageHeader from "@/shared/ui/page-header";
 import { FaCheckSquare, FaEdit, FaListAlt, FaTags } from "react-icons/fa";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import { FaCirclePlus } from "react-icons/fa6";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import OffboardingConfigModal from "./_components/OffboardingConfigModal";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "axios";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 type Item = {
   id: string;
@@ -48,7 +48,7 @@ const sidebarItems: {
 
 export default function TerminationConfigPage() {
   const [activeTab, setActiveTab] = useState<"types" | "reasons" | "checklist">(
-    "types"
+    "types",
   );
   const [modalOpen, setModalOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -78,7 +78,7 @@ export default function TerminationConfigPage() {
   const { data, isLoading, isError } = useQuery<OffboardingConfig>({
     queryKey: ["offboarding-config", activeTab],
     queryFn: fetchOffboardingConfig,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

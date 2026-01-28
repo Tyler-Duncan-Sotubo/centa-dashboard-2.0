@@ -6,10 +6,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import { format } from "date-fns";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 
 type Interview = {
   id: string;

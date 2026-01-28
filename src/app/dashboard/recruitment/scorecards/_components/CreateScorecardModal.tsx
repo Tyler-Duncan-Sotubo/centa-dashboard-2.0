@@ -3,15 +3,15 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import Modal from "@/components/ui/modal"; // your reusable modal
-import { Card } from "@/components/ui/card";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Textarea } from "@/shared/ui/textarea";
+import { Button } from "@/shared/ui/button";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal"; // your reusable modal
+import { Card } from "@/shared/ui/card";
 import { FaTrash, FaPlus } from "react-icons/fa";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import * as z from "zod";
 
 const scorecardTemplateSchema = z.object({
@@ -25,7 +25,7 @@ const scorecardTemplateSchema = z.object({
         maxScore: z
           .number({ invalid_type_error: "Must be a number" })
           .min(1, "Max score must be at least 1"),
-      })
+      }),
     )
     .min(1, "At least one criterion is required"),
 });

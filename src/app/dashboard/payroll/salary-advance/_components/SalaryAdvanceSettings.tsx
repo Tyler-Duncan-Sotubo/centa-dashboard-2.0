@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
+import { Input } from "@/shared/ui/input";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { Switch } from "@/components/ui/switch";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { Switch } from "@/shared/ui/switch";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function SalaryAdvanceSettings() {
   const { data: session, status } = useSession();
@@ -23,7 +23,7 @@ export default function SalaryAdvanceSettings() {
   async function fetchLoanSettings() {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-settings/loan-settings"
+        "/api/payroll-settings/loan-settings",
       );
       return res.data.data;
     } catch (error) {
@@ -60,7 +60,7 @@ export default function SalaryAdvanceSettings() {
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       toast({
@@ -81,7 +81,7 @@ export default function SalaryAdvanceSettings() {
 
   async function updateAmountSetting(
     key: "loan_min_amount" | "loan_max_amount",
-    value: string
+    value: string,
   ) {
     const num = parseInt(value);
     if (isNaN(num)) return;
@@ -97,7 +97,7 @@ export default function SalaryAdvanceSettings() {
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       toast({

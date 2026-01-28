@@ -13,7 +13,7 @@ import {
   getDay,
 } from "date-fns";
 import InterviewDetailsModal from "./InterviewDetailsModal"; // adjust path as needed
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type Interview = {
@@ -34,7 +34,7 @@ type Props = {
 const InterviewCalendar = ({ interviews }: Props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedInterview, setSelectedInterview] = useState<Interview | null>(
-    null
+    null,
   );
   const [modalOpen, setModalOpen] = useState(false);
 

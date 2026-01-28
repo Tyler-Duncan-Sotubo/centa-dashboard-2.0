@@ -7,7 +7,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -15,14 +15,14 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
 import {
   FormControl,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import CreateScorecardModal from "../../scorecards/_components/CreateScorecardModal";
 
 export type Scorecard = {
@@ -45,11 +45,11 @@ const ScorecardTemplateSelector: React.FC<ScorecardTemplateSelectorProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPreviewId, setSelectedPreviewId] = useState<string | null>(
-    null
+    null,
   );
 
   const selectedPreview = scorecards.find(
-    (card) => card.id === selectedPreviewId
+    (card) => card.id === selectedPreviewId,
   );
 
   return (

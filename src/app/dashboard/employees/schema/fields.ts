@@ -263,14 +263,6 @@ export const compensationFields: FieldConfig[] = [
     type: "text",
     cols: 6 as AllowedCols,
   },
-  {
-    name: "applyNhf",
-    label: "NHF Applied",
-    required: true,
-    type: "boolean",
-    controlType: "checkbox",
-    cols: 6 as AllowedCols,
-  },
 ];
 
 export const profileSchema = z.object({
@@ -358,7 +350,6 @@ export const compensationSchema = z.object({
     .nonempty("Compensation Effective date is required")
     .refine((s) => !isNaN(Date.parse(s)), { message: "Invalid date" }),
   grossSalary: z.string().min(1, "Gross Salary is required"),
-  applyNhf: z.boolean(),
 });
 
 export type CompensationForm = z.infer<typeof compensationSchema>;

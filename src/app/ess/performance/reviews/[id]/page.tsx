@@ -1,22 +1,23 @@
 "use client";
 
-import BackButton from "@/components/ui/back-button";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import BackButton from "@/shared/ui/back-button";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { FaUser, FaUserTie } from "react-icons/fa";
 import { FaBriefcase, FaBuilding } from "react-icons/fa6";
 import CompletedAppraisalResult from "../_components/CompletedAppraisalResult";
 import EntryForm from "../_components/EmployeeEntryForm";
+import { use } from "react";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function AppraisalSelfPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = use(params);
   const { data: session, status } = useSession();
   const axios = useAxiosAuth();
 

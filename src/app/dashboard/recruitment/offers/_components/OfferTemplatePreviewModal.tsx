@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import { getHtmlPreview } from "./getHtmlPreview";
 
 export function OfferTemplatePreviewModal({

@@ -1,8 +1,8 @@
 "use client";
 
 import { z } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import { Button } from "@/shared/ui/button";
 import { MdPayments } from "react-icons/md";
 import { useState } from "react";
 import EmployeeOverride from "./overrides/EmployeeOverride";

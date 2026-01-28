@@ -2,11 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
 import { useState } from "react";
 import ReviewTemplateTable from "./_components/ReviewTemplateTable";
@@ -51,7 +51,7 @@ export default function PerformanceTemplates() {
   } = useQuery({
     queryKey: ["templates"],
     queryFn: fetchTemplates,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -11,19 +11,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/select";
+import FormError from "@/shared/ui/form-error";
 import { userSchema } from "@/schema/user.schema";
 import { User } from "@/types/user.type";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 interface UsersAndRoleModalProps {
   isOpen: boolean;

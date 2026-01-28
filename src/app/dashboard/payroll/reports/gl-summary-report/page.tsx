@@ -7,11 +7,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/table";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
-import { useDownloadFile } from "@/utils/useDownloadFile";
+import { useDownloadFile } from "@/shared/utils/useDownloadFile";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import {
@@ -20,12 +20,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { BiExport } from "react-icons/bi";
-import PageHeader from "@/components/pageHeader";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 type GLSummaryData = {
   rows: {
@@ -47,7 +47,7 @@ const currentMonth = now.getMonth() + 1;
 
 const years = Array.from({ length: 5 }, (_, i) => (currentYear - i).toString());
 const months = Array.from({ length: 12 }, (_, i) =>
-  String(i + 1).padStart(2, "0")
+  String(i + 1).padStart(2, "0"),
 );
 
 export default function GLSummaryTable() {
@@ -67,7 +67,7 @@ export default function GLSummaryTable() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       return res.data.data;
     } catch (error) {
@@ -79,8 +79,9 @@ export default function GLSummaryTable() {
 
   const { data, isLoading, isError } = useQuery<GLSummaryData>({
     queryKey: ["gl-report", yearMonth],
-    queryFn: () => fetchGLSummary(session?.backendTokens.accessToken as string),
-    enabled: !!session?.backendTokens.accessToken,
+    queryFn: () =>
+      fetchGLSummary(session?.backendTokens?.accessToken as string),
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

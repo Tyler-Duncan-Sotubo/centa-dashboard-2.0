@@ -4,12 +4,12 @@ import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 const competencySchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Max 100 characters"),

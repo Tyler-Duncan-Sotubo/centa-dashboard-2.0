@@ -7,7 +7,7 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 
 export default function CompanyVarianceTable({
   data,
@@ -20,7 +20,7 @@ export default function CompanyVarianceTable({
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4">Company Payroll Variance</h2>
-      <Table className="text-md border shadow-sm rounded-md">
+      <Table className="text-md border shadow-2xs rounded-md">
         <TableHeader className="bg-monzo-primary">
           <TableRow>
             {data.columns.map((col) => (

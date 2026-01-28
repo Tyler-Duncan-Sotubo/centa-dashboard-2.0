@@ -3,16 +3,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Form, FormLabel, FormControl, FormMessage } from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import { Pencil, X, Settings } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 import { companyTaxDetailsSchema } from "@/schema/company-tax.schema";
 import {
   Card,
@@ -20,10 +15,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import InfoTooltip from "@/components/InfoTooltip";
+} from "@/shared/ui/card";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import InfoTooltip from "@/shared/ui/info-tooltip";
 
 const taxFields = [
   {
@@ -63,7 +58,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
       tin: !!taxDetail?.tin,
       nhf_code: !!taxDetail?.nhf_code,
       pension_code: !!taxDetail?.pension_code,
-    }
+    },
   );
 
   const form = useForm({
@@ -101,7 +96,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
   const handleSave = async (field: string) => {
     setIsLoading(true);
     const isValid = await form.trigger(
-      field as "tin" | "nhf_code" | "pension_code"
+      field as "tin" | "nhf_code" | "pension_code",
     );
     if (!isValid) return;
     const updatedTaxData = { ...form.getValues() };
@@ -156,7 +151,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
                         <FormControl>
                           <Input
                             {...form.register(
-                              key as "tin" | "nhf_code" | "pension_code"
+                              key as "tin" | "nhf_code" | "pension_code",
                             )}
                             className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                             placeholder={`Enter ${label}`}
@@ -185,7 +180,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
                       <div className="flex justify-between items-center mt-4 border-t pt-4 ">
                         <div>
                           {form.watch(
-                            key as "tin" | "nhf_code" | "pension_code"
+                            key as "tin" | "nhf_code" | "pension_code",
                           ) ? (
                             <div className="flex flex-col space-y-2">
                               <p className="text-gray-700 font-medium">
@@ -193,7 +188,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
                               </p>
                               <p className="font-semibold text-blue-600">
                                 {form.watch(
-                                  key as "tin" | "nhf_code" | "pension_code"
+                                  key as "tin" | "nhf_code" | "pension_code",
                                 )}
                               </p>
                               <p className="text-gray-500 text-sm mt-1">
@@ -220,7 +215,7 @@ const TaxConfig = ({ taxDetail }: { taxDetail: Record<string, string> }) => {
                   </div>
                 )}
               </div>
-            )
+            ),
           )}
         </Form>
       </CardContent>

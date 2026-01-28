@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { EmployeeDetail } from "@/types/payRunDetails";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { format } from "date-fns";
 import { Download } from "lucide-react";
 import React from "react";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { useToast } from "@/hooks/use-toast";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { useToast } from "@/shared/hooks/use-toast";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const PaySummary = ({
   payrollSummary,
@@ -25,7 +25,7 @@ const PaySummary = ({
     try {
       setIsLoading(true);
       const res = await axiosInstance.get(
-        `/api/payroll-report/payment-advice/${payrollSummary[0].payrollRunId}?format=${selectedFormat}`
+        `/api/payroll-report/payment-advice/${payrollSummary[0].payrollRunId}?format=${selectedFormat}`,
       );
 
       const url = res.data?.data?.url?.url;
@@ -52,7 +52,7 @@ const PaySummary = ({
   const fetchPayrollVariance = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-report/company-payroll-variance"
+        "/api/payroll-report/company-payroll-variance",
       );
       return res.data.data;
     } catch (error) {
@@ -69,7 +69,7 @@ const PaySummary = ({
   } = useQuery({
     queryKey: ["variance"],
     queryFn: fetchPayrollVariance,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (!payrollSummary || payrollSummary.length === 0) {
@@ -87,7 +87,7 @@ const PaySummary = ({
     <div className="md:w-[90%] mx-auto mt-6">
       {data?.current && (
         <section className="flex space-x-6">
-          <div className="border border-background rounded-md p-6 shadow-sm bg-background/30 w-[65%]">
+          <div className="border border-background rounded-md p-6 shadow-2xs bg-background/30 w-[65%]">
             <div>
               <p className="text-md text-textPrimary capitalize">
                 You are paying <strong>{data?.current.employee_count}</strong>{" "}
@@ -147,7 +147,7 @@ const PaySummary = ({
               Download Bank Advice
             </Button>
           </div>
-          <div className="w-[30%] hidden md:block border border-background rounded-md p-6 shadow-sm space-y-4 mx-auto text-center">
+          <div className="w-[30%] hidden md:block border border-background rounded-md p-6 shadow-2xs space-y-4 mx-auto text-center">
             <h3 className="text-md font-semibold text-textPrimary">
               Last Payroll Variance
             </h3>
@@ -174,8 +174,8 @@ const PaySummary = ({
               const color = isZero
                 ? "text-gray-500"
                 : isPositive
-                ? "text-green-600"
-                : "text-red-600";
+                  ? "text-green-600"
+                  : "text-red-600";
 
               return (
                 <div key={item.label} className="text-md flex justify-between">

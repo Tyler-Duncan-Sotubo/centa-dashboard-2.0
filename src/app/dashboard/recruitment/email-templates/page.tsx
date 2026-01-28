@@ -1,13 +1,13 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { FaPlus } from "react-icons/fa6";
 import EmailTemplateList from "./_components/EmailTemplateList";
 import CreateEmailTemplateModal from "./_components/CreateEmailTemplateModal";
@@ -35,7 +35,7 @@ const EmailTemplateSettings = () => {
   } = useQuery({
     queryKey: ["emailTemplates"],
     queryFn: () => fetchEmailTemplates(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

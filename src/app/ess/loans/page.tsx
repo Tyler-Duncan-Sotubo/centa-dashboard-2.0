@@ -4,15 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { Loan } from "@/types/loans.type";
 import { ActiveLoanCard } from "./_components/ActiveLoanCard";
 import { SettledLoansTable } from "./_components/SettledLoansTable";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import EmptyState from "@/components/empty-state";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import EmptyState from "@/shared/ui/empty-state";
+import { Wallet } from "lucide-react";
 
 export default function LoansPage() {
   const { data: session } = useSession();
@@ -31,7 +32,7 @@ export default function LoansPage() {
     queryFn: async () => {
       try {
         const res = await axiosInstance.get(
-          `/api/salary-advance/employee/${session?.user.id}`
+          `/api/salary-advance/employee/${session?.user.id}`,
         );
         return res.data.data;
       } catch (err) {
@@ -75,13 +76,13 @@ export default function LoansPage() {
           ))}
         </div>
       ) : (
-        <EmptyState
-          title="No Active Loans"
-          description="You have no active loans or salary advances at the moment."
-          image={
-            "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585350/wallet_tcmlzc.svg"
-          } // or "/images/empty-jobs.png" from public folder
-        />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <EmptyState
+            title="No Active Loans"
+            description="You have no active loans or salary advances at the moment."
+            icon={<Wallet className="h-20 w-20 text-brand mx-auto" />}
+          />
+        </div>
       )}
 
       {/* ── Settled loans (DataTable) ──────────────────────── */}

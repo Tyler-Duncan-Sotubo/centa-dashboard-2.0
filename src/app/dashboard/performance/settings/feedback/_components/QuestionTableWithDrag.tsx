@@ -11,11 +11,11 @@ import {
   TableHeader,
   TableBody,
   TableCell,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/table";
+import { Button } from "@/shared/ui/button";
 import { FaEdit } from "react-icons/fa";
 import FeedbackQuestionModal from "./CreateFeedbackQuestionModal";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 
 type Question = {
   id: string;

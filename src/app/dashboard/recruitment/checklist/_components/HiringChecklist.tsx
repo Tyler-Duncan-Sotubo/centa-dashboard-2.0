@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ChecklistCard, { TaskMeta } from "@/components/common/ChecklistCard";
+import ChecklistCard, { TaskMeta } from "@/shared/ui/checklist-card";
 import {
   FaBriefcase,
   FaClipboardCheck,

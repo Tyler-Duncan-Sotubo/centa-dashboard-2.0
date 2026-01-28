@@ -1,13 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
+import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { FaEye } from "react-icons/fa";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import { Feedback } from "@/types/performance/feedback.type";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import ViewFeedbackModal from "./ViewFeedbackModal";
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ type Props = {
 export default function FeedbackList({ feedbacks, disabledAction }: Props) {
   const [open, setOpen] = useState(false);
   const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(
-    null
+    null,
   );
 
   const columns: ColumnDef<Feedback>[] = [

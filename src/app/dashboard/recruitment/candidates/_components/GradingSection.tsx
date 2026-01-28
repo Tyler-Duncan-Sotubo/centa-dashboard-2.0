@@ -1,15 +1,15 @@
 "use client";
 
-import { RichTextEditor } from "@/components/RichTextEditor";
-import { Button } from "@/components/ui/button";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
+import { Button } from "@/shared/ui/button";
 import React, { useState } from "react";
 import { InterviewerWithScorecard } from "@/types/application";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useToast } from "@/hooks/use-toast";
-import Loading from "@/components/ui/loading";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useToast } from "@/shared/hooks/use-toast";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 
 function getScoreLabel(score: number): string {
@@ -117,7 +117,7 @@ const GradingSection = ({
   const fetchInterviewFeedback = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/interviews/4b53fcd5-b786-4d26-8ba5-ad37c8724eca/feedback`
+        `/api/interviews/4b53fcd5-b786-4d26-8ba5-ad37c8724eca/feedback`,
       );
       return res.data.data;
     } catch (error) {
@@ -130,7 +130,7 @@ const GradingSection = ({
   const { data, isLoading, isError } = useQuery({
     queryKey: ["candidate-application"],
     queryFn: () => fetchInterviewFeedback(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     refetchOnMount: true,
   });
 
@@ -189,7 +189,7 @@ const GradingSection = ({
                   onClick={() => {
                     populateFormFromFeedback(
                       interviewer.id,
-                      feedbackEntry.scores
+                      feedbackEntry.scores,
                     );
                     setIsEditing((prev) => ({
                       ...prev,
@@ -207,12 +207,12 @@ const GradingSection = ({
                 {scorecard.criteria.map((crit) => {
                   const scoreData = feedbackEntry.scores.find(
                     (s: { criterionId: string }) =>
-                      s.criterionId === crit.criterionId
+                      s.criterionId === crit.criterionId,
                   );
                   return (
                     <li
                       key={crit.criterionId}
-                      className="border p-4 rounded-md shadow-sm bg-muted"
+                      className="border p-4 rounded-md shadow-2xs bg-muted"
                     >
                       <p className="font-medium text-lg">{crit.label}</p>
                       <p className="text-sm text-muted-foreground">

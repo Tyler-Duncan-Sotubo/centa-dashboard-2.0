@@ -1,7 +1,7 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -29,7 +29,7 @@ const PipelinePage = () => {
   } = useQuery({
     queryKey: ["pipelineTemplates"],
     queryFn: () => fetchPipelineTemplates(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     retry: 2,
   });
 

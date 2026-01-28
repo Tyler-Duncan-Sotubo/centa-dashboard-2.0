@@ -6,11 +6,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import { FormType } from "./EmployeeInvite";
 import React from "react";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 
 const DependentsForm = ({ form }: { form: FormType }) => {
   return (

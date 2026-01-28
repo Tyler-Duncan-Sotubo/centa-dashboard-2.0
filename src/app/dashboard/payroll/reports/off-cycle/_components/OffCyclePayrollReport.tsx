@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import {
   XAxis,
   CartesianGrid,
@@ -24,8 +24,8 @@ import {
   Line,
 } from "recharts";
 
-import { formatCurrency } from "@/utils/formatCurrency";
-import PageHeader from "@/components/pageHeader";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import PageHeader from "@/shared/ui/page-header";
 
 interface PayrollSummaryItem {
   employeeId: string;
@@ -214,7 +214,7 @@ export default function OffCyclePayrollReport({
                     content={({ viewBox }) => {
                       const total = pieChartData.reduce(
                         (sum, item) => sum + item.value,
-                        0
+                        0,
                       );
                       if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                         return (
@@ -353,7 +353,7 @@ export default function OffCyclePayrollReport({
                     </td>
                     <td className="py-4 text-center">{item.payrollDate}</td>
                   </tr>
-                )
+                ),
               )}
             </tbody>
           </table>

@@ -1,6 +1,6 @@
 "use client";
 
-import { settingsItems } from "@/data/settings.data";
+import { settingsItems } from "@/features/settings/config/settings.data";
 import SettingsSection from "./_components/SettingsSection";
 
 export default function SettingsPage() {
@@ -10,7 +10,7 @@ export default function SettingsPage() {
       acc[item.category].push(item);
       return acc;
     },
-    {}
+    {},
   );
 
   return (

@@ -31,7 +31,7 @@ export function KeyValueCard({
         <h2 className="capitalize font-semibold mb-6 text-xl">{title}</h2>
         {fieldName === "finance" && (
           <EntitySheet
-            entityType={fieldName as "finance" | "compensation" | "employee"}
+            entityType={fieldName as "finance" | "compensation" | "certification" | "profile" | "dependent" | "history"}
             employeeId={employeeId}
             initialData={initialData}
             recordId={undefined}

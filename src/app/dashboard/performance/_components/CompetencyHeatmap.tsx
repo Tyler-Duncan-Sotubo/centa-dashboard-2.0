@@ -16,7 +16,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 
 interface CompetencyHeatmapProps {
   heatmap: Record<string, Record<string, number | string>>;
@@ -43,7 +43,7 @@ export function CompetencyHeatmap({
     competency: name,
     value: Object.values(levels).reduce(
       (sum, v) => Number(sum) + Number(v || 0),
-      0
+      0,
     ),
   }));
 

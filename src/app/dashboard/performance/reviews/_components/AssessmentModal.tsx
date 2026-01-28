@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import RenderHtml from "@/components/ui/render-html";
+} from "@/shared/ui/dialog";
+import RenderHtml from "@/shared/ui/render-html";
 import { FaEye } from "react-icons/fa";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 
 type AssessmentData = {
   id: string;
@@ -43,11 +43,12 @@ export default function AssessmentModal({
     queryKey: ["assessment", assessmentId],
     queryFn: async () => {
       const res = await axios.get(
-        `/api/assessments/${assessmentId}/conclusion`
+        `/api/assessments/${assessmentId}/conclusion`,
       );
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && !!assessmentId && open,
+    enabled:
+      Boolean(session?.backendTokens?.accessToken) && !!assessmentId && open,
   });
 
   if (isLoading) return <Loading />;

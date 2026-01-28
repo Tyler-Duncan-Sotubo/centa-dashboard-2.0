@@ -1,8 +1,8 @@
 "use client";
 
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/ui/status-badge";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
+import { StatusBadge } from "@/shared/ui/status-badge";
 import { format, isValid, parseISO } from "date-fns";
 import { CiExport } from "react-icons/ci";
 

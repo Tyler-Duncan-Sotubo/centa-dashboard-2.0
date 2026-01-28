@@ -1,7 +1,7 @@
 // _components/ResumeScoreSection.tsx
 import React from "react";
 import { ApplicationDetails } from "@/types/application";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 
 interface Props {
   score: ApplicationDetails["application"]["resumeScore"] | undefined;

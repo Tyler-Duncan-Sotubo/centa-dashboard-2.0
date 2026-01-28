@@ -5,22 +5,21 @@ import { EmployeeModal } from "../../_components/invite/EmployeeInvite";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
-type Params = {
-  params: {
-    id: string;
-  };
+type PageProps = {
+  params: Promise<{ id: string }>;
 };
 
-const EmployeePage = ({ params }: Params) => {
+const EmployeePage = ({ params }: PageProps) => {
+  const { id } = React.use(params);
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
 
   const fetchEmployee = async () => {
     try {
-      const res = await axiosInstance.get(`/api/employees/${params.id}/full`);
+      const res = await axiosInstance.get(`/api/employees/${id}/full`);
       return res.data.data;
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -30,9 +29,9 @@ const EmployeePage = ({ params }: Params) => {
   };
   // Fetch employee data if we're editing an existing employee
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["employee", params.id],
+    queryKey: ["employee", id],
     queryFn: fetchEmployee,
-    enabled: !!session?.backendTokens.accessToken && !!params.id,
+    enabled: Boolean(session?.backendTokens?.accessToken) && !!id,
   });
 
   // While either the session or employee data is loading, show loading state

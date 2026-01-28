@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/DataTable";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { Badge } from "@/shared/ui/badge";
+import { DataTable } from "@/shared/ui/data-table";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { Loan } from "@/types/loans.type";
 
 const settledColumns: ColumnDef<Loan>[] = [

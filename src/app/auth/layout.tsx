@@ -1,6 +1,6 @@
 "use client";
 
-import AuthFooter from "@/components/navigation/AuthFooter";
+import AuthFooter from "@/features/admin-layout/ui/AuthFooter";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

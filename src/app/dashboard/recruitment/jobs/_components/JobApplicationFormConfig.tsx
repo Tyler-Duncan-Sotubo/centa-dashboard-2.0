@@ -2,25 +2,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card } from "@/components/ui/card";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Card } from "@/shared/ui/card";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import Loading from "@/shared/ui/loading";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
+import { Label } from "@/shared/ui/label";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+} from "@/shared/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 
 import { AdditionalQuestionsForm } from "./AdditionalQuestionsForm";
 
@@ -68,14 +68,14 @@ const JobApplicationFormConfig = ({
     { question: "", type: "text", required: false, options: [] },
   ]);
   const [style, setStyle] = useState<"resume_only" | "form_only" | "both">(
-    "form_only"
+    "form_only",
   );
   const [publishing, setPublishing] = useState(false);
 
   const fetchFields = async (): Promise<FieldType[]> => {
     try {
       const res = await axiosInstance.get(
-        "/api/jobs/application-form/field-definitions"
+        "/api/jobs/application-form/field-definitions",
       );
       return res.data.data;
     } catch (err) {
@@ -91,7 +91,7 @@ const JobApplicationFormConfig = ({
   } = useQuery({
     queryKey: ["applicationFormFields"],
     queryFn: fetchFields,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   useEffect(() => {

@@ -6,9 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormItem,
@@ -16,14 +16,14 @@ import {
   FormControl,
   FormMessage,
   FormField,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Textarea } from "@/shared/ui/textarea";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useState } from "react";
-import FormError from "@/components/ui/form-error";
+import FormError from "@/shared/ui/form-error";
 
 const formSchema = z.object({
   name: z.string().min(1, "Template name is required"),
@@ -32,7 +32,7 @@ const formSchema = z.object({
     .array(
       z.object({
         value: z.string().min(1, "Stage name is required"),
-      })
+      }),
     )
     .min(1, "At least one stage is required")
     .max(20, "Maximum 20 stages allowed"),

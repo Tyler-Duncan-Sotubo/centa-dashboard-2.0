@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import PayrollBonuses from "./payroll-bonuses/PayrollBonuses";
 import PayrollDeductions from "./payroll-deductions/PayrollDeductions";
 

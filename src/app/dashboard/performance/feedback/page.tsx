@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   FaUsers,
   FaUserFriends,
@@ -12,19 +12,19 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
-import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/shared/ui/skeleton";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { Department } from "@/types/employees.type";
 import { TbMessageCircle } from "react-icons/tb";
 import FeedbackFormModal from "./_components/FeedbackFormModal";
@@ -68,7 +68,7 @@ export default function FeedbackPage() {
       const res = await axios.get(`/api/department`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: feedbacks = [], isLoading } = useQuery({
@@ -89,7 +89,7 @@ export default function FeedbackPage() {
       const res = await axios.get(`/api/feedback?${params.toString()}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: settings, isLoading: isLoadingSettings } = useQuery({

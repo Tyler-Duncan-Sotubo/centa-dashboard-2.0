@@ -1,22 +1,22 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
+} from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
 import { useEffect } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import { DateInput } from "@/components/ui/date-input";
+import { Textarea } from "@/shared/ui/textarea";
+import { DateInput } from "@/shared/ui/date-input";
 import { useSession } from "next-auth/react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { Goal } from "@/types/performance/goals.type";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 // Dynamic schema based on whether you're creating or editing
 const createSchema = z.object({

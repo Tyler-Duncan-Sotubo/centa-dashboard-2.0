@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import FormError from "@/components/ui/form-error";
-import { Label } from "@/components/ui/label";
-import Loading from "@/components/ui/loading";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
+import FormError from "@/shared/ui/form-error";
+import { Label } from "@/shared/ui/label";
+import Loading from "@/shared/ui/loading";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function PermissionManagementPage() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -75,7 +75,7 @@ export default function PermissionManagementPage() {
     setIsSubmitting(true);
     await submitPermissions(
       { rolePermissions: localRolePermissions },
-      setError
+      setError,
     );
   };
 
@@ -112,7 +112,7 @@ export default function PermissionManagementPage() {
           part
             .split("_")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")
+            .join(" "),
         )
         .join(": ");
 

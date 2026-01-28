@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodTypeAny } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+
+import GenericSheet from "@/shared/ui/generic-sheet";
+import Modal from "@/shared/ui/modal";
+import { Button } from "@/shared/ui/button";
 import { Edit, Plus } from "lucide-react";
-import { Form } from "@/components/ui/form";
+import { Form } from "@/shared/ui/form";
 
 import { DynamicFormFields } from "./personal/DynamicFormFields";
 import {
@@ -25,55 +27,56 @@ import {
   compensationSchema,
   compensationFields,
 } from "../schema/fields";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import FormError from "@/components/ui/form-error";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import FormError from "@/shared/ui/form-error";
+
+/* ✅ no-deps mobile hook */
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+
+  return isMobile;
+}
 
 const entityConfig = {
   profile: {
     title: "Profile",
-    icon: <Edit />,
     schema: profileSchema,
     fields: profileFields,
     endpoint: (id: string) => `/api/employee-profile/${id}`,
   },
   dependent: {
     title: "Dependent",
-    icon: <Edit />,
     schema: dependentSchema,
     fields: dependentFields,
     endpoint: (id: string) => `/api/dependents/${id}`,
   },
   history: {
     title: "History Entry",
-    icon: <Edit />,
     schema: historySchema,
     fields: historyFields,
     endpoint: (id: string) => `/api/employee-history/${id}`,
   },
   certification: {
     title: "Certification",
-    icon: <Edit />,
     schema: certificationSchema,
     fields: certificationFields,
     endpoint: (id: string) => `/api/employee-certifications/${id}`,
   },
-  employee: {
-    title: "Employment Details",
-    icon: <Edit />,
-    schema: profileSchema, // Reusing profile schema for employment details
-    fields: profileFields, // Reusing profile fields for employment details
-    endpoint: (id: string) => `/api/employee-details/${id}`,
-  },
   finance: {
     title: "Financials",
-    icon: <Edit />,
     schema: bankSchema,
     fields: bankFields,
     endpoint: (id: string) => `/api/employee-finance/${id}`,
   },
   compensation: {
     title: "Compensation",
-    icon: <Edit />,
     schema: compensationSchema,
     fields: compensationFields,
     endpoint: (id: string) => `/api/employee-compensation/${id}`,
@@ -82,63 +85,94 @@ const entityConfig = {
 
 type EntityType = keyof typeof entityConfig;
 
-interface EntitySheetProps<Schema extends ZodTypeAny> {
+interface EntitySheetProps {
   entityType: EntityType;
-  initialData?: Partial<z.infer<Schema>>;
+  initialData?: any;
   employeeId: string;
   recordId?: string;
 }
 
-export function EntitySheet<Schema extends ZodTypeAny>({
+export function EntitySheet({
   entityType,
   initialData,
   employeeId,
   recordId,
-}: EntitySheetProps<Schema>) {
+}: EntitySheetProps) {
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const cfg = entityConfig[entityType] as {
-    title: string;
-    icon: React.ReactNode;
-    schema: ZodTypeAny;
-    fields: typeof profileFields; // we only index by fields array shape
-    endpoint: (id: string) => string;
-  };
+
+  const cfg = entityConfig[entityType];
 
   const isEditing = Boolean(initialData || recordId);
   const TriggerIcon = isEditing ? Edit : Plus;
 
-  const form = useForm<z.infer<Schema>>({
-    resolver: zodResolver(cfg.schema),
+  const form = useForm({
+    resolver: zodResolver(cfg.schema as any),
     defaultValues: (initialData as any) || {},
   });
 
-  const createORUpdateData = useCreateMutation({
+  const mutation = useCreateMutation({
     endpoint: cfg.endpoint(employeeId),
     successMessage: isEditing
       ? `${cfg.title} updated successfully`
       : `${cfg.title} created successfully`,
     refetchKey: "employee",
-    onSuccess: () => {
-      setOpen(false);
-    },
+    onSuccess: () => setOpen(false),
   });
 
-  const onSubmit = async (data: z.infer<Schema>) => {
-    await createORUpdateData(data, setError, form.reset);
+  const onSubmit = async (values: any) => {
+    await mutation(values, setError, form.reset);
     setOpen(false);
   };
 
+  const content = (
+    <Form {...form}>
+      <form
+        id="entity-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 mt-6 mb-5"
+      >
+        <DynamicFormFields control={form.control} fields={cfg.fields as any} />
+        {error && <FormError message={error} />}
+      </form>
+    </Form>
+  );
+
+  const title = recordId ? `Edit ${cfg.title}` : `Add ${cfg.title}`;
+
+  /* 📱 MOBILE → MODAL */
+  if (isMobile) {
+    return (
+      <>
+        <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+          <TriggerIcon />
+        </Button>
+
+        <Modal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title={title}
+          confirmText={recordId ? "Update" : "Save"}
+          onConfirm={form.handleSubmit(onSubmit)}
+        >
+          {content}
+        </Modal>
+      </>
+    );
+  }
+
+  /* 🖥 DESKTOP → SHEET */
   return (
     <GenericSheet
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+        <Button variant="ghost" size="icon">
           <TriggerIcon />
         </Button>
       }
-      title={recordId ? `Edit ${cfg.title}` : `Add ${cfg.title}`}
+      title={title}
       footer={
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
@@ -150,16 +184,7 @@ export function EntitySheet<Schema extends ZodTypeAny>({
         </div>
       }
     >
-      <Form {...form}>
-        <form
-          id="entity-form"
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 mt-10 mb-5"
-        >
-          <DynamicFormFields control={form.control} fields={cfg.fields} />
-        </form>
-        {error && <FormError message={error} />}
-      </Form>
+      {content}
     </GenericSheet>
   );
 }

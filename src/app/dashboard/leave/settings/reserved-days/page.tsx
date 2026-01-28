@@ -1,5 +1,4 @@
-import React from "react";
-import ReservedDays from "../reserved-days/ReservedDays";
+import ReservedDays from "@/features/leave/settings/reserved-days/ReservedDays";
 
 const page = () => {
   return (

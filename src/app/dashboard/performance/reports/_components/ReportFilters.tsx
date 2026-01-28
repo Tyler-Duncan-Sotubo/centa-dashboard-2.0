@@ -3,18 +3,18 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Input } from "@/components/ui/input";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/select";
+import Loading from "@/shared/ui/loading";
 import { useSession } from "next-auth/react";
-import { ExportMenu } from "@/components/ExportMenu";
+import { ExportMenu } from "@/shared/ui/export-menu";
 
 type Option = { id: string; name: string };
 

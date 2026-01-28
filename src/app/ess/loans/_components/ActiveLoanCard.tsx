@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { Badge } from "@/shared/ui/badge";
+import { Progress } from "@/shared/ui/progress";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { Loan } from "@/types/loans.type";
 import { addMonths, endOfMonth, format } from "date-fns";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/shared/ui/separator";
 
 export function ActiveLoanCard({ loan }: { loan: Loan }) {
   const installmentAmount = Number(loan.preferredMonthlyPayment);
@@ -19,12 +19,12 @@ export function ActiveLoanCard({ loan }: { loan: Loan }) {
 
   const progressPercent = Math.min(
     (amountRepaid / Number(loan.amount)) * 100,
-    100
+    100,
   );
 
   const nextInstallmentDate = format(
     endOfMonth(addMonths(new Date(loan.createdAt), installmentsPaid)),
-    "dd MMM yyyy"
+    "dd MMM yyyy",
   );
 
   return (
@@ -40,8 +40,8 @@ export function ActiveLoanCard({ loan }: { loan: Loan }) {
                 loan.paymentStatus === "overdue"
                   ? "rejected"
                   : loan.paymentStatus === "closed"
-                  ? "approved"
-                  : "pending"
+                    ? "approved"
+                    : "pending"
               }
             >
               {loan.paymentStatus.toUpperCase()}

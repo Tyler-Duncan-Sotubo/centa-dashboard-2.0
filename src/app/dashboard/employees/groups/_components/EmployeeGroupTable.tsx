@@ -17,7 +17,7 @@ import {
 } from "@tanstack/react-table";
 
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 
 import {
@@ -27,9 +27,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/table";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -37,8 +37,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/dropdown-menu";
+import { Badge } from "@/shared/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,16 +49,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 
 import { ChevronDown, Trash2, Users, Settings2 } from "lucide-react";
 
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
-import EmptyState from "@/components/empty-state";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import EmptyState from "@/shared/ui/empty-state";
 import EmployeeGroupFormSheet from "./EmployeeGroupFormSheet";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 import { GroupType } from "@/types/team.type";
+import { HiOutlineUserGroup } from "react-icons/hi2";
 
 // --- Types ---
 export type EmployeeGroup = {
@@ -76,7 +77,7 @@ export type EmployeeGroup = {
 // --- Data Fetch ---
 async function fetchEmployeeGroups(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  axiosInstance: any
+  axiosInstance: any,
 ): Promise<EmployeeGroup[]> {
   try {
     const res = await axiosInstance.get("/api/employee-groups");
@@ -146,7 +147,7 @@ function DataTableToolbar({
             table.getColumn("name")?.setFilterValue(val);
             table.getColumn("leadEmployeeName")?.setFilterValue(val);
           }}
-          className="w-[240px]"
+          className="w-60"
         />
         {typeColumn && (
           <DropdownMenu>
@@ -172,7 +173,9 @@ function DataTableToolbar({
                     const current =
                       (typeColumn.getFilterValue() as string[]) ?? [];
                     typeColumn.setFilterValue(
-                      checked ? [...current, t] : current.filter((x) => x !== t)
+                      checked
+                        ? [...current, t]
+                        : current.filter((x) => x !== t),
                     );
                   }}
                 >
@@ -296,7 +299,7 @@ function useColumns() {
         enableHiding: false,
       },
     ],
-    []
+    [],
   );
 }
 
@@ -308,7 +311,7 @@ export default function EmployeeGroupDataTable() {
   const { data, isLoading, isError } = useQuery<EmployeeGroup[]>({
     queryKey: ["employee-groups"],
     queryFn: () => fetchEmployeeGroups(axiosInstance),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: !!session?.backendTokens?.accessToken,
     staleTime: 1000 * 60 * 60,
   });
 
@@ -354,11 +357,11 @@ export default function EmployeeGroupDataTable() {
       </PageHeader>
 
       {(data?.length ?? 0) === 0 ? (
-        <div className="mt-20">
+        <div className="flex min-h-[70vh] items-center justify-center">
           <EmptyState
             title="No Employee Groups Found"
             description="You don’t have any employee groups yet. Once groups are created, they’ll appear here."
-            image="https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585355/group_uux34k.svg"
+            icon={<HiOutlineUserGroup />}
           />
         </div>
       ) : (
@@ -379,7 +382,7 @@ export default function EmployeeGroupDataTable() {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     ))}
@@ -397,7 +400,7 @@ export default function EmployeeGroupDataTable() {
                         <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}

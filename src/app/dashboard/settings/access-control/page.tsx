@@ -2,11 +2,11 @@
 
 import React from "react";
 import UsersAndRoles from "./UsersAndRoles";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const Roles = () => {
   const { data: session, status } = useSession();

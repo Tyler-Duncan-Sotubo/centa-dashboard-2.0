@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   FormControl,
   FormDescription,
@@ -7,22 +7,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { EmploymentType, JobType } from "@/types/enums";
 import React from "react";
 import { PipelineTemplateSelector } from "./pipeline-template-selector";
-import { Textarea } from "@/components/ui/textarea";
-import { formatSource } from "@/utils/formatSource";
-import { CentaAISuggest } from "@/components/ui/centa-ai-suggest";
-import { DateInput } from "@/components/ui/date-input";
+import { Textarea } from "@/shared/ui/textarea";
+import { formatSource } from "@/shared/utils/formatSource";
+import { CentaAISuggest } from "@/shared/ui/centa-ai-suggest";
+import { DateInput } from "@/shared/ui/date-input";
 import { Controller } from "react-hook-form";
 
 const currencies = [
@@ -294,17 +294,17 @@ const JobDetailsForm = ({
                     }
                     if (data.responsibilities) {
                       data.responsibilities.forEach((r: string) =>
-                        addRes({ value: r })
+                        addRes({ value: r }),
                       );
                     }
                     if (data.requirements) {
                       data.requirements.forEach((r: string) =>
-                        addReq({ value: r })
+                        addReq({ value: r }),
                       );
                     }
                     if (data.benefits) {
                       data.benefits.forEach((b: string) =>
-                        addBenefit({ value: b })
+                        addBenefit({ value: b }),
                       );
                     }
                   }}

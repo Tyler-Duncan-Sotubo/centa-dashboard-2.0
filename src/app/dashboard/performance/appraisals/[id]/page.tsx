@@ -1,22 +1,23 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import CycleHeader from "./_components/CycleHeader";
 import ParticipantsTable from "./_components/ParticipantsTable";
-import BackButton from "@/components/ui/back-button";
+import BackButton from "@/shared/ui/back-button";
 import { FaCirclePlus } from "react-icons/fa6";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import AppraisalModal from "./_components/AppraisalModal";
 
-interface PageProps {
-  params: { id: string };
-}
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
 
 const CycleDetailPage = ({ params }: PageProps) => {
+  const { id } = React.use(params);
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const axios = useAxiosAuth();
@@ -27,12 +28,12 @@ const CycleDetailPage = ({ params }: PageProps) => {
     isLoading: isCycleLoading,
     isError: isCycleError,
   } = useQuery({
-    queryKey: ["appraisal-cycle", params.id],
+    queryKey: ["appraisal-cycle", id],
     queryFn: async () => {
-      const res = await axios.get(`/api/appraisals/cycle/${params.id}`);
+      const res = await axios.get(`/api/appraisals/cycle/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   // 2. Fetch participants for the cycle
@@ -41,12 +42,12 @@ const CycleDetailPage = ({ params }: PageProps) => {
     isLoading: isParticipantsLoading,
     isError: isParticipantsError,
   } = useQuery({
-    queryKey: ["appraisal-participants", params.id],
+    queryKey: ["appraisal-participants", id],
     queryFn: async () => {
-      const res = await axios.get(`/api/appraisals/${params.id}/appraisals`);
+      const res = await axios.get(`/api/appraisals/${id}/appraisals`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   // Handle loading/error state

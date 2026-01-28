@@ -2,9 +2,9 @@
 
 import React from "react";
 import { DollarSign, FileText, Home, PiggyBank } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { Button } from "@/shared/ui/button";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { PayRunDetails } from "@/types/payRunDetails";
 import { FinalPayRunTable } from "../../../../_components/FinalPayrunTable";
 

@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { FaBuilding, FaClone, FaGlobe, FaTrash } from "react-icons/fa";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { useState } from "react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import {
   Dialog,
   DialogTrigger,
@@ -19,7 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -29,8 +29,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+} from "@/shared/ui/alert-dialog";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 
 export type ScoreCard = {
   id: string;
@@ -200,7 +200,7 @@ export default function ScoreCardList({
                                 {criterion.maxScore})
                               </p>
                             </li>
-                          )
+                          ),
                       )}
                     </ul>
                   ) : (

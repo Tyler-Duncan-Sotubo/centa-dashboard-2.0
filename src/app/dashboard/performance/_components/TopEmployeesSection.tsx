@@ -1,14 +1,17 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Avatars } from "@/components/avatars";
+import { Badge } from "@/shared/ui/badge";
+import { Avatars } from "@/shared/ui/avatars";
 
 // Group by department
 function groupByDepartment(data: TopEmployee[]) {
-  return data.reduce((acc, emp) => {
-    acc[emp?.departmentName] = acc[emp?.departmentName] || [];
-    acc[emp?.departmentName].push(emp);
-    return acc;
-  }, {} as Record<string, TopEmployee[]>);
+  return data.reduce(
+    (acc, emp) => {
+      acc[emp?.departmentName] = acc[emp?.departmentName] || [];
+      acc[emp?.departmentName].push(emp);
+      return acc;
+    },
+    {} as Record<string, TopEmployee[]>,
+  );
 }
 
 interface TopEmployee {
@@ -35,7 +38,10 @@ export function TopEmployeesSection({ employees }: TopEmployeesSectionProps) {
       {Object.entries(grouped).map(([dept, emps]) => {
         const employeesArr = emps as TopEmployee[];
         return (
-          <div key={dept} className="mb-4 p-4 py-6 border rounded-md shadow-sm">
+          <div
+            key={dept}
+            className="mb-4 p-4 py-6 border rounded-md shadow-2xs"
+          >
             <div className="space-y-2">
               {employeesArr.map((employee: TopEmployee) => (
                 <div key={employee?.employeeId}>

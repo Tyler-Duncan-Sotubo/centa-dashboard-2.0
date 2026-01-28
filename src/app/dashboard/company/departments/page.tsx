@@ -1,7 +1,7 @@
-import Departments from "./_components/Departments";
+import DepartmentsClient from "@/features/company/departments/ui/DepartmentsClient";
 
 const page = () => {
-  return <Departments />;
+  return <DepartmentsClient />;
 };
 
 export default page;

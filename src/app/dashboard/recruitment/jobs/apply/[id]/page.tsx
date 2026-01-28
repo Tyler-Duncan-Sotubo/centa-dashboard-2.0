@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { ApplicationForm } from "../../_components/ApplicationForm";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { FaChevronCircleLeft } from "react-icons/fa";
 
@@ -39,7 +39,7 @@ export default function ApplyPage({ params }: PageProps) {
   const fetchForm = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/jobs/${params.id}/application-form`
+        `/api/jobs/${params.id}/application-form`,
       );
       return res.data.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export default function ApplyPage({ params }: PageProps) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["application-form", params.id],
     queryFn: () => fetchForm(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     refetchOnMount: true,
   });
 
@@ -79,7 +79,7 @@ export default function ApplyPage({ params }: PageProps) {
 
       const value =
         field.fieldType === "file"
-          ? rawValue?.base64 ?? "" // ✅ send only base64
+          ? (rawValue?.base64 ?? "") // ✅ send only base64
           : String(rawValue ?? "");
 
       return {

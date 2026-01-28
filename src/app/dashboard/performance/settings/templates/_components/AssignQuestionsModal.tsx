@@ -1,16 +1,16 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import Modal from "@/components/ui/modal";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import { Label } from "@/shared/ui/label";
+import Modal from "@/shared/ui/modal";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Loading from "@/components/ui/loading";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import Loading from "@/shared/ui/loading";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { Competency } from "@/types/performance/question-competency.type";
 
 type Props = {
@@ -47,7 +47,7 @@ export default function AssignQuestionsModal({
       const res = await axios.get("/api/performance-seed/competencies");
       return res.data.data as Competency[];
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const assignQuestions = useCreateMutation({

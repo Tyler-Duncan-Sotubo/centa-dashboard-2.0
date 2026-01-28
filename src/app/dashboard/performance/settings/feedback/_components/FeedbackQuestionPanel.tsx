@@ -2,14 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
-import { Button } from "@/components/ui/button";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { Button } from "@/shared/ui/button";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import QuestionTableWithDrag from "./QuestionTableWithDrag";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import PageHeader from "@/components/pageHeader";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import PageHeader from "@/shared/ui/page-header";
 import { FaCirclePlus } from "react-icons/fa6";
 import FeedbackQuestionModal from "./CreateFeedbackQuestionModal";
 
@@ -51,7 +51,7 @@ export default function FeedbackQuestionManager() {
       const res = await axios.get("/api/feedback-questions");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;
@@ -75,7 +75,7 @@ export default function FeedbackQuestionManager() {
               variant="ghost"
               className={cn(
                 "w-full justify-start capitalize rounded-none text-left p-3",
-                selectedType === type && "bg-muted font-semibold"
+                selectedType === type && "bg-muted font-semibold",
               )}
               onClick={() => setSelectedType(type)}
             >

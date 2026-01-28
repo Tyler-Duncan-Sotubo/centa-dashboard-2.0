@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/shared/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   Table,
   TableBody,
@@ -9,12 +9,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import Image from "next/image";
 import { User } from "@/types/user.type";
 import { useState } from "react";
 import UsersAndRoleModal from "./UsersAndRoleModal";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { Users } from "lucide-react";
 import DefaultManagerSettings from "./DefaultManager";
 import TwoFactorAuthToggle from "./TwoFactor";
@@ -131,12 +131,12 @@ export default function UsersAndRoles({ users }: { users: User[] }) {
                       {user.role === "super_admin"
                         ? "Super Admin"
                         : user.role === "manager"
-                        ? "Line Manager"
-                        : user.role === "hr_manager"
-                        ? "HR Manager"
-                        : user.role === "payroll_specialist"
-                        ? "Payroll Specialist"
-                        : "Unknown"}
+                          ? "Line Manager"
+                          : user.role === "hr_manager"
+                            ? "HR Manager"
+                            : user.role === "payroll_specialist"
+                              ? "Payroll Specialist"
+                              : "Unknown"}
                     </TableCell>
                     <TableCell>
                       <span

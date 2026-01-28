@@ -6,10 +6,10 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import { formatDate } from "date-fns";
 import { payrollOverview } from "@/types/analytics.type";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 
 export function PayrollSummaryPieChart({
@@ -29,17 +29,17 @@ export function PayrollSummaryPieChart({
 
   const netSalaryGrowth = calculateGrowth(
     Number(latestPayroll?.totalNetSalary),
-    Number(previousPayroll?.totalNetSalary)
+    Number(previousPayroll?.totalNetSalary),
   );
 
   const grossSalaryGrowth = calculateGrowth(
     Number(latestPayroll?.totalPayrollCost),
-    Number(previousPayroll?.totalPayrollCost)
+    Number(previousPayroll?.totalPayrollCost),
   );
 
   const deductionGrowth = calculateGrowth(
     Number(latestPayroll?.totalDeductions),
-    Number(previousPayroll?.totalDeductions)
+    Number(previousPayroll?.totalDeductions),
   );
 
   // Transform the payroll data into a format suitable for the pie chart
@@ -94,8 +94,8 @@ export function PayrollSummaryPieChart({
             displayValue > 0
               ? "text-success"
               : displayValue < 0
-              ? "text-error"
-              : "text-gray-500"
+                ? "text-error"
+                : "text-gray-500"
           }
         >
           {displayValue.toFixed(2)}%
@@ -145,7 +145,7 @@ export function PayrollSummaryPieChart({
     <section
       className={`${
         dashboard ? "w-full" : "md:w-[30%]"
-      } flex flex-col justify-between first-letter:shadow-none p-4 rounded-xl shadow-xs border border-background mt-6 md:mt-0`}
+      } flex flex-col justify-between first-letter:shadow-none p-4 rounded-xl shadow-2xs border border-background mt-6 md:mt-0`}
     >
       <div>
         <div className="flex items-center justify-between w-full mb-2">
@@ -186,7 +186,7 @@ export function PayrollSummaryPieChart({
                   latestPayroll?.payrollMonth &&
                   formatDate(
                     new Date(latestPayroll?.payrollMonth || ""),
-                    "MMMM yyyy"
+                    "MMMM yyyy",
                   )
                 }`}
                 fill="var(--color-text)"

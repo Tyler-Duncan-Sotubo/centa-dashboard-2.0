@@ -1,11 +1,11 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { use, useState } from "react";
 import ReviewHeader from "../_components/ReviewHeader";
 import QuestionnaireSection from "../_components/QuestionnaireSection";
 import GoalsSection from "../_components/GoalsSection";
@@ -19,16 +19,16 @@ import {
   FaFlagCheckered,
   FaListUl,
 } from "react-icons/fa6";
-import { Button } from "@/components/ui/button";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import BackButton from "@/components/ui/back-button";
+import { Button } from "@/shared/ui/button";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import BackButton from "@/shared/ui/back-button";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function ReviewDetailPage({ params }: Props) {
-  const { id } = params;
+  const { id } = use(params);
   const { data: session } = useSession();
   const axios = useAxiosAuth();
   const [conclusion, setConclusion] = useState({
@@ -45,7 +45,7 @@ export default function ReviewDetailPage({ params }: Props) {
       const res = await axios.get(`/api/performance-assessments/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && !!id,
+    enabled: Boolean(session?.backendTokens?.accessToken) && !!id,
   });
 
   const startReview = useUpdateMutation({
@@ -118,7 +118,7 @@ export default function ReviewDetailPage({ params }: Props) {
                   assessmentId={id}
                   comment={
                     review.sectionComments.find(
-                      (c: { section: string }) => c.section === "questionnaire"
+                      (c: { section: string }) => c.section === "questionnaire",
                     )?.comment ?? ""
                   }
                 />
@@ -131,7 +131,7 @@ export default function ReviewDetailPage({ params }: Props) {
                   assessmentId={id}
                   comment={
                     review.sectionComments.find(
-                      (c: { section: string }) => c.section === "goals"
+                      (c: { section: string }) => c.section === "goals",
                     )?.comment ?? ""
                   }
                 />
@@ -144,7 +144,7 @@ export default function ReviewDetailPage({ params }: Props) {
                   assessmentId={id}
                   comment={
                     review.sectionComments.find(
-                      (c: { section: string }) => c.section === "feedback"
+                      (c: { section: string }) => c.section === "feedback",
                     )?.comment ?? ""
                   }
                 />
@@ -157,7 +157,7 @@ export default function ReviewDetailPage({ params }: Props) {
                   assessmentId={id}
                   comment={
                     review.sectionComments.find(
-                      (c: { section: string }) => c.section === "attendance"
+                      (c: { section: string }) => c.section === "attendance",
                     )?.comment ?? ""
                   }
                 />

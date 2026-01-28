@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Button } from "@/components/ui/button";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormField,
@@ -15,16 +15,16 @@ import {
   FormMessage,
   FormControl,
   FormDescription,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+} from "@/shared/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { ToggleGroup, ToggleGroupItem } from "@/shared/ui/toggle-group";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Command,
   CommandInput,
@@ -32,18 +32,14 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/command";
+import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
+import { Badge } from "@/shared/ui/badge";
 import { useSession } from "next-auth/react";
-import FormError from "@/components/ui/form-error";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
+import FormError from "@/shared/ui/form-error";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
 
 // --- schema ---
 const schema = z.object({
@@ -121,7 +117,7 @@ export default function CompanyPolicyForm() {
       const res = await axios.get("/api/performance-policies");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const form = useForm<FormValues>({

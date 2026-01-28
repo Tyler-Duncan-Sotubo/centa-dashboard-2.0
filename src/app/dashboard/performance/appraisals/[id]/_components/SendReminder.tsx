@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import React from "react";
 import { IoIosSend } from "react-icons/io";
 

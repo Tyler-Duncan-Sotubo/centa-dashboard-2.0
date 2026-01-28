@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { Eye } from "lucide-react";
 import { OfferTemplatePreviewModal } from "./OfferTemplatePreviewModal";
 import { OfferTemplatesResponse } from "@/types/offer.type";
@@ -20,8 +20,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+} from "@/shared/ui/alert-dialog";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 import { FaBuilding } from "react-icons/fa";
 
 export default function OfferLetterTemplates({

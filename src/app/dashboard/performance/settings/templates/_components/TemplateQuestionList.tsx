@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import { FaQuestionCircle } from "react-icons/fa";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaCirclePlus } from "react-icons/fa6";
 import AssignQuestionsModal from "./AssignQuestionsModal";
-import { DeleteWithTwoIdsDialog } from "@/components/DeleteWithTwoIdsDialog";
+import { DeleteWithTwoIdsDialog } from "@/shared/ui/delete-with-two-Ids-dialog";
 
 type Question = {
   id: string;
@@ -30,7 +30,7 @@ export default function TemplateQuestionList({ templateId, questions }: Props) {
 
   const filtered = useMemo(() => {
     return questions.filter((q) =>
-      q.question.toLowerCase().includes(search.toLowerCase())
+      q.question.toLowerCase().includes(search.toLowerCase()),
     );
   }, [search, questions]);
 

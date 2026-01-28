@@ -1,9 +1,9 @@
 "use client";
 
-import { useDownloadFile } from "@/utils/useDownloadFile";
+import { useDownloadFile } from "@/shared/utils/useDownloadFile";
 import { useSession } from "next-auth/react";
 import { BiExport } from "react-icons/bi";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import {
   Select,
@@ -11,7 +11,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { EmployeeSalaryBreakdown } from "./EmployeeSalaryBreakdown";
 import { SalaryDistribution } from "./EmployeeSalaryStats";
 
@@ -48,9 +48,9 @@ const SalaryOverview = ({ data }: { data: SalaryData }) => {
   const availableMonths: string[] = Array.from(
     new Set(
       (data.breakdown as { payrollMonth: string }[])?.map(
-        (item) => item.payrollMonth
-      )
-    )
+        (item) => item.payrollMonth,
+      ),
+    ),
   )
     .sort()
     .reverse();
@@ -80,7 +80,7 @@ const SalaryOverview = ({ data }: { data: SalaryData }) => {
           onClick={() =>
             selectedMonth &&
             download(
-              `/api/payroll-report/gen-cost-by-department?month=${selectedMonth}`
+              `/api/payroll-report/gen-cost-by-department?month=${selectedMonth}`,
             )
           }
           isLoading={isLoading}

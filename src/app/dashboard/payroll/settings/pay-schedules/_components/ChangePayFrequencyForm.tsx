@@ -7,21 +7,21 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Badge, BadgeCheck, CalendarRange, CalendarDays } from "lucide-react";
 import { PayScheduleTable } from "./PayScheduleTable";
-import GenericSheet from "@/components/ui/generic-sheet";
+import GenericSheet from "@/shared/ui/generic-sheet";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/form";
+import { Button } from "@/shared/ui/button";
 import { cn } from "@/lib/utils";
 import { payFrequencySchema } from "@/schema/pay-frequency.schema";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import type { PaySchedule } from "@/types/pay-schedule";
-import { DateInput } from "@/components/ui/date-input";
+import { DateInput } from "@/shared/ui/date-input";
 import { FaCirclePlus } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 
@@ -50,7 +50,7 @@ export default function ChangePayFrequencyForm({
   schedules: PaySchedule[];
 }) {
   const [selectedSchedule, setSelectedSchedule] = useState<PaySchedule | null>(
-    null
+    null,
   );
   const [error, setError] = useState<string | null>(null);
   const [isSheetOpen, setSheetOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function ChangePayFrequencyForm({
           countryCode: "NG",
         },
         setError,
-        form.reset
+        form.reset,
       );
       setSheetOpen(false);
       setSelectedSchedule(null);
@@ -112,7 +112,7 @@ export default function ChangePayFrequencyForm({
           countryCode: "NG",
         },
         setError,
-        form.reset
+        form.reset,
       );
       setSelectedSchedule(null);
       setSheetOpen(false);
@@ -182,7 +182,7 @@ export default function ChangePayFrequencyForm({
                               "flex flex-col w-1/2 cursor-pointer rounded-lg p-4 border-2",
                               field.value === opt.value
                                 ? "border-brand"
-                                : "border-gray-300 hover:bg-gray-50"
+                                : "border-gray-300 hover:bg-gray-50",
                             )}
                           >
                             <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function ChangePayFrequencyForm({
                               "flex items-center cursor-pointer rounded-lg px-4 py-2 border-2",
                               field.value === opt.value
                                 ? "border-brand"
-                                : "border-gray-300 hover:bg-gray-50"
+                                : "border-gray-300 hover:bg-gray-50",
                             )}
                           >
                             {field.value === opt.value ? (

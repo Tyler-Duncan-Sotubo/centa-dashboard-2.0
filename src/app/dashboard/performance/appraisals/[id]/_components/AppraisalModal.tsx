@@ -6,17 +6,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
+} from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import { useEffect } from "react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { Appraisal } from "@/types/performance/appraisal.type";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 const schema = z.object({
   employeeId: z.string().min(1, "Employee is required"),

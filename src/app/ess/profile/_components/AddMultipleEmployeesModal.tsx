@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -12,14 +12,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
-import { Card } from "@/components/ui/card";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
+import { Card } from "@/shared/ui/card";
 import { Download, Trash, UploadCloud } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Link from "next/link";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import Image from "next/image";
 
 interface EmployeeModalProps {
@@ -37,7 +37,7 @@ const csvSchema = z.object({
         const fileName = files[0]?.name.toLowerCase();
         return fileName.endsWith(".csv") || fileName.endsWith(".xlsx");
       },
-      { message: "Only CSV and XLSX files are allowed." }
+      { message: "Only CSV and XLSX files are allowed." },
     ),
 });
 const AddMultipleEmployeesModal = ({ isOpen, onClose }: EmployeeModalProps) => {
@@ -61,7 +61,7 @@ const AddMultipleEmployeesModal = ({ isOpen, onClose }: EmployeeModalProps) => {
         form.setValue("file", acceptedFiles as unknown as FileList);
       }
     },
-    [form]
+    [form],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

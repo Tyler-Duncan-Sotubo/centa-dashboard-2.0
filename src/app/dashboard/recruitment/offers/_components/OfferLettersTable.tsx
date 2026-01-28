@@ -2,11 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/shared/ui/badge";
+import { DataTable } from "@/shared/ui/data-table";
 import { ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatars } from "@/components/avatars";
+import { Button } from "@/shared/ui/button";
+import { Avatars } from "@/shared/ui/avatars";
 import { useState } from "react";
 import {
   Select,
@@ -14,7 +14,7 @@ import {
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { OfferLetter } from "@/types/offer.type";
 import Link from "next/link";
 import { FaEdit, FaFilePdf } from "react-icons/fa";
@@ -53,8 +53,8 @@ function getColumns(data: OfferLetter[] | undefined): ColumnDef<OfferLetter>[] {
           status === "signed"
             ? "completed"
             : status === "sent"
-            ? "ongoing"
-            : "pending";
+              ? "ongoing"
+              : "pending";
         return <Badge variant={variant}>{status}</Badge>;
       },
     },
@@ -119,10 +119,10 @@ function getColumns(data: OfferLetter[] | undefined): ColumnDef<OfferLetter>[] {
   ];
 
   const showSend = data?.some(
-    (item) => item.status === "pending" || item.status === "sent"
+    (item) => item.status === "pending" || item.status === "sent",
   );
   const showActions = data?.some(
-    (item) => item.status === "signed" || item.status === "pending"
+    (item) => item.status === "signed" || item.status === "pending",
   );
 
   if (showActions) {
@@ -190,7 +190,7 @@ export default function OfferLettersTable({
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredData = data?.filter((item) =>
-    statusFilter === "all" ? true : item.status === statusFilter
+    statusFilter === "all" ? true : item.status === statusFilter,
   );
 
   const columns = getColumns(filteredData);

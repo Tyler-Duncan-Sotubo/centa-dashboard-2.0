@@ -12,21 +12,21 @@ import {
   CalendarRange, // leave
 } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/shared/ui/badge";
+import { Progress } from "@/shared/ui/progress";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerClose,
-} from "@/components/ui/drawer";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/drawer";
+import Loading from "@/shared/ui/loading";
 import { axiosInstance } from "@/lib/axios";
 import {
   OnboardingTaskKey,
   onboardingTaskLabels,
-} from "@/constants/onboardingTasks";
+} from "@/shared/constants/onboardingTasks";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
@@ -90,8 +90,10 @@ const OnboardingChecklist = ({
       const res = await axiosInstance.get("/api/company-settings/onboarding");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && !onboardingTaskCompleted,
+    enabled: !!session?.backendTokens?.accessToken && !onboardingTaskCompleted,
   });
+
+  console.log("Onboarding data:", onboarding);
 
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -232,7 +234,7 @@ const OnboardingChecklist = ({
                       <Badge variant="outline">Optional</Badge>
                     </Link>
                   </li>
-                )
+                ),
               )}
             </ul>
           </section>

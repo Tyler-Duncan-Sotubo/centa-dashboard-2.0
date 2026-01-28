@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
+import { DataTable } from "@/shared/ui/data-table";
 import { ReportFilters } from "../_components/ReportFilters";
-import RenderHtml from "@/components/ui/render-html";
+import RenderHtml from "@/shared/ui/render-html";
 import Link from "next/link";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import { ChevronsUpDown } from "lucide-react";
 
 // -------------- TYPE DEFS -------------- //
@@ -100,8 +100,8 @@ const columns: ColumnDef<AppraisalReportRow>[] = [
             val === "hold"
               ? "pending"
               : val && val !== "None"
-              ? "outline"
-              : "completed"
+                ? "outline"
+                : "completed"
           }
           className="capitalize"
         >
@@ -178,7 +178,7 @@ const AppraisalSummaryPage = () => {
       }) =>
         row.employeeName?.toLowerCase().includes(q) ||
         row.jobRoleName?.toLowerCase().includes(q) ||
-        row.departmentName?.toLowerCase().includes(q)
+        row.departmentName?.toLowerCase().includes(q),
     );
   }, [report, search]);
 

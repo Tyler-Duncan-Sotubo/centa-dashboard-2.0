@@ -1,32 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/shared/ui/label";
 import { useSession } from "next-auth/react";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+} from "@/shared/ui/select";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function DefaultManagerSettings() {
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
   const { toast } = useToast();
   const [fallbackManagerId, setFallbackManagerId] = useState<string | null>(
-    null
+    null,
   );
 
   async function fetchFallBackManager() {
     const res = await axiosInstance.get(
-      "/api/company-settings/default-manager"
+      "/api/company-settings/default-manager",
     );
     return res.data.data; // expected: [{ id, name }]
   }
@@ -41,7 +41,7 @@ export default function DefaultManagerSettings() {
       queryKey: ["existing-fallback-manager"],
       queryFn: fetchFallBackManager,
       enabled: !!session?.backendTokens?.accessToken,
-    }
+    },
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function DefaultManagerSettings() {
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       toast({

@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
-import { Input } from "@/components/ui/input";
+import Modal from "@/shared/ui/modal";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormControl,
@@ -10,14 +10,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 
 // Define a schema generator so each modal field is validated
 const generateSchema = (fields: { name: string; label: string }[]) => {
-  const shape = fields.reduce((acc, field) => {
-    acc[field.name] = z.string().min(1, `${field.label} is required`);
-    return acc;
-  }, {} as Record<string, z.ZodTypeAny>);
+  const shape = fields.reduce(
+    (acc, field) => {
+      acc[field.name] = z.string().min(1, `${field.label} is required`);
+      return acc;
+    },
+    {} as Record<string, z.ZodTypeAny>,
+  );
   return z.object(shape);
 };
 
@@ -48,10 +51,13 @@ export const RemitReusableModal = ({
 
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: fields.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {} as Record<string, string>),
+    defaultValues: fields.reduce(
+      (acc, field) => {
+        acc[field.name] = "";
+        return acc;
+      },
+      {} as Record<string, string>,
+    ),
   });
 
   const handleSubmit = (values: Record<string, string>) => {

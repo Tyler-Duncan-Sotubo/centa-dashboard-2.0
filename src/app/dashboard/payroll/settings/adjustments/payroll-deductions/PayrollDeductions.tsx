@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { EmployeeDeduction } from "@/types/deduction.type";
 import {
   AlertDialog,
@@ -19,19 +19,19 @@ import {
   AlertDialogAction,
   AlertDialogTitle,
   AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import { useState } from "react";
 import { Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+import { Button } from "@/shared/ui/button";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { formatCurrency } from "@/utils/formatCurrency";
+import Loading from "@/shared/ui/loading";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import DeductionModal from "./_components/DeductionModal";
-import PageHeader from "@/components/pageHeader";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const DeductionSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +41,7 @@ const DeductionSettings = () => {
   const fetchCustomDeductions = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/deductions/company/employee-deductions"
+        "/api/deductions/company/employee-deductions",
       );
       return res.data.data;
     } catch (error) {
@@ -58,7 +58,7 @@ const DeductionSettings = () => {
   } = useQuery({
     queryKey: ["employeeDeductions"],
     queryFn: fetchCustomDeductions,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const Alert = ({

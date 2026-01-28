@@ -11,23 +11,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/select";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
-import { MultiSelect } from "@/components/ui/multi-select";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { MultiSelect } from "@/shared/ui/multi-select";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import ScorecardTemplateSelector from "./ScorecardTemplateSelector";
 import EmailTemplateSelector from "./EmailTemplateSelector";
 
@@ -72,7 +72,7 @@ export function ScheduleInterviewModal({
   const fetchPipelineTemplates = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/interviews/scorecards-templates"
+        "/api/interviews/scorecards-templates",
       );
       return res.data.data;
     } catch (error) {
@@ -135,7 +135,7 @@ export function ScheduleInterviewModal({
   const { data: googleConnected } = useQuery({
     queryKey: ["google"],
     queryFn: fetchGoogle,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const {
@@ -145,15 +145,15 @@ export function ScheduleInterviewModal({
   } = useQuery({
     queryKey: ["scoreCards"],
     queryFn: () => fetchPipelineTemplates(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: emailTemplates, isLoading: isLoadingEmailTemplates } = useQuery(
     {
       queryKey: ["emailTemplates"],
       queryFn: () => fetchEmailTemplates(),
-      enabled: !!session?.backendTokens.accessToken,
-    }
+      enabled: Boolean(session?.backendTokens?.accessToken),
+    },
   );
 
   const form = useForm<ScheduleFormValues>({
@@ -196,7 +196,7 @@ export function ScheduleInterviewModal({
     setIsLoading(true);
 
     const selectedInterviewers = users?.filter((i) =>
-      values.interviewerIds.includes(i.id)
+      values.interviewerIds.includes(i.id),
     );
 
     const interviewerEmails = [
@@ -347,7 +347,7 @@ export function ScheduleInterviewModal({
                           ? selected(field.value)
                           : selected;
                       const filtered = selectedArray.filter(
-                        (email) => email !== candidateEmail
+                        (email) => email !== candidateEmail,
                       );
                       field.onChange([...filtered]);
                     }}

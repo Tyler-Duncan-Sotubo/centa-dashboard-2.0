@@ -5,10 +5,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodTypeAny } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import { Button } from "@/shared/ui/button";
 import { Edit, Plus } from "lucide-react";
-import { Form } from "@/components/ui/form";
+import { Form } from "@/shared/ui/form";
 
 import { DynamicFormFields } from "./personal/DynamicFormFields";
 import {
@@ -25,8 +25,8 @@ import {
   compensationSchema,
   compensationFields,
 } from "../schema/fields";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import FormError from "@/components/ui/form-error";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import FormError from "@/shared/ui/form-error";
 
 const entityConfig = {
   profile: {

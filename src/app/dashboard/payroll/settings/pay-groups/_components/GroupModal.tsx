@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormControl,
@@ -12,29 +12,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import FormError from "@/components/ui/form-error";
-import { Checkbox } from "@/components/ui/checkbox";
+} from "@/shared/ui/select";
+import FormError from "@/shared/ui/form-error";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { groupSchema, GroupSchemaType } from "@/schema/group";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Employee } from "@/types/employees.type";
-import Loading from "@/components/ui/loading";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import Loading from "@/shared/ui/loading";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { PaySchedule } from "@/types/pay-schedule";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import GenericSheet from "@/components/ui/generic-sheet";
+import GenericSheet from "@/shared/ui/generic-sheet";
 import { Edit } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { Button } from "@/shared/ui/button";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { FaCirclePlus } from "react-icons/fa6";
 
 interface GroupModalProps {
@@ -79,14 +79,15 @@ const GroupModal = ({ id, isEditing = false, name }: GroupModalProps) => {
   } = useQuery<PaySchedule[]>({
     queryKey: ["pay-schedules"],
     queryFn: fetchCompanyPayScheduleSummary,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   // Fetch group data when editing
   const { data: group, isLoading: isLoadingGroup } = useQuery<GroupSchemaType>({
     queryKey: ["group", id],
     queryFn: () => fetchGroup(id),
-    enabled: !!isEditing && !!id && !!session?.backendTokens.accessToken,
+    enabled:
+      !!isEditing && !!id && Boolean(session?.backendTokens?.accessToken),
   });
 
   // Fetch employees only when modal opens
@@ -142,7 +143,7 @@ const GroupModal = ({ id, isEditing = false, name }: GroupModalProps) => {
           ...values,
           payScheduleId: group?.payScheduleId,
         },
-        setError
+        setError,
       );
     } else {
       await createGroup(values, setError, form.reset);

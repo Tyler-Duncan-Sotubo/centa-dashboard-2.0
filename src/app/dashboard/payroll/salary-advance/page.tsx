@@ -4,11 +4,11 @@ import React from "react";
 import LoansPage from "./_components/LoansPage";
 import { useQuery } from "@tanstack/react-query";
 import { Loan } from "@/types/loans.type";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const SalaryAdvance = () => {
   const { data: session } = useSession();

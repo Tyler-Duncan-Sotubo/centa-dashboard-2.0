@@ -4,21 +4,21 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { CheckCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
+import { useToast } from "@/shared/hooks/use-toast";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
 
 export default function PerformanceSettings() {
   const { data: session, status } = useSession();

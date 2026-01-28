@@ -13,9 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
+import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -23,14 +23,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { PaySchedule } from "@/types/pay-schedule";
 
 export const columns = (
   selectedSchedule: PaySchedule | null,
-  setSelectedSchedule: (schedule: PaySchedule | null) => void
+  setSelectedSchedule: (schedule: PaySchedule | null) => void,
 ): ColumnDef<PaySchedule>[] => [
   {
     id: "select",
@@ -40,7 +40,7 @@ export const columns = (
         checked={selectedSchedule?.id === row.original.id}
         onCheckedChange={() =>
           setSelectedSchedule(
-            selectedSchedule?.id === row.original.id ? null : row.original
+            selectedSchedule?.id === row.original.id ? null : row.original,
           )
         }
         aria-label="Select row"
@@ -99,7 +99,7 @@ export function PayScheduleTable({
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -138,7 +138,7 @@ export function PayScheduleTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -155,7 +155,7 @@ export function PayScheduleTable({
                       setSelectedSchedule(
                         selectedSchedule?.id === row.original.id
                           ? null
-                          : row.original
+                          : row.original,
                       ) // ✅ Toggle selection
                   }
                   className={cn("cursor-pointer", {
@@ -167,7 +167,7 @@ export function PayScheduleTable({
                     <TableCell key={cell.id} className="py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

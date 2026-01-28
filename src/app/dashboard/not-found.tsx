@@ -1,4 +1,4 @@
-import NotFoundSection from "@/components/NotFoundSection";
+import NotFoundSection from "@/shared/ui/not-found-section";
 
 export default function DashboardNotFound() {
   return (

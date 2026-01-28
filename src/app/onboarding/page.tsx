@@ -1,14 +1,14 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useEffect, useMemo, useState } from "react";
-import { useOnboardingData } from "./_components/useOnboardingData";
-import Sidebar from "./_components/Sidebar";
-import StepForm from "./_components/StepForm";
 import { useSession } from "next-auth/react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useRouter } from "next/navigation";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
+import { useOnboardingData } from "@/features/ess-onboarding/hooks/use-onboarding-data";
+import EssOnboardingSidebar from "@/features/ess-onboarding/ui/sidebar";
+import StepForm from "@/features/ess-onboarding/ui/step-form";
 
 export default function OnboardingPage() {
   const { data: session } = useSession();
@@ -84,7 +84,7 @@ export default function OnboardingPage() {
     // Merge all answers into a single payload
     const mergedAnswers = Object.assign(
       {},
-      ...Object.values(updatedAnswersById)
+      ...Object.values(updatedAnswersById),
     );
 
     if (isLast) {
@@ -101,7 +101,7 @@ export default function OnboardingPage() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar
+      <EssOnboardingSidebar
         checklist={checklist}
         currentIndex={currentIndex}
         jump={setCurrentIndex}
@@ -115,7 +115,7 @@ export default function OnboardingPage() {
             description="Complete the steps below to onboard successfully."
           />
         </div>
-        <div className="sticky top-0 z-20 border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="sticky top-0 z-20 border-b bg-white/80 backdrop-blur-xs supports-backdrop-filter:bg-white/60">
           <div className="flex items-center gap-3 px-4 py-3 md:hidden">
             <div className="flex-1">
               <p className="text-sm text-muted-foreground">

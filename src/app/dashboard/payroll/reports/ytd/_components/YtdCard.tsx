@@ -1,13 +1,8 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import {
   FaMoneyBillWave,
   FaWallet,
@@ -16,7 +11,7 @@ import {
   FaUserShield,
   FaHandHoldingUsd,
 } from "react-icons/fa";
-import { ExportMenu } from "@/components/ExportMenu";
+import { ExportMenu } from "@/shared/ui/export-menu";
 
 type Totals = {
   gross_salary_ytd: number | string;

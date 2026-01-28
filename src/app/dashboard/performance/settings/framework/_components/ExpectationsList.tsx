@@ -1,15 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import { FaEdit, FaSearch } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { Expectation } from "@/types/performance/framework.type";
 import RoleCompetencyModal from "./RoleCompetencyModal";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import CompetencyModal from "../../competency/_components/CompetencyModal";
 
 interface ExpectationsListProps {
@@ -30,7 +30,7 @@ export default function ExpectationsList({
 
   const filtered = useMemo(() => {
     return expectations.filter((e) =>
-      e.competencyName.toLowerCase().includes(search.toLowerCase())
+      e.competencyName.toLowerCase().includes(search.toLowerCase()),
     );
   }, [expectations, search]);
 

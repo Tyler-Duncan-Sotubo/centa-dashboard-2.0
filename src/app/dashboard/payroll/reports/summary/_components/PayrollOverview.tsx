@@ -8,9 +8,9 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import { payrollOverview } from "@/types/analytics.type";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 
 const chartConfig = {
   "Payroll Cost": {
@@ -70,7 +70,7 @@ const CustomTooltip = ({
         color="bg-slate-500"
         name="Tax Deduction"
       />
-      <div className="h-[1px] w-full bg-background my-2" />
+      <div className="h-px w-full bg-background my-2" />
       <RenderToolTipUI cost={gross} color="bg-green-500" name="Net Salary" />
     </div>
   );
@@ -135,7 +135,7 @@ export function PayrollOverview({
     <div
       className={`${
         dashboard ? "md:w-full" : "md:w-[70%]"
-      } p-4 rounded-xl shadow-xs border border-background`}
+      } p-4 rounded-xl shadow-2xs border border-background`}
     >
       <div className="mb-6">
         <h3 className="text-xl my-1 font-semibold">Payroll Overview</h3>

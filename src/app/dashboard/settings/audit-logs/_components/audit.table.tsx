@@ -13,9 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   Table,
   TableBody,
@@ -23,10 +23,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { AuditLog } from "@/types/audit.type";
 import { AuditLogDetailsSheet } from "./AuditLogDetailsSheet";
-import { ActionBadge } from "@/components/ui/action-badge";
+import { ActionBadge } from "@/shared/ui/action-badge";
 
 const RoleMap = {
   super_admin: "Super Admin",
@@ -142,7 +142,7 @@ export const columns: ColumnDef<AuditLog>[] = [
 export function AuditTable({ data = [] }: { data: AuditLog[] | undefined }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -191,7 +191,7 @@ export function AuditTable({ data = [] }: { data: AuditLog[] | undefined }) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -210,7 +210,7 @@ export function AuditTable({ data = [] }: { data: AuditLog[] | undefined }) {
                     <TableCell key={cell.id} className="py-5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

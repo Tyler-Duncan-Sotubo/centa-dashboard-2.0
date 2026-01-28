@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RichTextEditor } from "@/components/RichTextEditor";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/shared/ui/accordion";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -18,22 +18,22 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { CentaAISuggest } from "@/components/ui/centa-ai-suggest";
+} from "@/shared/ui/select";
+import { Slider } from "@/shared/ui/slider";
+import { Button } from "@/shared/ui/button";
+import { CentaAISuggest } from "@/shared/ui/centa-ai-suggest";
 import CompetencyRadarChartCard from "./CompetencyRadarChart";
 import { Question } from "@/types/performance/question-competency.type";
-import FormError from "@/components/ui/form-error";
-import RenderHtml from "@/components/ui/render-html";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import FormError from "@/shared/ui/form-error";
+import RenderHtml from "@/shared/ui/render-html";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useRouter } from "next/navigation";
 
 type Conclusion = {

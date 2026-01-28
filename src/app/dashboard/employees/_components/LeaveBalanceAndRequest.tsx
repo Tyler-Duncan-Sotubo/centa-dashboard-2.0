@@ -1,9 +1,9 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 
 interface LeaveBalanceEntry {
   leaveTypeId: string;
@@ -55,8 +55,8 @@ const leaveRequestColumns: ColumnDef<LeaveRequestEntry>[] = [
             status === "approved"
               ? "approved"
               : status === "pending"
-              ? "pending"
-              : "pending"
+                ? "pending"
+                : "pending"
           }
         >
           {status}

@@ -3,17 +3,22 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { useEffect, useState } from "react";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { use, useEffect, useState } from "react";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import CompetencyList from "../../competency/_components/CompetencyList";
 import AssignQuestionsModal from "../_components/AssignQuestionsModal";
 import TemplateQuestionList from "../_components/TemplateQuestionList";
-import BackButton from "@/components/ui/back-button";
+import BackButton from "@/shared/ui/back-button";
 import { Competency } from "@/types/performance/question-competency.type";
 
-export default function Template({ params }: { params: { id: string } }) {
+export default function Template({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
   const { data: session } = useSession();
   const axios = useAxiosAuth();
   const [activeId, setActiveId] = useState<string | null>("all");
@@ -25,12 +30,12 @@ export default function Template({ params }: { params: { id: string } }) {
   }, [activeId]);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["template-questions", params.id],
+    queryKey: ["template-questions", id],
     queryFn: async () => {
-      const res = await axios.get(`/api/templates/${params.id}`);
+      const res = await axios.get(`/api/templates/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const competencies: Competency[] = data?.questions
@@ -52,7 +57,7 @@ export default function Template({ params }: { params: { id: string } }) {
           }
           acc[id].questions.push(q);
           return acc;
-        }, {})
+        }, {}),
       )
     : [];
 
@@ -79,27 +84,23 @@ export default function Template({ params }: { params: { id: string } }) {
           isDisabled={true}
         />
         <TemplateQuestionList
-          templateId={params.id}
+          templateId={id}
           questions={
             activeId === "all"
               ? competencies.flatMap((c) =>
                   c.questions.map((q) => ({
                     ...q,
                     competencyName: c.name,
-                  }))
+                  })),
                 )
-              : active?.questions.map((q) => ({
+              : (active?.questions.map((q) => ({
                   ...q,
                   competencyName: active.name,
-                })) ?? []
+                })) ?? [])
           }
         />
 
-        <AssignQuestionsModal
-          open={false}
-          setOpen={() => {}}
-          templateId={params.id}
-        />
+        <AssignQuestionsModal open={false} setOpen={() => {}} templateId={id} />
       </div>
     </section>
   );

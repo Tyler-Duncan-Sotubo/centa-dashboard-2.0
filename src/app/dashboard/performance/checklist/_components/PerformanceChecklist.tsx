@@ -10,7 +10,7 @@ import {
   Landmark,
   Users,
 } from "lucide-react";
-import ChecklistCard, { TaskMeta } from "@/components/common/ChecklistCard";
+import ChecklistCard, { TaskMeta } from "@/shared/ui/checklist-card";
 const TASK_META: Record<string, TaskMeta> = {
   performance_general: {
     label: "General Settings",

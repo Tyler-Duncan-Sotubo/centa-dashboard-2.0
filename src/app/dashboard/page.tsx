@@ -1,23 +1,22 @@
 "use client";
 
-import React from "react";
-import CompanySummary from "../../components/widgets/CompanySummary";
+import CompanySummary from "../../features/home/dashboard/CompanySummary";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
-import { EmployeesTable } from "@/components/common/tables/employees.table";
-import { formattedDate, timeOfDay } from "@/utils/formatDate";
+import { EmployeesTable } from "@/features/employees/core/ui/employees.table";
+import { formattedDate, timeOfDay } from "@/shared/utils/formatDate";
 import { PayrollOverview } from "./payroll/reports/summary/_components/PayrollOverview";
-import { EmployeeDepartmentPieChart } from "@/components/widgets/RoleLevelBarChart";
-import QuickActions from "@/components/widgets/QuickActions";
-import { AttendanceChart } from "@/components/widgets/AttendanceChart";
-import { EmployeesOnLeaveCard } from "@/components/widgets/EmployeesOnLeaveCard";
+import { EmployeeDepartmentPieChart } from "@/features/home/dashboard/RoleLevelBarChart";
+import QuickActions from "@/features/home/dashboard/QuickActions";
+import { AttendanceChart } from "@/features/home/dashboard/AttendanceChart";
+import { EmployeesOnLeaveCard } from "@/features/home/dashboard/EmployeesOnLeaveCard";
 import { Employee } from "@/types/employees.type";
 import { payrollOverview } from "@/types/analytics.type";
-import DashboardBanner from "@/components/common/DashboardBanner";
+import DashboardBanner from "@/features/home/dashboard/DashboardBanner";
 import OnboardingChecklist from "./OnboardingChecklist";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export interface SummaryData {
   totalEmployees: number;
@@ -93,7 +92,7 @@ const DashboardPage = () => {
   const { data, isLoading, isError } = useQuery<SummaryData>({
     queryKey: ["company-summary"],
     queryFn: fetchCompanySummary,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: !!session?.backendTokens?.accessToken,
   });
 
   const {

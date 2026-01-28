@@ -1,33 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectItem,
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
+} from "@/shared/ui/select";
+import { useToast } from "@/shared/hooks/use-toast";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import { format } from "date-fns";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { Button } from "@/shared/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Calendar } from "@/shared/ui/calendar";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function ThirteenthMonthSettings() {
   const { toast } = useToast();
@@ -47,7 +43,7 @@ export default function ThirteenthMonthSettings() {
     try {
       await axiosInstance.patch(
         "/api/payroll-settings/update-payroll-setting",
-        { key, value }
+        { key, value },
       );
     } catch {
       toast({
@@ -122,7 +118,7 @@ export default function ThirteenthMonthSettings() {
                 variant="outline"
                 className={cn(
                   "w-[300px] justify-start text-left font-normal",
-                  !paymentDate && "text-muted-foreground"
+                  !paymentDate && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -148,7 +144,7 @@ export default function ThirteenthMonthSettings() {
                       () => {
                         setDateSaved(true);
                         setTimeout(() => setDateSaved(false), 4000);
-                      }
+                      },
                     );
                     setCalendarOpen(false);
                   }

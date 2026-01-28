@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { Trash, PlusCircle } from "lucide-react";
 import {
   AlertDialog,
@@ -21,17 +21,17 @@ import {
   AlertDialogAction,
   AlertDialogTitle,
   AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
-import { formatCurrency } from "@/utils/formatCurrency";
+} from "@/shared/ui/alert-dialog";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import { FaEdit, FaFileImport } from "react-icons/fa";
-import PageHeader from "@/components/pageHeader";
-import BulkUploadModal from "@/components/common/BulkUploadModal";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
+import BulkUploadModal from "@/shared/ui/bulk-upload-modal";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { CostCenterModal } from "./_components/CostCenterModal";
 
 export interface CostCenter {
@@ -65,7 +65,7 @@ const CostCenterSettings = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["cost-centers"],
     queryFn: fetchCostCenters,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const Alert = ({
@@ -135,7 +135,7 @@ const CostCenterSettings = () => {
         {/* ✅ Table always visible */}
         <div className="my-2 space-y-4 py-6">
           <Table className="text-md">
-            <TableHeader className="shadow-sm rounded-lg border">
+            <TableHeader className="shadow-2xs rounded-lg border">
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Code</TableHead>

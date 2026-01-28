@@ -1,33 +1,31 @@
 "use client";
 
-import AnnouncementsCard from "@/components/ess/homepage-widgets/AnnouncementsCard";
-import ClockInCard from "@/components/ess/homepage-widgets/ClockInCard";
-import EmployeeProfileCard from "@/components/ess/homepage-widgets/EmployeeProfileCard";
-import InteractiveCalendarCard from "@/components/ess/homepage-widgets/InteractiveCalendarCard";
-import LeaveManagementCard from "@/components/ess/homepage-widgets/LeaveManagementCard";
+import AnnouncementsCard from "@/features/home/ess/AnnouncementsCard";
+import ClockInCard from "@/features/home/ess/ClockInCard";
+import EmployeeProfileCard from "@/features/home/ess/EmployeeProfileCard";
+import InteractiveCalendarCard from "@/features/home/ess/InteractiveCalendarCard";
+import LeaveManagementCard from "@/features/home/ess/LeaveManagementCard";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
-import PendingTasksWidget from "@/components/ess/homepage-widgets/PendingTasksWidget";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@/context/AuthContext";
-import { useWorkspace } from "@/context/workspace";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import PendingTasksWidget from "@/features/home/ess/PendingTasksWidget";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { useAuth } from "@/shared/context/AuthContext";
+import { useWorkspace } from "@/shared/context/workspace";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
   const { workspace } = useWorkspace();
 
-  const employeeId = session?.employeeId ?? session?.user.id ?? null;
+  const accessToken = session?.backendTokens?.accessToken;
+  const employeeId = session?.employeeId ?? session?.user?.id ?? null;
 
-  const enabled =
-    workspace === "employee" &&
-    !!employeeId &&
-    !!session?.backendTokens?.accessToken;
+  const enabled = status === "authenticated" && !!employeeId && !!accessToken;
 
   const { user, refreshUser } = useAuth();
   React.useEffect(() => {
@@ -39,8 +37,9 @@ const Dashboard = () => {
   const fetchEmployees = async (id: string) => {
     try {
       const res = await axiosInstance.get(
-        `/api/company/employee-summary/${id}`
+        `/api/company/employee-summary/${id}`,
       );
+      console.log("Fetched employee summary:", res.data);
       return res.data.data;
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -54,6 +53,8 @@ const Dashboard = () => {
     queryFn: () => fetchEmployees(employeeId as string),
     enabled,
   });
+
+  console.log("Dashboard data:", data);
 
   if (status === "loading" || isLoading) return <Loading />;
   if (isError) return <p>Error loading data</p>;

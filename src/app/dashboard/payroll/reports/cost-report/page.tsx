@@ -16,29 +16,29 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { format } from "date-fns";
 import { useState } from "react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
-import { ExportMenu } from "@/components/ExportMenu";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { ExportMenu } from "@/shared/ui/export-menu";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const chartColors = [
   "#007A8B", // brand
@@ -56,7 +56,7 @@ const currentMonth = now.getMonth() + 1;
 
 const years = Array.from({ length: 5 }, (_, i) => (currentYear - i).toString());
 const months = Array.from({ length: 12 }, (_, i) =>
-  String(i + 1).padStart(2, "0")
+  String(i + 1).padStart(2, "0"),
 );
 
 export default function PayrollCostReport() {
@@ -69,7 +69,7 @@ export default function PayrollCostReport() {
   const fetchPayrollCost = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/payroll-report/payroll-cost?month=${yearMonth}`
+        `/api/payroll-report/payroll-cost?month=${yearMonth}`,
       );
       return res.data.data;
     } catch (error) {
@@ -82,7 +82,7 @@ export default function PayrollCostReport() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["payroll-cost-report", yearMonth],
     queryFn: fetchPayrollCost,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;
@@ -109,7 +109,7 @@ export default function PayrollCostReport() {
       name: dept.departmentName,
       value: parseFloat(dept.totalGross as string),
       fill: chartColors[i % chartColors.length],
-    })
+    }),
   );
 
   interface PayGroupChartData {

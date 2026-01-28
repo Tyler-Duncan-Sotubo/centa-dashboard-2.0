@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { formatCurrency } from "@/utils/formatCurrency"; // Assuming you have this utility
+import { formatCurrency } from "@/shared/utils/formatCurrency"; // Assuming you have this utility
 
 type LoanRepaymentSummary = {
   employeeId: string;

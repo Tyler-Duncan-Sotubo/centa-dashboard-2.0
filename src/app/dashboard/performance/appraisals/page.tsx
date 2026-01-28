@@ -1,14 +1,14 @@
 "use client";
 
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import React, { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import AppraisalCycleModal from "./_components/AppraisalCycleModal";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import AppraisalCycleList from "./_components/AppraisalCycleList";
 
 const AppraisalPage = () => {
@@ -22,7 +22,7 @@ const AppraisalPage = () => {
       const res = await axios.get(`/api/appraisals/cycle`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

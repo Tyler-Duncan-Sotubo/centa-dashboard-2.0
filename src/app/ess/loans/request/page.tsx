@@ -13,12 +13,12 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import PageHeader from "@/components/pageHeader";
-import NavBackButton from "@/components/ess/navigation/NavBackButton";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import PageHeader from "@/shared/ui/page-header";
+import NavBackButton from "@/features/ess-layout/ui/NavBackButton";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -74,7 +74,7 @@ export default function SalaryAdvanceRequestPage() {
     }
 
     await requestAdvance(values, (err: string) =>
-      setError("name", { type: "manual", message: err })
+      setError("name", { type: "manual", message: err }),
     );
   };
 

@@ -2,11 +2,11 @@
 
 import React from "react";
 import TaxConfig from "./TaxConfigPage";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const Taxes = () => {
   const { data: session, status } = useSession();
@@ -30,7 +30,7 @@ const Taxes = () => {
   } = useQuery({
     queryKey: ["company-tax-details"],
     queryFn: fetchCompanyTaxDetails,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

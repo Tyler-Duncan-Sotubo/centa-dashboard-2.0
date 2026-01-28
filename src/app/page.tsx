@@ -1,6 +1,6 @@
 "use client";
 
-import AuthFooter from "@/components/navigation/AuthFooter";
+import AuthFooter from "@/features/admin-layout/ui/AuthFooter";
 import LoginForm from "./auth/login/page";
 
 export default function Home() {

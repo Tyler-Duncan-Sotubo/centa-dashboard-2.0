@@ -10,7 +10,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { FaReceipt } from "react-icons/fa6";
-import ChecklistCard, { TaskMeta } from "@/components/common/ChecklistCard";
+import ChecklistCard, { TaskMeta } from "@/shared/ui/checklist-card";
 
 const TASK_META: Record<string, TaskMeta> = {
   pay_schedule: {

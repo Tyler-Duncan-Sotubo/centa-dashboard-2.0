@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PageHeader from "@/components/pageHeader";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import PageHeader from "@/shared/ui/page-header";
 import TaxFilingDocuments from "../_components/TaxFilingDocuments";
 import TaxForms from "../_components/TaxForms";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const DocumentAndForms = () => {
   return (

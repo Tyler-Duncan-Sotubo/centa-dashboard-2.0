@@ -4,13 +4,14 @@ import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React from "react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import OnboardingEmployeesTable from "./_components/OnboardingEmployeesTable";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { OnboardingEmployee } from "@/types/onboarding/onboarding.type";
 import { SendOnboardingInviteSheet } from "./_components/SendOnboardingInviteSheet";
-import EmptyState from "@/components/empty-state";
+import EmptyState from "@/shared/ui/empty-state";
+import { HiUserPlus } from "react-icons/hi2";
 
 const OnboardingPage = () => {
   const { data: session } = useSession();
@@ -31,7 +32,7 @@ const OnboardingPage = () => {
   const { data, isLoading, isError } = useQuery<OnboardingEmployee[]>({
     queryKey: ["onboarding-employees"],
     queryFn: fetchEmployeesOnboarding,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;
@@ -50,13 +51,11 @@ const OnboardingPage = () => {
 
       {/* Render the onboarding employees table or an empty state */}
       {data?.length === 0 ? (
-        <div className="mt-20">
+        <div className="flex min-h-[70vh] items-center justify-center">
           <EmptyState
             title="No Active Onboarding"
             description="It seems like there are no onboarding employees at the moment. You can invite employees to start the onboarding process."
-            image={
-              "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585350/onboarding_izogcj.svg"
-            } // or "/images/empty-jobs.png" from public folder
+            icon={<HiUserPlus />}
           />
         </div>
       ) : (

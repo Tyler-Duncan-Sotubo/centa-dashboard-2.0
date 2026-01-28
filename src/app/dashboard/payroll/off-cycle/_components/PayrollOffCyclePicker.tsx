@@ -1,11 +1,11 @@
 "use client";
 
 import { z } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import { Button } from "@/shared/ui/button";
 import { MdPayments } from "react-icons/md";
 import { useState } from "react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -15,19 +15,19 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
+import { Textarea } from "@/shared/ui/textarea";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+} from "@/shared/ui/select";
+import { Switch } from "@/shared/ui/switch";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 export const overRideSchema = z.object({
   notes: z.string().min(1, "Note is required"),
@@ -182,7 +182,7 @@ export const PayrollOffCyclePicker = ({
         payrollDate,
       },
       setError,
-      form.reset
+      form.reset,
     );
   };
 
@@ -216,7 +216,7 @@ export const PayrollOffCyclePicker = ({
                   onValueChange={(val) => {
                     field.onChange(val);
                     const config = payElementConfigs.find(
-                      (p) => p.type === val
+                      (p) => p.type === val,
                     );
                     if (config) {
                       form.setValue("taxable", config.taxable);
@@ -227,7 +227,7 @@ export const PayrollOffCyclePicker = ({
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select element type" />
                   </SelectTrigger>
-                  <SelectContent className="z-[100]">
+                  <SelectContent className="z-100">
                     {payElementConfigs.map((config) => (
                       <SelectItem key={config.type} value={config.type}>
                         {config.label}

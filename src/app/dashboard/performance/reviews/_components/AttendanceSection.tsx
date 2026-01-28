@@ -52,7 +52,7 @@ export default function AttendanceSection({
         {summaryData.map(({ title, icon, value }) => (
           <div
             key={title}
-            className="px-4 py-6 shadow rounded-lg bg-white flex flex-col items-center space-y-2"
+            className="px-4 py-6 shadow-xs rounded-lg bg-white flex flex-col items-center space-y-2"
           >
             <div className="flex items-center gap-2">
               <div className="bg-gray-100 p-2 rounded-full text-xl">{icon}</div>

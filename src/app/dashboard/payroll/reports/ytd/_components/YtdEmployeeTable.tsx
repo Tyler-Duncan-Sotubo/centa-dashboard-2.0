@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { DataTable } from "@/components/DataTable"; // ⬅️ adjust path if needed
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { DataTable } from "@/shared/ui/data-table"; // ⬅️ adjust path if needed
 
 type YtdEmployee = {
   employeeId: string;

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -13,11 +13,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
-import { Switch } from "@/components/ui/switch";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
+import { Switch } from "@/shared/ui/switch";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 type ConfigType = "types" | "reasons" | "checklist";
 

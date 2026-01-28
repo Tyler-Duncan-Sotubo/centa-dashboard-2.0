@@ -1,10 +1,10 @@
 "use client";
 
 import AsidePanel from "./_components/AsidePanel";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { TopMetrics } from "./_components/TopMetrics";
 import { AppraisalOutcomes } from "./_components/AppraisalOutcomes";
 import { RecommendationDonut } from "./_components/RecommendationDonut";
@@ -12,7 +12,7 @@ import { CompetencyHeatmap } from "./_components/CompetencyHeatmap";
 import { GoalAndFeedbackCharts } from "./_components/GoalAndFeedbackCharts";
 import AppraisalCycleList from "./appraisals/_components/AppraisalCycleList";
 import { TopEmployeesSection } from "./_components/TopEmployeesSection";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export default function PerformanceDashboard() {
   const { data: session } = useSession();
@@ -38,13 +38,13 @@ export default function PerformanceDashboard() {
   const hasScores =
     performanceData?.appraisalOutcomes &&
     Object.values(
-      performanceData.appraisalOutcomes.scoreDistribution || {}
+      performanceData.appraisalOutcomes.scoreDistribution || {},
     ).some((v) => (v as number) > 0);
   const hasRecommendations =
     performanceData?.appraisalOutcomes &&
     performanceData.appraisalOutcomes.recommendationCounts &&
     Object.values(performanceData.appraisalOutcomes.recommendationCounts).some(
-      (v) => (v as number) > 0
+      (v) => (v as number) > 0,
     );
   const hasHeatmap =
     performanceData?.competencyInsights?.heatmap &&

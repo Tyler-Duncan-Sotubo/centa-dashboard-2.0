@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
 import { useSession } from "next-auth/react";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const approverRoles = [
   { label: "Line Manager", value: "manager" },
@@ -50,7 +50,7 @@ export default function ExpenseApprovalSettings() {
   const updateSetting = async (
     key: string,
     value: boolean | string[],
-    revert?: () => void
+    revert?: () => void,
   ) => {
     try {
       await axiosInstance.patch(
@@ -60,7 +60,7 @@ export default function ExpenseApprovalSettings() {
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
       toast({
         title: "Setting updated successfully",
@@ -79,7 +79,7 @@ export default function ExpenseApprovalSettings() {
     const newValue = !enabled;
     setEnabled(newValue);
     await updateSetting("multi_level_approval", newValue, () =>
-      setEnabled(!newValue)
+      setEnabled(!newValue),
     );
   };
 

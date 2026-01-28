@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -12,13 +12,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { BonusSchema } from "@/schema/bonus.schema";
 import { PlusCircle } from "lucide-react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useState } from "react";
-import FormError from "@/components/ui/form-error";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import FormError from "@/shared/ui/form-error";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 interface BonusModalProps {
   isOpen: boolean;

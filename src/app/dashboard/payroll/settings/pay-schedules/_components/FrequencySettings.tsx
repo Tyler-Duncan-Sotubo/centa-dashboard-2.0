@@ -2,12 +2,12 @@
 
 import React from "react";
 import ChangePayFrequencyForm from "./ChangePayFrequencyForm";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import PageHeader from "@/components/pageHeader";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
 
 const FrequencySettings = () => {
   const { data: session, status } = useSession();

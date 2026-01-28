@@ -3,14 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import CompanyVarianceTable from "./_components/CompanyVarianceTable";
 import EmployeeVarianceTable from "./_components/EmployeeVarianceTable";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { BiExport } from "react-icons/bi";
-import { useDownloadFile } from "@/utils/useDownloadFile";
-import PageHeader from "@/components/pageHeader";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { useDownloadFile } from "@/shared/utils/useDownloadFile";
+import PageHeader from "@/shared/ui/page-header";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const PayrollVariancePage = () => {
   const { data: session, status } = useSession();
@@ -21,7 +21,7 @@ const PayrollVariancePage = () => {
   const fetchPayrollOffCycle = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-report/company-variance-report"
+        "/api/payroll-report/company-variance-report",
       );
       return res.data.data;
     } catch (error) {
@@ -34,7 +34,7 @@ const PayrollVariancePage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["variance-report"],
     queryFn: fetchPayrollOffCycle,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

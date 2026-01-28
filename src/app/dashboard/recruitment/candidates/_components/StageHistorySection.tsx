@@ -1,7 +1,7 @@
 import React from "react";
 import { StageHistoryItem, stageHistoryColumns } from "./StageHistoryColumns";
-import { DataTable } from "@/components/DataTable";
-import PageHeader from "@/components/pageHeader";
+import { DataTable } from "@/shared/ui/data-table";
+import PageHeader from "@/shared/ui/page-header";
 
 const StageHistorySection = ({
   stageHistory,

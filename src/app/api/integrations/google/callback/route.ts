@@ -42,9 +42,9 @@ export async function GET(req: NextRequest) {
       },
       {
         headers: {
-          Authorization: `Bearer ${session.backendTokens.accessToken}`,
+          Authorization: `Bearer ${session.backendTokens?.accessToken}`,
         },
-      }
+      },
     );
 
     // Conditionally set redirectUri based on environment

@@ -1,26 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Loading from "@/components/ui/loading";
+import { use, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Textarea } from "@/shared/ui/textarea";
+import { Button } from "@/shared/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { format } from "date-fns";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { useToast } from "@/hooks/use-toast";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { useToast } from "@/shared/hooks/use-toast";
 import { Download } from "lucide-react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 interface ApprovalStep {
@@ -40,6 +38,7 @@ interface PayrollApprovalStatus {
 }
 
 export default function PayrollApprovalPage({ params }: Props) {
+  const { id } = use(params);
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
   const [isLoadingDownload, setIsLoadingDownload] = useState(false);
@@ -47,15 +46,15 @@ export default function PayrollApprovalPage({ params }: Props) {
   const [remarks, setRemarks] = useState("");
 
   const fetchApprovalStatus = async (
-    id: string
+    id: string,
   ): Promise<PayrollApprovalStatus> => {
     const res = await axiosInstance.get(`/api/payroll/approval-status/${id}`);
     return res.data.data;
   };
 
   const { data, isLoading, isError } = useQuery<PayrollApprovalStatus>({
-    queryKey: ["approval-status", params.id],
-    queryFn: () => fetchApprovalStatus(params.id),
+    queryKey: ["approval-status", id],
+    queryFn: () => fetchApprovalStatus(id),
     enabled: !!session?.backendTokens?.accessToken,
   });
 
@@ -64,7 +63,7 @@ export default function PayrollApprovalPage({ params }: Props) {
   const currentStep = steps.find((s) => s.status === "pending");
 
   const updateApprovalStatus = useUpdateMutation({
-    endpoint: `/api/payroll/${params.id}/approve`,
+    endpoint: `/api/payroll/${id}/approve`,
     successMessage: "Payroll approved successfully",
     refetchKey: "approval-status",
   });
@@ -84,12 +83,12 @@ export default function PayrollApprovalPage({ params }: Props) {
     try {
       setIsLoadingDownload(true);
       const res = await axiosInstance.get(
-        `/api/payroll-report/payment-advice/${params.id}?format=internal`,
+        `/api/payroll-report/payment-advice/${id}?format=internal`,
         {
           headers: {
-            Authorization: `Bearer ${session?.backendTokens.accessToken}`,
+            Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       const url = res.data?.data?.url?.url;

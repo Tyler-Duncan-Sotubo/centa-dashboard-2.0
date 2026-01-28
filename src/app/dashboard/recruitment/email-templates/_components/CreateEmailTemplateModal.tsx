@@ -4,23 +4,23 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { RichTextEditor } from "@/components/RichTextEditor";
+} from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
 import { useState } from "react";
 import { marked } from "marked";
-import FormError from "@/components/ui/form-error";
-import { CentaAISuggest } from "@/components/ui/centa-ai-suggest";
-import { Button } from "@/components/ui/button";
+import FormError from "@/shared/ui/form-error";
+import { CentaAISuggest } from "@/shared/ui/centa-ai-suggest";
+import { Button } from "@/shared/ui/button";
 
 const emailTemplateSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -151,11 +151,7 @@ const CreateEmailTemplateModal: React.FC<CreateEmailTemplateModalProps> = ({
                     <CentaAISuggest isLoading={isSubmitting} />
                   </Button>
                 </div>
-                <RichTextEditor
-                  value={field.value}
-                  onChange={field.onChange}
-                  key={field.value}
-                />
+                <RichTextEditor value={field.value} onChange={field.onChange} />
                 <FormMessage />
               </FormItem>
             )}

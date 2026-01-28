@@ -6,14 +6,10 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Calendar } from "@/shared/ui/calendar";
+import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { CalendarIcon, XCircle } from "lucide-react";
 import React, { useState } from "react";

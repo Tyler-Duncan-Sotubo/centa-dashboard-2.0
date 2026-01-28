@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import InfoTooltip from "@/components/InfoTooltip";
-import Loading from "@/components/ui/loading";
-import { useToast } from "@/hooks/use-toast";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import InfoTooltip from "@/shared/ui/info-tooltip";
+import Loading from "@/shared/ui/loading";
+import { useToast } from "@/shared/hooks/use-toast";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 interface Allowance {
   type: string;
@@ -45,7 +45,7 @@ export default function AllowanceSettings({
   // Fetch current settings
   const fetchAllowanceSettings = async () => {
     const res = await axiosInstance.get(
-      "/api/payroll-settings/allowance-settings"
+      "/api/payroll-settings/allowance-settings",
     );
     return res.data.data as AllowanceSettingsData;
   };
@@ -226,7 +226,7 @@ export default function AllowanceSettings({
                             (item, idx) =>
                               idx === i
                                 ? { ...item, percentage: editedValue }
-                                : item
+                                : item,
                           );
                           updateAllowance({
                             key: "allowance_others",

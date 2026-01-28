@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import { FaEdit, FaQuestionCircle } from "react-icons/fa";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaCirclePlus } from "react-icons/fa6";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import QuestionModal from "./QuestionModal";
 import {
   Competency,
@@ -31,15 +31,15 @@ export default function QuestionList({
     const questions =
       activeId === "all"
         ? allCompetencies.flatMap((c) =>
-            c.questions.map((q) => ({ ...q, _competencyName: c.name }))
+            c.questions.map((q) => ({ ...q, _competencyName: c.name })),
           )
-        : competency?.questions.map((q) => ({
+        : (competency?.questions.map((q) => ({
             ...q,
             _competencyName: competency.name,
-          })) ?? [];
+          })) ?? []);
 
     return questions.filter((q) =>
-      q.question.toLowerCase().includes(search.toLowerCase())
+      q.question.toLowerCase().includes(search.toLowerCase()),
     );
   }, [activeId, allCompetencies, competency, search]);
 

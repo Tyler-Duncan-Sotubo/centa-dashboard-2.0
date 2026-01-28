@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   Table,
   TableBody,
@@ -9,23 +9,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/table";
+import { Progress } from "@/shared/ui/progress";
+import { Badge } from "@/shared/ui/badge";
 import LoanModal from "./LoanModal";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Pencil, PlusCircle } from "lucide-react";
 import { Loan } from "@/types/loans.type";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import EditLoanModal from "./EditLoanModal";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import { formatDate } from "@/utils/formatDate";
-import PageHeader from "@/components/pageHeader";
+import Loading from "@/shared/ui/loading";
+import { formatDate } from "@/shared/utils/formatDate";
+import PageHeader from "@/shared/ui/page-header";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import SalaryAdvanceSettings from "./SalaryAdvanceSettings";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const LoansPage = ({ loans }: { loans: Loan[] | undefined }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -156,8 +156,8 @@ const LoanTable = ({
                         loan.status === "approved"
                           ? "approved"
                           : loan.status === "rejected"
-                          ? "rejected"
-                          : "pending"
+                            ? "rejected"
+                            : "pending"
                       }
                     >
                       {loan.status}
@@ -254,8 +254,8 @@ const LoanHistoryTab = () => {
                         history.action === "approved"
                           ? "approved"
                           : history.action === "rejected"
-                          ? "rejected"
-                          : "pending"
+                            ? "rejected"
+                            : "pending"
                       }
                     >
                       {history.action}

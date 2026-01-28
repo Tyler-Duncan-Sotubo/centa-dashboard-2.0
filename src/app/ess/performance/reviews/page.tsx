@@ -1,19 +1,20 @@
 "use client";
 
 import React from "react";
-import PageHeader from "@/components/pageHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/DataTable";
+import PageHeader from "@/shared/ui/page-header";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import Link from "next/link";
 import { format, differenceInCalendarDays } from "date-fns";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { Progress } from "@/components/ui/progress";
+import { StatusBadge } from "@/shared/ui/status-badge";
+import { Progress } from "@/shared/ui/progress";
+import { AppraisalHistoryMobileRow } from "./_components/appraisal-history-mobile-row";
 
 type HistoryRow = {
   id: string;
@@ -65,7 +66,7 @@ export default function AppraisalPage() {
     queryKey: ["appraisals:employee-dashboard"],
     queryFn: async () => {
       const res = await axios.get(
-        `/api/appraisals/${session?.user.id}/participants`
+        `/api/appraisals/${session?.user.id}/participants`,
       );
       return res.data.data;
     },
@@ -86,8 +87,8 @@ export default function AppraisalPage() {
     finalized || (meSubmitted && mgrSubmitted)
       ? 100
       : meSubmitted || mgrSubmitted
-      ? 50
-      : 0;
+        ? 50
+        : 0;
 
   const daysLeft = currentCycle
     ? differenceInCalendarDays(new Date(currentCycle.endDate), new Date())
@@ -195,8 +196,8 @@ export default function AppraisalPage() {
         h.finalized || (h.submittedByEmployee && h.submittedByManager)
           ? 100
           : h.submittedByEmployee || h.submittedByManager
-          ? 50
-          : 0,
+            ? 50
+            : 0,
     })) ?? [];
 
   return (
@@ -280,7 +281,11 @@ export default function AppraisalPage() {
       {/* History Table */}
       <div className="mt-10">
         <h3 className="text-xl font-semibold">Appraisals History</h3>
-        <DataTable columns={columns} data={dataWithProgress} />
+        <DataTable
+          columns={columns}
+          data={dataWithProgress}
+          mobileRow={AppraisalHistoryMobileRow as any}
+        />
       </div>
     </div>
   );

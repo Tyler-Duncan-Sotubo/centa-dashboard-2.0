@@ -5,33 +5,33 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Mustache from "mustache";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RichTextEditor } from "@/components/RichTextEditor";
-import { OFFER_LETTER_VARIABLES } from "@/constants/offerLetterVariables";
-import PageHeader from "@/components/pageHeader";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { formatSource } from "@/utils/formatSource";
-import { CentaAISuggest } from "@/components/ui/centa-ai-suggest";
+} from "@/shared/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
+import { OFFER_LETTER_VARIABLES } from "@/shared/constants/offerLetterVariables";
+import PageHeader from "@/shared/ui/page-header";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { formatSource } from "@/shared/utils/formatSource";
+import { CentaAISuggest } from "@/shared/ui/centa-ai-suggest";
 import { useRouter } from "next/navigation";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import Link from "next/link";
-import RenderHtml from "@/components/ui/render-html";
+import RenderHtml from "@/shared/ui/render-html";
 import { buildTemplatePreviewData } from "../../offers/_components/buildTemplatePreviewData";
 
 const templateSchema = z
@@ -41,7 +41,7 @@ const templateSchema = z
   })
   .superRefine((val, ctx) => {
     const usedVars = Array.from(val.content.matchAll(/{{\s*(.*?)\s*}}/g)).map(
-      ([, varName]) => varName
+      ([, varName]) => varName,
     );
 
     const allowed = new Set<string>(OFFER_LETTER_VARIABLES);
@@ -60,7 +60,7 @@ export default function OfferTemplateCreate() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"create" | "preview" | "raw">(
-    "create"
+    "create",
   );
   const [AiError, setAIError] = useState<string | null>(null);
   const form = useForm({
@@ -192,8 +192,7 @@ export default function OfferTemplateCreate() {
                           )}
                         </div>
                         <RichTextEditor
-                          key={form.watch("content")} // forces re-render when value changes
-                          value={field.value}
+                          value={field.value ?? ""}
                           onChange={field.onChange}
                         />
                         <FormMessage />

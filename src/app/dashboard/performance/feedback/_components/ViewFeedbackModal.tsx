@@ -5,15 +5,15 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+} from "@/shared/ui/dialog";
+import { Separator } from "@/shared/ui/separator";
 import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import { Feedback } from "@/types/performance/feedback.type";
-import { formatSource } from "@/utils/formatSource";
+import { formatSource } from "@/shared/utils/formatSource";
 
 type Props = {
   open: boolean;
@@ -35,7 +35,7 @@ export default function ViewFeedbackModal({ open, onClose, id }: Props) {
       const res = await axios.get(`/api/feedback/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

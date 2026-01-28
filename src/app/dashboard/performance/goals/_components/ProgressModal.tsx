@@ -1,11 +1,11 @@
-import Modal from "@/components/ui/modal";
-import { Slider } from "@/components/ui/slider";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import Modal from "@/shared/ui/modal";
+import { Slider } from "@/shared/ui/slider";
+import { Textarea } from "@/shared/ui/textarea";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useEffect } from "react";
 
 interface ProgressModalProps {
@@ -41,7 +41,7 @@ export function ProgressModal({ isOpen, onClose, goalId }: ProgressModalProps) {
       const value =
         typeof res.data.data === "number"
           ? res.data.data
-          : res.data.data?.progress ?? 0;
+          : (res.data.data?.progress ?? 0);
       return value as number;
     },
     enabled: !!session?.backendTokens?.accessToken && !!goalId && isOpen,

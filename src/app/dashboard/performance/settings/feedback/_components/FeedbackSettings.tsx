@@ -3,15 +3,15 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Card, CardHeader, CardContent } from "@/shared/ui/card";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
 import { CheckCircle } from "lucide-react";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { useToast } from "@/hooks/use-toast";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Skeleton } from "@/components/ui/skeleton";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { useToast } from "@/shared/hooks/use-toast";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Skeleton } from "@/shared/ui/skeleton";
 import { useSession } from "next-auth/react";
 
 type RuleType = "self" | "peer" | "manager_to_employee" | "employee_to_manager";
@@ -70,7 +70,7 @@ export default function FeedbackSettings() {
       setSettings(structured);
       return structured;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const updateTopLevel = async (key: keyof FeedbackSettingsState) => {
@@ -92,7 +92,7 @@ export default function FeedbackSettings() {
 
   const updateRule = async (
     group: "employee" | "manager",
-    updated: Partial<Rule> & { type: RuleType }
+    updated: Partial<Rule> & { type: RuleType },
   ) => {
     if (!settings) return;
 
@@ -110,7 +110,7 @@ export default function FeedbackSettings() {
     };
 
     const updatedGroup = rules.map((r) =>
-      r.type === updatedRule.type ? updatedRule : r
+      r.type === updatedRule.type ? updatedRule : r,
     );
 
     setSettings({

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IoRefreshCircle } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -11,8 +11,8 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
+} from "@/shared/ui/alert-dialog";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
 
 type Props = {
   appraisalId: string;

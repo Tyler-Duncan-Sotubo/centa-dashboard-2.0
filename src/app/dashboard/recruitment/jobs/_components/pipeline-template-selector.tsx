@@ -7,7 +7,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -15,10 +15,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import CreatePipelineTemplateModal from "./CreatePipelineTemplateModal";
 import { useSession } from "next-auth/react";
 
@@ -51,7 +51,7 @@ export const PipelineTemplateSelector: React.FC<
   const [isOpen, setIsOpen] = useState(false);
   const axiosInstance = useAxiosAuth();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
-    null
+    null,
   );
 
   const fetchStages = async (templateId: string): Promise<Stage[]> => {
@@ -62,7 +62,8 @@ export const PipelineTemplateSelector: React.FC<
   const { data: stages = [], isFetching: loadingStages } = useQuery<Stage[]>({
     queryKey: ["stages", selectedTemplateId],
     queryFn: () => fetchStages(selectedTemplateId!),
-    enabled: !!selectedTemplateId && !!session?.backendTokens.accessToken,
+    enabled:
+      !!selectedTemplateId && Boolean(session?.backendTokens?.accessToken),
   });
 
   return (

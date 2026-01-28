@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import {
   Banknote,
   Calendar as CalendarIcon,
@@ -13,29 +13,25 @@ import {
   CheckSquare,
   Check,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/shared/ui/button";
+import { Calendar } from "@/shared/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { PayslipTable } from "@/components/common/tables/payslip.table";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { PayslipTable } from "@/features/payroll/core/ui/payslip.table";
 import { EmployeeDetail } from "@/types/payRunDetails";
 import { SendPayrollForApproval } from "./_components/SendPayrollForApproval";
 import PaySummary from "./_components/PaySummary";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { FinalPayRunTable } from "./_components/FinalPayrunTable";
 import { PayrollHistory } from "./_components/PayrollHistory";
 import { PayrollOverride } from "./_components/PayrollOverride";
 import { MdOutlineSync } from "react-icons/md";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { FaTrash } from "react-icons/fa6";
-import { useDeleteMutation } from "@/hooks/useDeleteMutation";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import { useDeleteMutation } from "@/shared/hooks/useDeleteMutation";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const steps = [
   { label: "Start", icon: <CalendarIcon className="h-5 w-5" /> },
@@ -115,7 +111,7 @@ export default function Payroll() {
   useEffect(() => {
     if (fetchedSummary) {
       setPayrollSummary(
-        fetchedSummary.map((r) => ({ ...r, isLeaver: r.isLeaver ?? false }))
+        fetchedSummary.map((r) => ({ ...r, isLeaver: r.isLeaver ?? false })),
       );
     }
   }, [fetchedSummary]);
@@ -277,11 +273,11 @@ export default function Payroll() {
   const isStepDisabled = [0, 1, 3, 4].includes(activeStep) || loadingStep;
 
   const employeesOnPayroll = payrollSummary.filter(
-    (e) => !(e.isStarter ?? false) && !(e.isLeaver ?? false)
+    (e) => !(e.isStarter ?? false) && !(e.isLeaver ?? false),
   );
 
   const startersOnPayroll = payrollSummary.filter(
-    (e) => (e.isStarter ?? false) && !(e.isLeaver ?? false)
+    (e) => (e.isStarter ?? false) && !(e.isLeaver ?? false),
   );
 
   const leaversOnPayroll = payrollSummary.filter((e) => e.isLeaver ?? false);
@@ -330,8 +326,8 @@ export default function Payroll() {
                         idx < activeStep
                           ? "border-brand bg-brand"
                           : idx === activeStep
-                          ? "border-brand bg-white"
-                          : "border-gray-300 bg-white"
+                            ? "border-brand bg-white"
+                            : "border-gray-300 bg-white",
                       )}
                     >
                       {idx < activeStep ? (
@@ -345,7 +341,7 @@ export default function Payroll() {
                         "text-sm mt-1",
                         idx <= activeStep
                           ? "text-brand"
-                          : "text-muted-foreground"
+                          : "text-muted-foreground",
                       )}
                     >
                       {step.label}
@@ -356,7 +352,7 @@ export default function Payroll() {
                     <div
                       className={cn(
                         "flex-1 self-center h-1.5 mb-5 mx-1", // slightly thicker
-                        idx < activeStep ? "bg-brand" : "bg-gray-300"
+                        idx < activeStep ? "bg-brand" : "bg-gray-300",
                       )}
                     />
                   )}
@@ -371,12 +367,12 @@ export default function Payroll() {
                 {activeStep === 0
                   ? "Calculate Payroll"
                   : activeStep === 1
-                  ? "Send for Approval"
-                  : activeStep === 2
-                  ? "Pay Employees"
-                  : activeStep === 3
-                  ? "Finish"
-                  : ""}
+                    ? "Send for Approval"
+                    : activeStep === 2
+                      ? "Pay Employees"
+                      : activeStep === 3
+                        ? "Finish"
+                        : ""}
               </Button>
             ) : (
               ""
@@ -393,7 +389,7 @@ export default function Payroll() {
                   variant="outline"
                   className={cn(
                     "w-[300px] justify-start text-left font-normal",
-                    !nextPayDate && "text-muted-foreground"
+                    !nextPayDate && "text-muted-foreground",
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />

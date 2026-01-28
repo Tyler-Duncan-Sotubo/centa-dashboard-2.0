@@ -6,8 +6,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
+} from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,13 +17,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { useEffect } from "react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 
 const schema = z.object({
   managerId: z.string().min(1, "Manager is required"),

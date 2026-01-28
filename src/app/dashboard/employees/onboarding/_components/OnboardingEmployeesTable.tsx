@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { format } from "date-fns";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { useState } from "react";
 import {
   Select,
@@ -11,11 +11,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import OnboardingChecklistModal from "./OnboardingChecklistModal";
 import { ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatars } from "@/components/avatars";
+import { Button } from "@/shared/ui/button";
+import { Avatars } from "@/shared/ui/avatars";
 import { OnboardingEmployee } from "@/types/onboarding/onboarding.type";
 
 const columns: ColumnDef<OnboardingEmployee>[] = [
@@ -56,8 +56,8 @@ const columns: ColumnDef<OnboardingEmployee>[] = [
         status === "completed"
           ? "completed"
           : status === "in_progress"
-          ? "ongoing"
-          : "pending";
+            ? "ongoing"
+            : "pending";
       return <Badge variant={variant}>{status}</Badge>;
     },
   },
@@ -93,7 +93,7 @@ export default function OnboardingEmployeesTable({
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const filteredData = data?.filter((item) =>
-    statusFilter === "all" ? true : item.status === statusFilter
+    statusFilter === "all" ? true : item.status === statusFilter,
   );
 
   return (

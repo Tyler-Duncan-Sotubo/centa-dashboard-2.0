@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -13,25 +13,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import FormError from "@/components/ui/form-error";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/select";
+import FormError from "@/shared/ui/form-error";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { BadgeMinus } from "lucide-react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useSession } from "next-auth/react";
 import { CreateEmployeeDeductionSchema } from "@/schema/deductions.schema";
 import { DeductionType } from "@/types/deduction.type";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { DateInput } from "@/components/ui/date-input";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { DateInput } from "@/shared/ui/date-input";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 interface DeductionModalProps {
   isOpen: boolean;
@@ -75,7 +75,7 @@ const DeductionModal = ({
   >({
     queryKey: ["deductionTypes"],
     queryFn: fetchDeductionTypes,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const createDeductions = useCreateMutation({
@@ -85,7 +85,7 @@ const DeductionModal = ({
   });
 
   const onSubmit = async (
-    values: z.infer<typeof CreateEmployeeDeductionSchema>
+    values: z.infer<typeof CreateEmployeeDeductionSchema>,
   ) => {
     await createDeductions(values, setError, form.reset, onClose);
   };

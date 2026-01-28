@@ -11,14 +11,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import { Edit } from "lucide-react";
-import FormError from "@/components/ui/form-error";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { EmployeeMultiSelect } from "@/components/ui/employee-multi-select";
+import FormError from "@/shared/ui/form-error";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { EmployeeMultiSelect } from "@/shared/ui/employee-multi-select";
 
 import {
   Dialog,
@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import { FaCirclePlus } from "react-icons/fa6";
 import {
   Select,
@@ -35,7 +35,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { EmployeeGroup, GroupType, MemberRole } from "@/types/team.type";
 
 interface Props {
@@ -74,7 +74,7 @@ const groupSchema = z.object({
   type: z.nativeEnum(GroupType).optional(),
   headcountCap: z.preprocess(
     (v) => (v === "" || v === undefined || v === null ? undefined : Number(v)),
-    z.number().int().min(0).optional()
+    z.number().int().min(0).optional(),
   ),
   employeeIds: z
     .union([
@@ -103,7 +103,7 @@ export default function EmployeeGroupFormModal({
         ? selected!.members.map((m: { employeeId: string }) => m.employeeId)
         : [],
     }),
-    [selected]
+    [selected],
   );
 
   const form = useForm<z.infer<typeof groupSchema>>({
@@ -150,7 +150,7 @@ export default function EmployeeGroupFormModal({
   const employeeIdsValue = form.watch("employeeIds");
   const employeesSel = useMemo(
     () => (employeeIdsValue as Sel[]) ?? [],
-    [employeeIdsValue]
+    [employeeIdsValue],
   );
 
   const selectedIds = useMemo(() => employeesSel.map(getId), [employeesSel]);
@@ -188,9 +188,9 @@ export default function EmployeeGroupFormModal({
   const leadId = useMemo(
     () =>
       Object.entries(memberMeta).find(
-        ([, m]) => m.role === MemberRole.LEAD
+        ([, m]) => m.role === MemberRole.LEAD,
       )?.[0],
-    [memberMeta]
+    [memberMeta],
   );
 
   const setUniqueRole = (targetId: string | undefined, role: MemberRole) => {

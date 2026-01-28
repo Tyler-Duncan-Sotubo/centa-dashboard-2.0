@@ -120,7 +120,7 @@ export function ProfileCard({ profile, core }: ProfileCardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
         {/* Left: Avatar + Major Details */}
         <div className="flex items-center space-x-6">
-          <div className="w-44 h-44 relative flex-shrink-0">
+          <div className="w-44 h-44 relative shrink-0">
             {p.avatarUrl ? (
               <Image
                 src={p.avatarUrl}

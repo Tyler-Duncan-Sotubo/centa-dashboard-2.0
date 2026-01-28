@@ -1,11 +1,11 @@
 "use client";
 
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { Button } from "@/shared/ui/button";
 import { ChevronsUpDown } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/shared/ui/avatar";
 
 type DeductionByEmployee = {
   employeeName: string;

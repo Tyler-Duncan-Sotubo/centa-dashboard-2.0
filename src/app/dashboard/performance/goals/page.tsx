@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   FaTasks,
   FaCheck,
@@ -11,22 +11,22 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/shared/ui/skeleton";
 import GoalList from "./_components/GoalList";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import GoalModal from "./_components/GoalFormModal";
-import Loading from "@/components/ui/loading";
-import { Input } from "@/components/ui/input";
+import Loading from "@/shared/ui/loading";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { Goal } from "@/types/performance/goals.type";
 import { Department } from "@/types/employees.type";
 import { TbTarget } from "react-icons/tb";
@@ -44,7 +44,7 @@ export default function GoalsPage() {
       const res = await axios.get(`/api/performance-goals?status=${status}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: counts = {}, isLoading: loadingCounts } = useQuery({
@@ -53,7 +53,7 @@ export default function GoalsPage() {
       const res = await axios.get(`/api/performance-goals/status-counts`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const {
@@ -66,7 +66,7 @@ export default function GoalsPage() {
       const res = await axios.get(`/api/department`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const [employeeFilter, setEmployeeFilter] = useState("");

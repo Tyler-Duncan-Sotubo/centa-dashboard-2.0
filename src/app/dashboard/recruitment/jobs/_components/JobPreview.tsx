@@ -1,13 +1,13 @@
 "use client";
 
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { formatDate } from "date-fns";
 import { useSession } from "next-auth/react";
-import { Separator } from "@/components/ui/separator";
-import { formatSource } from "@/utils/formatSource";
-import { formatCurrencyRange } from "@/utils/formatCurrency";
+import { Separator } from "@/shared/ui/separator";
+import { formatSource } from "@/shared/utils/formatSource";
+import { formatCurrencyRange } from "@/shared/utils/formatCurrency";
 
 interface JobDetailItemProps {
   label: string;
@@ -38,7 +38,7 @@ const JobPreview = ({ jobId }: { jobId: string }) => {
   } = useQuery({
     queryKey: ["jobPreview", jobId],
     queryFn: fetchJobDetails,
-    enabled: !!jobId && !!session?.backendTokens.accessToken,
+    enabled: !!jobId && Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;
@@ -80,7 +80,7 @@ const JobPreview = ({ jobId }: { jobId: string }) => {
           </ul>
         </div>
       </section>
-      <section className="space-y-6 bg-gray-50 shadow-sm p-6 rounded-md">
+      <section className="space-y-6 bg-gray-50 shadow-2xs p-6 rounded-md">
         <JobDetailItem
           label="Location"
           value={`${job?.city}, ${job?.state}, ${job?.country}`}
@@ -97,7 +97,7 @@ const JobPreview = ({ jobId }: { jobId: string }) => {
           label="Salary"
           value={`${formatCurrencyRange(
             job?.salaryRangeFrom,
-            job?.currency
+            job?.currency,
           )} - ${formatCurrencyRange(job?.salaryRangeTo, job?.currency)}`}
         />
 

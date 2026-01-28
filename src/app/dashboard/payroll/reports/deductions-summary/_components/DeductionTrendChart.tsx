@@ -13,8 +13,8 @@ import {
   DeductionBreakdownItem,
   EmployerCostBreakdownItem,
 } from "@/types/deduction.type";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import { Card, CardContent, CardHeader } from "@/shared/ui/card";
 import type { TooltipProps } from "recharts";
 import type {
   ValueType,

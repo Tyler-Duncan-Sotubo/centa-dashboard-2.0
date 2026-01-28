@@ -29,7 +29,7 @@ export async function PUT(req: NextRequest) {
 
   const res = await axiosInstance.get(`/api/google`, {
     headers: {
-      Authorization: `Bearer ${session.backendTokens.accessToken}`,
+      Authorization: `Bearer ${session.backendTokens?.accessToken}`,
     },
   });
 
@@ -53,7 +53,7 @@ export async function PUT(req: NextRequest) {
       eventId: body.eventId,
       startTime: body.scheduledFor,
       endTime: new Date(
-        new Date(body.scheduledFor).getTime() + body.durationMins * 60000
+        new Date(body.scheduledFor).getTime() + body.durationMins * 60000,
       ).toISOString(),
       summary: `Interview – ${body.stage} (Rescheduled)`,
       description: `Rescheduled interview for ${body.applicationId} by ${
@@ -73,7 +73,7 @@ export async function PUT(req: NextRequest) {
           eventId: body.eventId,
           startTime: body.scheduledFor,
           endTime: new Date(
-            new Date(body.scheduledFor).getTime() + body.durationMins * 60000
+            new Date(body.scheduledFor).getTime() + body.durationMins * 60000,
           ).toISOString(),
           summary: `Interview – ${body.stage} (Rescheduled)`,
           description: `Rescheduled interview for ${body.applicationId}`,
@@ -85,9 +85,9 @@ export async function PUT(req: NextRequest) {
           { accessToken: refreshedAccessToken },
           {
             headers: {
-              Authorization: `Bearer ${session.backendTokens.accessToken}`,
+              Authorization: `Bearer ${session.backendTokens?.accessToken}`,
             },
-          }
+          },
         );
 
         return Response.json(updatedEvent);

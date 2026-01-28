@@ -3,12 +3,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
-import EmptyState from "@/components/empty-state";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
+import EmptyState from "@/shared/ui/empty-state";
 import { OffboardingSession } from "@/types/offboarding/offboarding.type";
 import OffboardingEmployeesTable from "./_components/OffboardingTable";
+import { BiLogOutCircle } from "react-icons/bi";
 
 export default function OffboardingPage() {
   const { data: session } = useSession();
@@ -45,11 +46,11 @@ export default function OffboardingPage() {
       </div>
 
       {data?.length === 0 ? (
-        <div className="mt-20">
+        <div className="flex min-h-[70vh] items-center justify-center">
           <EmptyState
             title="No Active Offboarding"
             description="It looks like there are no ongoing termination processes. You can initiate a termination to begin offboarding."
-            image="https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585352/exit_y8alak.svg"
+            icon={<BiLogOutCircle />}
           />
         </div>
       ) : (

@@ -16,15 +16,15 @@ import {
 } from "@tanstack/react-table";
 import { ChevronsUpDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { formatDateHumanReadable } from "@/utils/formatDateHumanReadable";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { formatDateHumanReadable } from "@/shared/utils/formatDateHumanReadable";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Table,
   TableBody,
@@ -32,18 +32,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import Loading from "@/components/ui/loading";
-import { Avatars } from "@/components/avatars";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+} from "@/shared/ui/table";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Badge } from "@/shared/ui/badge";
+import Loading from "@/shared/ui/loading";
+import { Avatars } from "@/shared/ui/avatars";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import Link from "next/link";
 import { TemplateSelectionModal } from "../../offers/_components/TemplateSelectionModal";
 import { ScheduleInterviewModal } from "../../interviews/_components/ScheduleInterviewModal";
-import EmptyState from "@/components/empty-state";
+import EmptyState from "@/shared/ui/empty-state";
 
 type ResumeScore = {
   score: number;
@@ -76,7 +76,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
         stage.applications.map((app: any) => ({
           ...app,
           stageName: stage.stageName,
-        }))
+        })),
       );
     },
   });
@@ -86,7 +86,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
     React.useState<VisibilityState>({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [showModal, setShowModal] = React.useState(false);
   const [showOfferTemplateModal, setShowOfferTemplateModal] =
@@ -306,7 +306,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
               <Select
                 onValueChange={(newStageName) => {
                   const newStage = stages.find(
-                    (s) => s.stageName === newStageName
+                    (s) => s.stageName === newStageName,
                   );
                   if (!newStage) return;
 
@@ -314,7 +314,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
                     movingApplication({
                       applicationId: row.original.applicationId,
                       newStageId: newStage.stageId,
-                    })
+                    }),
                   );
 
                   Promise.all(updates);
@@ -363,7 +363,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     ))}
@@ -384,7 +384,7 @@ export default function JobListView({ jobId }: { jobId: string }) {
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       ))}

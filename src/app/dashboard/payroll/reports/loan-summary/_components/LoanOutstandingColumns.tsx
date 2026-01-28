@@ -1,9 +1,9 @@
 "use client";
 
-import { Avatars } from "@/components/avatars";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { Avatars } from "@/shared/ui/avatars";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronsUpDown } from "lucide-react";
 

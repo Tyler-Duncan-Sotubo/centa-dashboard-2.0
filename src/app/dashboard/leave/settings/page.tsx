@@ -1,23 +1,7 @@
-import React from "react";
-import LeaveApprovalSettings from "./_components/LeaveApprovalSettings";
-import LeaveEntitlementSettings from "./_components/LeaveEntitlementSettings";
-import LeaveDaysAndEligibilitySettings from "./_components/LeaveDaysAndEligibilitySettings";
-import LeaveNotificationSettings from "./_components/LeaveNotificationSettings";
-import PageHeader from "@/components/pageHeader";
+import { LeaveSettingsClient } from "@/features/leave/settings/core/ui/LeaveSettingsClient";
 
-const LeaveSettings = () => {
-  return (
-    <div className="p-5 my-10">
-      <PageHeader
-        title="Leave Settings"
-        description="Configure leave policies, approval workflows, and notifications."
-      />
-      <LeaveApprovalSettings />
-      <LeaveEntitlementSettings />
-      <LeaveDaysAndEligibilitySettings />
-      <LeaveNotificationSettings />
-    </div>
-  );
+const page = () => {
+  return <LeaveSettingsClient />;
 };
 
-export default LeaveSettings;
+export default page;

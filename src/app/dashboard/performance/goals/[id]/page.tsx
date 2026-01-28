@@ -1,27 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import BackButton from "@/components/ui/back-button";
+import Loading from "@/shared/ui/loading";
+import BackButton from "@/shared/ui/back-button";
 import EmployeeCard from "../_components/EmployeeCard";
 import { GoalDetailsCard } from "../_components/GoalDetailsCard";
 import GoalActionButtons from "../_components/GoalActionButtons";
 import ActivityFeed from "../_components/ActivityFeed";
 import { CommentSection } from "../_components/CommentSection";
-import PageHeader from "@/components/pageHeader";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { Button } from "@/shared/ui/button";
 import { FaCheck } from "react-icons/fa6";
+import { use } from "react";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function GoalDetailPage({ params }: Props) {
-  const { id } = params;
+  const { id } = use(params);
   const { data: session } = useSession();
   const axios = useAxiosAuth();
 
@@ -37,7 +38,7 @@ export default function GoalDetailPage({ params }: Props) {
       const res = await axios.get(`/api/performance-goals/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (isLoading) return <Loading />;

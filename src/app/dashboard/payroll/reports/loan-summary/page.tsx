@@ -1,18 +1,18 @@
 "use client";
 
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import React from "react";
 import { LoanOutstandingColumns } from "./_components/LoanOutstandingColumns";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import { LoanMonthlySummaryChart } from "./_components/LoanMonthlySummary";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { BiExport } from "react-icons/bi";
-import { useDownloadFile } from "@/utils/useDownloadFile";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { useDownloadFile } from "@/shared/utils/useDownloadFile";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 interface ExportButtonProps {
   endpoint: string;
@@ -39,7 +39,7 @@ const LoanMonthlySummary = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["loan-balance-report"],
     queryFn: fetchBalanceReport,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

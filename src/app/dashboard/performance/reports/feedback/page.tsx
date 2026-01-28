@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { ColumnDef, CellContext } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
+import { DataTable } from "@/shared/ui/data-table";
 import { ReportFilters } from "../_components/ReportFilters";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import { ChevronsUpDown } from "lucide-react";
 
 // ---------- TYPES ----------
@@ -170,7 +170,7 @@ const FeedbackReportPage = () => {
     return report.filter(
       (row: FeedbackReportRow) =>
         row.employeeName?.toLowerCase().includes(q) ||
-        row.senderName?.toLowerCase().includes(q)
+        row.senderName?.toLowerCase().includes(q),
     );
   }, [report, search]);
 

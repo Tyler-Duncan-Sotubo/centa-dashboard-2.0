@@ -8,11 +8,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { Button } from "@/components/ui/button";
-import Loading from "@/components/ui/loading";
-import FormError from "@/components/ui/form-error";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import Loading from "@/shared/ui/loading";
+import FormError from "@/shared/ui/form-error";
 
 import {
   Form,
@@ -21,19 +21,19 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import PageHeader from "@/components/pageHeader";
+} from "@/shared/ui/select";
+import PageHeader from "@/shared/ui/page-header";
 import { FaArrowRight } from "react-icons/fa6";
-import { DateInput } from "@/components/ui/date-input";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { DateInput } from "@/shared/ui/date-input";
+import { Separator } from "@/shared/ui/separator";
+import { Input } from "@/shared/ui/input";
 
 // --- Types ---
 type Items = {
@@ -80,7 +80,7 @@ const BeginOffboarding = () => {
     onSuccess: () => {
       form.reset();
       router.push(
-        `/dashboard/employees/offboarding/continue?employeeId=${employeeId}`
+        `/dashboard/employees/offboarding/continue?employeeId=${employeeId}`,
       );
     },
     onError: () => {
@@ -96,7 +96,7 @@ const BeginOffboarding = () => {
         ...values,
         employeeId,
       },
-      setError
+      setError,
     );
   };
 

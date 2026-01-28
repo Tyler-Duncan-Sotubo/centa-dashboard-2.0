@@ -1,12 +1,12 @@
 // DynamicFeedbackForm.tsx
 
-import { FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
+import { FormItem, FormLabel, FormControl } from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Separator } from "@/shared/ui/separator";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
 import { useSession } from "next-auth/react";
 
 type FeedbackQuestion = {
@@ -38,7 +38,7 @@ export default function DynamicFeedbackForm({
       const res = await axios.get(`/api/feedback-questions/type/${type}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken && !!open,
+    enabled: Boolean(session?.backendTokens?.accessToken) && !!open,
   });
 
   if (isLoading) return <Loading />;

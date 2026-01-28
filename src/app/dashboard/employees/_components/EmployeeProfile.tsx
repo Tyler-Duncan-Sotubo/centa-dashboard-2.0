@@ -2,21 +2,21 @@
 "use client";
 
 import React from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // You'll need to define this schema
+} from "@/shared/ui/select"; // You'll need to define this schema
 
 export const EmployeeProfileDetails = ({ form }: { form: any }) => {
   return (

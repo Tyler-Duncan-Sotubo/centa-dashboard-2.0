@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Taxes } from "@/types/taxes.type";
 import React, { useState } from "react";
 import { CalendarDays, DollarSign, Clock, Download, FileX } from "lucide-react";
@@ -11,13 +11,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { formatCurrency } from "@/utils/formatCurrency";
-import PageHeader from "@/components/pageHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GenericSheet from "@/components/ui/generic-sheet";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+} from "@/shared/ui/table";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
+import PageHeader from "@/shared/ui/page-header";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
   const [selectedTax, setSelectedTax] = useState<Taxes | null>(null);
@@ -31,12 +31,12 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
     const firstDate = new Date(
       nextMonth.getFullYear(),
       nextMonth.getMonth(),
-      1
+      1,
     );
     const lastDate = new Date(
       nextMonth.getFullYear(),
       nextMonth.getMonth(),
-      10
+      10,
     );
     const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",
@@ -45,7 +45,7 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
     };
     return `${firstDate.toLocaleDateString(
       "en-GB",
-      options
+      options,
     )} - ${lastDate.toLocaleDateString("en-GB", options)}`;
   };
 
@@ -56,7 +56,7 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
         `/api/tax/tax-filings-download/${id}`,
         {
           responseType: "blob",
-        }
+        },
       );
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const a = document.createElement("a");
@@ -83,7 +83,7 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
         `/api/tax/voluntary-download?type=${type}&month=${month}`,
         {
           responseType: "blob",
-        }
+        },
       );
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const a = document.createElement("a");
@@ -111,7 +111,7 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
 
   const updateTaxStatus = async (
     id: string,
-    status: "pending" | "completed"
+    status: "pending" | "completed",
   ) => {
     await updateTax({ status });
     setSelectedTax(null);
@@ -320,7 +320,7 @@ const TaxesPage = ({ taxes }: { taxes: Taxes[] | undefined }) => {
                   ) {
                     downloadVoluntaryExcel(
                       selectedTax.tax_type,
-                      selectedTax.month
+                      selectedTax.month,
                     );
                   } else {
                     downloadTaxExcel(selectedTax.id, selectedTax.tax_type);

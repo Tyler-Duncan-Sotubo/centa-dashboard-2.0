@@ -9,25 +9,21 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Checkbox } from "@/shared/ui/checkbox";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+} from "@/shared/ui/select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
+import { Calendar } from "@/shared/ui/calendar";
 import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { AllowedCols } from "../../schema/fields";
 
 // numeric → Tailwind spans
@@ -95,7 +91,7 @@ export function DynamicFormFields({
                               variant="outline"
                               className={cn(
                                 "w-full text-left font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                               onClick={() =>
                                 toggleOpen(f.name, !openMap[f.name])
@@ -109,7 +105,7 @@ export function DynamicFormFields({
                           </PopoverTrigger>
 
                           <PopoverContent
-                            className="w-auto p-0 z-[50]"
+                            className="w-auto p-0 z-50"
                             align="start"
                             side="bottom"
                             sideOffset={8}

@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader } from "@/shared/ui/card";
 import { Candidate } from "@/types/candidate";
 
 export function CandidateCard({ candidate }: { candidate: Candidate }) {

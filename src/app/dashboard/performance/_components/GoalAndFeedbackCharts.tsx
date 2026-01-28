@@ -20,7 +20,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 
 interface GoalAndFeedbackChartsProps {
   goalPerformance: {

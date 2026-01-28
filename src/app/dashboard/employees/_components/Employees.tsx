@@ -2,22 +2,23 @@
 
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { EmployeesTable } from "@/components/common/tables/employees.table";
-import { Button } from "@/components/ui/button";
+import { EmployeesTable } from "@/features/employees/core/ui/employees.table";
+import { Button } from "@/shared/ui/button";
 import { Upload } from "lucide-react";
-import { EmployeesCards } from "@/components/common/cards/employee.card";
+import { EmployeesCards } from "@/features/employees/core/ui/employee.card";
 import { Employee } from "@/types/employees.type";
 import AddMultipleEmployeesModal from "./AddMultipleEmployeesModal";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Loading from "@/components/ui/loading";
-import PageHeader from "@/components/pageHeader";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import Loading from "@/shared/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import Link from "next/link";
 import { FaUserPlus } from "react-icons/fa6";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import EmptyState from "@/components/empty-state";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import EmptyState from "@/shared/ui/empty-state";
 import { SendOnboardingInviteSheet } from "../onboarding/_components/SendOnboardingInviteSheet";
+import { HiUsers } from "react-icons/hi2";
 
 const Employees = () => {
   const [isMultipleOpen, setIsMultipleOpen] = useState(false);
@@ -44,26 +45,42 @@ const Employees = () => {
   } = useQuery<Employee[]>({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || loadingEmployees) return <Loading />;
   if (errorEmployees) return <p>Error loading data</p>;
 
   const allEmployees = Array.isArray(employees) ? employees : [];
-  const onlyEmployees = allEmployees.filter((e) => e.role === "employee");
-  const onlyManagers = allEmployees.filter((e) => e.role === "manager");
 
-  const getCardData = () => {
-    switch (activeTab) {
-      case "employee":
-        return onlyEmployees;
-      case "manager":
-        return onlyManagers;
-      case "all":
-      default:
-        return allEmployees;
-    }
+  // ✅ unique roles present in data
+  const roles = Array.from(
+    new Set(allEmployees.map((e) => e.role).filter(Boolean)),
+  ).sort();
+
+  // ✅ tab keys
+  const statuses = Array.from(
+    new Set(allEmployees.map((e) => e.employmentStatus).filter(Boolean)),
+  ).sort();
+
+  // ✅ tab keys
+  const tabs = ["all", ...statuses];
+
+  // ✅ filter by status
+  const dataByTab = (tab: string) =>
+    tab === "all"
+      ? allEmployees
+      : allEmployees.filter((e) => e.employmentStatus === tab);
+
+  // ✅ human-friendly labels
+  const statusLabel: Record<string, string> = {
+    active: "Active",
+    probation: "Probation",
+    on_leave: "On Leave",
+    onboarding: "Onboarding",
+    inactive: "Inactive",
+    resigned: "Resigned",
+    terminated: "Terminated",
   };
 
   return (
@@ -90,41 +107,33 @@ const Employees = () => {
       {/* Conditionally rendered Employee Cards above Tabs */}
       {allEmployees.length > 0 && (
         <div className="mt-6">
-          <EmployeesCards data={getCardData()} />
+          <EmployeesCards data={dataByTab(activeTab)} />
         </div>
       )}
 
       {allEmployees.length === 0 ? (
-        <div className="mt-20">
+        <div className="flex min-h-[70vh] items-center justify-center">
           <EmptyState
             title="No Employees Found"
             description="It seems you haven't added any employees yet. Start by adding your first employee."
-            image={
-              "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585356/employees_bpfi3q.svg"
-            }
-            actionLabel="Add Employee"
-            actionHref="/dashboard/employees/invite"
+            icon={<HiUsers />}
           />
         </div>
       ) : (
-        <Tabs defaultValue="all" onValueChange={setActiveTab}>
-          <TabsList className="mt-5">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="employee">Employees</TabsTrigger>
-            <TabsTrigger value="manager">Managers</TabsTrigger>
+        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="mt-5 flex flex-wrap">
+            {tabs.map((tab) => (
+              <TabsTrigger key={tab} value={tab}>
+                {tab === "all" ? "All" : (statusLabel[tab] ?? tab)}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
-          <TabsContent value="all" className="mt-6">
-            <EmployeesTable data={allEmployees} />
-          </TabsContent>
-
-          <TabsContent value="employee" className="mt-10">
-            <EmployeesTable data={onlyEmployees} />
-          </TabsContent>
-
-          <TabsContent value="manager" className="mt-10">
-            <EmployeesTable data={onlyManagers} />
-          </TabsContent>
+          {tabs.map((tab) => (
+            <TabsContent key={tab} value={tab} className="mt-6">
+              <EmployeesTable data={dataByTab(tab)} />
+            </TabsContent>
+          ))}
         </Tabs>
       )}
 

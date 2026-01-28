@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/DataTable";
+import { Button } from "@/shared/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaCheck, FaEye } from "react-icons/fa";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { StatusBadge } from "@/shared/ui/status-badge";
 import Link from "next/link";
 import { ChevronsUpDown } from "lucide-react";
-import { Avatars } from "@/components/avatars";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { Avatars } from "@/shared/ui/avatars";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import { Appraisal } from "@/types/performance/appraisal.type";
 import SendReminder from "./SendReminder";
 
@@ -145,8 +145,8 @@ export default function ParticipantsTable({ data }: ParticipantsTableProps) {
         d.finalized || (d.submittedByEmployee && d.submittedByManager)
           ? 100
           : d.submittedByEmployee || d.submittedByManager
-          ? 50
-          : 0,
+            ? 50
+            : 0,
     }));
 
   return (

@@ -8,7 +8,7 @@ import {
   ClipboardList,
   DoorOpen,
 } from "lucide-react";
-import ChecklistCard, { TaskMeta } from "@/components/common/ChecklistCard";
+import ChecklistCard, { TaskMeta } from "@/shared/ui/checklist-card";
 import { FaSitemap } from "react-icons/fa";
 
 const TASK_META: Record<string, TaskMeta> = {

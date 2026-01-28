@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { DeductionTrendChart } from "./_components/DeductionTrendChart";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { DeductionByEmployeeTable } from "./_components/DeductionByEmployeeTable";
 import {
   Select,
@@ -12,10 +12,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { format } from "date-fns";
-import { ExportMenu } from "@/components/ExportMenu";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { ExportMenu } from "@/shared/ui/export-menu";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const now = new Date();
 const currentYear = now.getFullYear();
@@ -23,7 +23,7 @@ const currentMonth = now.getMonth() + 1;
 
 const years = Array.from({ length: 5 }, (_, i) => (currentYear - i).toString());
 const months = Array.from({ length: 12 }, (_, i) =>
-  String(i + 1).padStart(2, "0")
+  String(i + 1).padStart(2, "0"),
 );
 
 const DeductionSummary = () => {
@@ -35,7 +35,7 @@ const DeductionSummary = () => {
 
   const fetchDeductionSummary = async () => {
     const res = await axiosInstance.get(
-      `/api/payroll-report/deductions-summary?month=${yearMonth}`
+      `/api/payroll-report/deductions-summary?month=${yearMonth}`,
     );
     return res.data.data;
   };
@@ -47,7 +47,7 @@ const DeductionSummary = () => {
   } = useQuery({
     queryKey: ["deduction-summary", yearMonth],
     queryFn: fetchDeductionSummary,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoadingDed) {

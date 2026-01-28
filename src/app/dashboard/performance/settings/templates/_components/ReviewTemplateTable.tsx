@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { ReviewTemplate } from "./PerformanceTemplates";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
-import { Button } from "@/components/ui/button";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
+import { Button } from "@/shared/ui/button";
 import ReviewTemplateModal from "./ReviewTemplateModal";
 import { useRouter } from "next/navigation";
 import { BsQuestionSquareFill } from "react-icons/bs";
@@ -102,7 +102,7 @@ export default function ReviewTemplateTable({
             size="icon"
             onClick={() =>
               router.push(
-                `/dashboard/performance/settings/templates/${row.original.id}`
+                `/dashboard/performance/settings/templates/${row.original.id}`,
               )
             }
             title="Edit Questions"

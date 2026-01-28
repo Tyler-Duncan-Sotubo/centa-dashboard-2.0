@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -13,13 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
 import { useQueryClient } from "@tanstack/react-query";
 import { loanSchema } from "@/schema/loan.schema";
 import { PlusCircle } from "lucide-react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 interface LoanModalProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ const LoanModal = ({ isOpen, onClose }: LoanModalProps) => {
         values.amount / values.tenureMonths
     ) {
       setError(
-        "Your preferred monthly payment is higher than the calculated monthly payment"
+        "Your preferred monthly payment is higher than the calculated monthly payment",
       );
       return;
     }

@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -11,20 +11,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import Loading from "@/components/ui/loading";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import Loading from "@/shared/ui/loading";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
 
 const schema = z.object({
   cycleId: z.string().uuid(),
@@ -63,7 +63,7 @@ export default function ReviewFormModal({ open, setOpen }: Props) {
         templates: templatesRes.data.data,
       };
     },
-    enabled: !!session?.backendTokens.accessToken && open,
+    enabled: Boolean(session?.backendTokens?.accessToken) && open,
   });
 
   const mutation = useCreateMutation({
@@ -119,7 +119,7 @@ export default function ReviewFormModal({ open, setOpen }: Props) {
                           <SelectItem key={cycle.id} value={cycle.id}>
                             {cycle.name}
                           </SelectItem>
-                        )
+                        ),
                       )}
                     </SelectContent>
                   </Select>
@@ -147,7 +147,7 @@ export default function ReviewFormModal({ open, setOpen }: Props) {
                           <SelectItem key={t.id} value={t.id}>
                             {t.name}
                           </SelectItem>
-                        )
+                        ),
                       )}
                     </SelectContent>
                   </Select>

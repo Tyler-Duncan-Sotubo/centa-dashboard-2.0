@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { FaCirclePlus, FaClone, FaGlobe } from "react-icons/fa6";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { TemplatesResponse } from "@/types/onboarding/onboarding.type";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { SendOnboardingInviteSheet } from "../onboarding/_components/SendOnboardingInviteSheet";
 
 export default function OnboardingTemplates() {
@@ -36,7 +36,7 @@ export default function OnboardingTemplates() {
   const { data, isLoading, isError } = useQuery<TemplatesResponse>({
     queryKey: ["templates"],
     queryFn: fetchTemplates,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const cloneTemplate = useCreateMutation({

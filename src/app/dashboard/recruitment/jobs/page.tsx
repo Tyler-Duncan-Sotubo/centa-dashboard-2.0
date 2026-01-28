@@ -1,9 +1,9 @@
 "use client";
 
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader } from "@/shared/ui/card";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { Job } from "@/types/jobs.type";
 import { useQuery } from "@tanstack/react-query";
@@ -13,13 +13,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { formatSource } from "@/utils/formatSource";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Badge } from "@/shared/ui/badge";
+import { Input } from "@/shared/ui/input";
+import { formatSource } from "@/shared/utils/formatSource";
 import { Search } from "lucide-react";
-import EmptyState from "@/components/empty-state";
+import EmptyState from "@/shared/ui/empty-state";
 import { FaPlug } from "react-icons/fa6";
+import { HiOutlineBriefcase } from "react-icons/hi2";
 
 const JobListingPage = () => {
   const axiosInstance = useAxiosAuth();
@@ -44,7 +45,7 @@ const JobListingPage = () => {
   } = useQuery<Job[]>({
     queryKey: ["jobs"],
     queryFn: () => fetchJobs(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     refetchOnMount: true,
   });
 
@@ -79,15 +80,13 @@ const JobListingPage = () => {
 
       {jobs?.length === 0 ? (
         <div className="mt-20">
-          <EmptyState
-            title="No Jobs Found"
-            description="You don’t have any jobs yet. Once jobs are created, they’ll appear here."
-            image={
-              "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585356/job_ruuqp1.svg"
-            } // or "/images/empty-jobs.png" from public folder
-            actionLabel="Create New Job"
-            actionHref="/dashboard/recruitment/jobs/create"
-          />
+          <div className="flex min-h-[60vh] items-center justify-center">
+            <EmptyState
+              title="No Jobs Found"
+              description="You don’t have any jobs yet. Once jobs are created, they’ll appear here."
+              icon={<HiOutlineBriefcase />}
+            />
+          </div>
         </div>
       ) : (
         <section>
@@ -113,7 +112,7 @@ const JobListingPage = () => {
               ?.filter(
                 (job) =>
                   job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  job.jobType.toLowerCase().includes(searchTerm.toLowerCase())
+                  job.jobType.toLowerCase().includes(searchTerm.toLowerCase()),
               )
               .map((job: Job) => {
                 const isDraft = job.status === "draft";
@@ -135,10 +134,10 @@ const JobListingPage = () => {
                             job.status === "open"
                               ? "approved"
                               : job.status === "draft"
-                              ? "pending"
-                              : job.status === "closed"
-                              ? "rejected"
-                              : undefined
+                                ? "pending"
+                                : job.status === "closed"
+                                  ? "rejected"
+                                  : undefined
                           }
                         >
                           {job.status.charAt(0).toUpperCase() +
@@ -147,9 +146,9 @@ const JobListingPage = () => {
                       </div>
                     </CardHeader>
 
-                    <CardContent className="flex flex-col justify-between flex-grow">
+                    <CardContent className="flex flex-col justify-between grow">
                       <div className="mb-2">
-                        <h3 className="text-lg font-semibold line-clamp-2 min-h-[2rem]">
+                        <h3 className="text-lg font-semibold line-clamp-2 min-h-8">
                           {job.title}
                         </h3>
                         <p className="text-gray-600 text-sm line-clamp-3">

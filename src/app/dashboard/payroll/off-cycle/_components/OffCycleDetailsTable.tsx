@@ -13,8 +13,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
-import { Button } from "@/components/ui/button";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
+import { Button } from "@/shared/ui/button";
 import {
   Table,
   TableBody,
@@ -22,9 +22,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/utils/formatCurrency";
+} from "@/shared/ui/table";
+import { Badge } from "@/shared/ui/badge";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { EmployeeDetail } from "@/types/payRunDetails";
 
 function formatPayrollMonth(payrollMonth: string): string {
@@ -121,8 +121,8 @@ export const columns: ColumnDef<EmployeeDetail>[] = [
               status === "completed"
                 ? "approved"
                 : status === "rejected"
-                ? "rejected"
-                : "pending"
+                  ? "rejected"
+                  : "pending"
             }
             className="capitalize"
           >
@@ -157,8 +157,8 @@ export const columns: ColumnDef<EmployeeDetail>[] = [
               status === "approved"
                 ? "approved"
                 : status === "rejected"
-                ? "rejected"
-                : "pending"
+                  ? "rejected"
+                  : "pending"
             }
             className="capitalize"
           >
@@ -177,7 +177,7 @@ export function OffCycleDetailsTable({
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -216,7 +216,7 @@ export function OffCycleDetailsTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -235,7 +235,7 @@ export function OffCycleDetailsTable({
                     <TableCell key={cell.id} className="py-5">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

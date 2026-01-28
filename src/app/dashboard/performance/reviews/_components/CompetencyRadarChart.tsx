@@ -11,7 +11,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/shared/ui/chart";
 import { Question } from "@/types/performance/question-competency.type";
 
 type Props = {
@@ -33,7 +33,7 @@ export default function CompetencyRadarChartCard({ questions }: Props) {
     const avg =
       scores.length > 0
         ? parseFloat(
-            (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2)
+            (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2),
           )
         : 0;
 

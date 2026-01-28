@@ -4,17 +4,17 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { formatSource } from "@/utils/formatSource";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { useToast } from "@/shared/hooks/use-toast";
+import { formatSource } from "@/shared/utils/formatSource";
 import Mustache from "mustache";
-import FormError from "@/components/ui/form-error";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import FormError from "@/shared/ui/form-error";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import Link from "next/link";
 
@@ -43,7 +43,7 @@ export default function OfferEditPage() {
       const res = await axios.get(`/api/offers/variables/${offerId}`);
       return res.data.data;
     },
-    enabled: !!offerId && !!session?.backendTokens.accessToken,
+    enabled: !!offerId && Boolean(session?.backendTokens?.accessToken),
   });
 
   useEffect(() => {
@@ -63,14 +63,14 @@ export default function OfferEditPage() {
 
   const handleSubmit = async () => {
     const missing = data.variables.filter(
-      (key: string) => !userInput[key] && !SIGNATURE_FIELDS.has(key)
+      (key: string) => !userInput[key] && !SIGNATURE_FIELDS.has(key),
     );
 
     if (missing.length > 0) {
       toast({
         title: "Missing Fields",
         description: `Please fill in the following fields: ${missing.join(
-          ", "
+          ", ",
         )}`,
         variant: "destructive",
       });
@@ -100,10 +100,10 @@ export default function OfferEditPage() {
     return <p className="text-red-500">Failed to load data.</p>;
 
   const editableVars = data.variables.filter(
-    (v: string) => !SIGNATURE_FIELDS.has(v)
+    (v: string) => !SIGNATURE_FIELDS.has(v),
   );
   const signatureVars = data.variables.filter((v: string) =>
-    SIGNATURE_FIELDS.has(v)
+    SIGNATURE_FIELDS.has(v),
   );
 
   return (

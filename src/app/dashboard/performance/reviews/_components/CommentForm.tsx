@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import PageHeader from "@/components/pageHeader";
+import { Button } from "@/shared/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import PageHeader from "@/shared/ui/page-header";
 import { FaEdit } from "react-icons/fa";
-import { RichTextEditor } from "@/components/RichTextEditor";
-import RenderHtml from "@/components/ui/render-html";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
+import RenderHtml from "@/shared/ui/render-html";
 
 type CommentFormProps = {
   name: string; // e.g., "questionnaireComment"

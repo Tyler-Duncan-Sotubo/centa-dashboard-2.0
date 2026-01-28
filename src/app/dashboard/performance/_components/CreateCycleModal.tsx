@@ -1,15 +1,15 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { DateInput } from "@/components/ui/date-input";
+import Modal from "@/shared/ui/modal";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { DateInput } from "@/shared/ui/date-input";
 import { useEffect } from "react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 const schema = z.object({
   name: z.string().min(1),

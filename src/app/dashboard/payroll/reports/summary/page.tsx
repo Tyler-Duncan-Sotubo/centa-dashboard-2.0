@@ -4,11 +4,11 @@ import React from "react";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { PayrollOverview } from "./_components/PayrollOverview";
 import { PayrollSummaryPieChart } from "./_components/PayrollSummaryPieChart";
 import { PayrollHistory } from "./_components/PayrollHistory";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const PayrollReportPage = () => {
   const { data: session, status } = useSession();
@@ -17,7 +17,7 @@ const PayrollReportPage = () => {
   const fetchPayrollOverview = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-report/analytics-report"
+        "/api/payroll-report/analytics-report",
       );
       return res.data.data;
     } catch (error) {
@@ -30,7 +30,7 @@ const PayrollReportPage = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["analytics-report"],
     queryFn: fetchPayrollOverview,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

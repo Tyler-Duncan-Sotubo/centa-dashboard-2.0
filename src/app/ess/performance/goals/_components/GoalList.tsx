@@ -2,16 +2,16 @@
 
 import { Goal } from "@/types/performance/goals.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable"; // assumes a reusable wrapper
-import { Button } from "@/components/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
+import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
-// import { DeleteWithTwoIdsDialog } from "@/components/DeleteWithTwoIdsDialog";
 import { FaCheck, FaEdit } from "react-icons/fa";
 import Link from "next/link";
 import GoalModal from "./GoalFormModal";
 import { useState } from "react";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { DeleteWithTwoIdsDialog } from "@/components/DeleteWithTwoIdsDialog";
+import { StatusBadge } from "@/shared/ui/status-badge";
+import { DeleteWithTwoIdsDialog } from "@/shared/ui/delete-with-two-Ids-dialog";
+import { GoalsMobileRow } from "./goals-mobile-row";
 
 interface GoalTableProps {
   goals: Goal[];
@@ -52,7 +52,6 @@ export default function GoalTable({
         </div>
       ),
     },
-
     {
       accessorKey: "status",
       header: "Status",
@@ -85,13 +84,12 @@ export default function GoalTable({
                 <FaCheck />
               </span>
             ) : (
-              <span className="text-sm font-medium min-w-[32px]">{value}%</span>
+              <span className="text-sm font-medium min-w-8">{value}%</span>
             )}
           </div>
         );
       },
     },
-
     {
       accessorKey: "weight",
       header: "Weight",
@@ -123,6 +121,7 @@ export default function GoalTable({
                 >
                   <FaEdit />
                 </Button>
+
                 <DeleteWithTwoIdsDialog
                   id1={goal.id}
                   id2={goal.employeeId}
@@ -142,7 +141,13 @@ export default function GoalTable({
 
   return (
     <div className="mt-4">
-      <DataTable columns={columns} data={goals} />
+      <DataTable
+        columns={columns}
+        data={goals}
+        mobileRow={GoalsMobileRow}
+        // optional if you want: hideTableOnMobile
+        // hideTableOnMobile
+      />
       <GoalModal open={open} setOpen={setOpen} initialData={selectedGoal} />
     </div>
   );

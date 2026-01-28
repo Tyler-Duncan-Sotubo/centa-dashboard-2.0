@@ -1,8 +1,8 @@
 "use client";
 
-import { PayrollSchedule } from "@/components/common/tables/payroll-schedule";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import { PayrollSchedule } from "@/features/payroll/core/ui/payroll-schedule";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { Employee, EmployeeGroup } from "@/types/employees.type";
 import { EmployeeDetail } from "@/types/payRunDetails";
@@ -10,7 +10,7 @@ import { SalaryBreakdown } from "@/types/salaryBreakdown";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 interface PayrollPreview {
   allEmployees: Employee[];
@@ -25,7 +25,7 @@ export const PayrollHistory = () => {
   const fetchPayrollPreview = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-report/payroll-preview"
+        "/api/payroll-report/payroll-preview",
       );
       return res.data.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export const PayrollHistory = () => {
   const pendingPayroll = payrollSummary?.filter(
     (payroll) =>
       payroll.paymentStatus === "in-progress" ||
-      payroll.paymentStatus === "paid"
+      payroll.paymentStatus === "paid",
   );
 
   return (

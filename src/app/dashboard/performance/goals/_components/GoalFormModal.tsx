@@ -3,9 +3,9 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/ui/modal";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import Modal from "@/shared/ui/modal";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 import {
   Form,
   FormField,
@@ -13,21 +13,21 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { DateInput } from "@/components/ui/date-input";
-import { EmployeeSingleSelect } from "@/components/ui/employee-single-select";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+} from "@/shared/ui/select";
+import { DateInput } from "@/shared/ui/date-input";
+import { EmployeeSingleSelect } from "@/shared/ui/employee-single-select";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { Goal } from "@/types/performance/goals.type";
 import { useEffect } from "react";
 
@@ -173,7 +173,7 @@ export default function ObjectiveModal({ open, setOpen, initialData }: Props) {
       const res = await axiosInstance.get("/api/employee-groups");
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   // ---------- Mutations ----------
@@ -202,8 +202,8 @@ export default function ObjectiveModal({ open, setOpen, initialData }: Props) {
       dueDate: values.dueDate,
       // server auto-resolves cycle by startDate; do not send cycleId unless you need it
       employeeId:
-        values.ownerType === "employee" ? values.employeeId ?? null : null,
-      groupId: values.ownerType === "group" ? values.groupId ?? null : null, // demo
+        values.ownerType === "employee" ? (values.employeeId ?? null) : null,
+      groupId: values.ownerType === "group" ? (values.groupId ?? null) : null, // demo
       status: values.status,
       weight: values.weight ?? null,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -355,7 +355,7 @@ export default function ObjectiveModal({ open, setOpen, initialData }: Props) {
                               <SelectItem key={group.id} value={group.id}>
                                 {group.name}
                               </SelectItem>
-                            )
+                            ),
                           )}
                         </SelectContent>
                       </Select>

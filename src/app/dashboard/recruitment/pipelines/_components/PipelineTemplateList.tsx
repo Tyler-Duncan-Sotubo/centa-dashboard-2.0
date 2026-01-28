@@ -6,20 +6,20 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
 import { FaGlobe, FaBuilding, FaPlus, FaEye } from "react-icons/fa";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 import CreatePipelineTemplateModal from "@/app/dashboard/recruitment/jobs/_components/CreatePipelineTemplateModal";
 
@@ -46,11 +46,11 @@ export default function PipelineTemplateList({
     queryKey: ["template-stages", selected?.id],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/api/pipeline/template/${selected?.id}`
+        `/api/pipeline/template/${selected?.id}`,
       );
       return res.data.data.stages; // Adjust based on your API response shape
     },
-    enabled: !!selected?.id && !!session?.backendTokens.accessToken,
+    enabled: !!selected?.id && Boolean(session?.backendTokens?.accessToken),
   });
 
   return (
@@ -128,7 +128,7 @@ export default function PipelineTemplateList({
                       <li key={stage.id}>
                         Stage {idx + 1}: {stage.name}
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               )}

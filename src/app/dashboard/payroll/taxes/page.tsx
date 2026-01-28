@@ -1,13 +1,13 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import TaxesPage from "./TaxesPage";
 import { Taxes } from "@/types/taxes.type";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const TaxCompliance = () => {
   const { data: session, status } = useSession();

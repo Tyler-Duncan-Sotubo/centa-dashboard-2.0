@@ -1,24 +1,24 @@
 "use client";
 
-import { DataTable } from "@/components/DataTable";
-import Loading from "@/components/ui/loading";
+import { DataTable } from "@/shared/ui/data-table";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React, { useMemo, useState } from "react";
 import { LoanRepaymentColumns } from "./_components/LoanRepaymentColumns";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { ExportMenu } from "@/components/ExportMenu";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { ExportMenu } from "@/shared/ui/export-menu";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const LoanRepaymentReport = () => {
   const { data: session, status } = useSession();
@@ -39,7 +39,7 @@ const LoanRepaymentReport = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["loan-repayment-report"],
     queryFn: fetchBalanceReport,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   // Extract unique months for filtering
@@ -49,9 +49,9 @@ const LoanRepaymentReport = () => {
     const uniqueMonths = Array.from(
       new Set(
         data.map((item: { lastRepayment: string }) =>
-          format(new Date(item.lastRepayment), "yyyy-MM")
-        )
-      )
+          format(new Date(item.lastRepayment), "yyyy-MM"),
+        ),
+      ),
     ) as string[];
 
     return uniqueMonths.sort((a, b) => b.localeCompare(a));
@@ -69,7 +69,7 @@ const LoanRepaymentReport = () => {
         if (selectedMonth === "all") return true;
         const itemMonth = format(new Date(item.lastRepayment), "yyyy-MM");
         return itemMonth === selectedMonth;
-      }
+      },
     );
   }, [data, selectedMonth]);
 

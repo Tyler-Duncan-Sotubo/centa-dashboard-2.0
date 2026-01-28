@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { KeyValueCard, KeyValueCardProps } from "./KeyValueCard";
 import { ManagerCard, Manager } from "./ManagerCard";
 import { MdExitToApp } from "react-icons/md";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 
 export interface EmploymentDetails {
@@ -123,7 +123,7 @@ export function EmploymentDetailsCard({
         <div className="flex  justify-end">
           <Link
             href={`/dashboard/employees/offboarding/begin?employeeId=${employeeId}&employeeName=${encodeURIComponent(
-              employeeName
+              employeeName,
             )}`}
           >
             <Button variant={"destructive"}>

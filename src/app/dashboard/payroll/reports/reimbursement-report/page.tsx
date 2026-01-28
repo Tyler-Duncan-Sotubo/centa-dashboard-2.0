@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import PageHeader from "@/components/pageHeader";
-import { DataTable } from "@/components/DataTable";
+import PageHeader from "@/shared/ui/page-header";
+import { DataTable } from "@/shared/ui/data-table";
 import { ReimbursementColumns } from "./_components/ReimbursementColumns";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useSession } from "next-auth/react";
 import { FilterSection } from "./_components/FilterSection";
-import { ExportMenu } from "@/components/ExportMenu";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { ExportMenu } from "@/shared/ui/export-menu";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const ReimbursementReportPage = () => {
   const { data: session, status } = useSession();
@@ -35,7 +35,7 @@ const ReimbursementReportPage = () => {
       if (statusFilter) params.append("status", statusFilter);
 
       const res = await axiosInstance.get(
-        `/api/expenses/reimbursement-report?${params.toString()}`
+        `/api/expenses/reimbursement-report?${params.toString()}`,
       );
 
       return res.data.data;

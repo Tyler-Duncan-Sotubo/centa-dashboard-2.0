@@ -1,7 +1,7 @@
 // MessagingUI.tsx
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import ComposeModal from "./ComposeModal";
 import MessageList from "./MessageList";
 import MessageDetail from "./MessageDetail";

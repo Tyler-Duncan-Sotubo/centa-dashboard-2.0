@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 import {
   Check,
   Send,
@@ -17,7 +17,7 @@ import {
   CheckCircle,
   Circle,
 } from "lucide-react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 interface ApprovalStep {
   id: string;
@@ -82,8 +82,8 @@ export function SendPayrollForApproval({
             {sent
               ? "Payroll Sent for Approval"
               : isSingleStepFlow
-              ? "Auto-Approved"
-              : "Send Payroll for Approval"}
+                ? "Auto-Approved"
+                : "Send Payroll for Approval"}
           </CardTitle>
         </CardHeader>
 
@@ -169,8 +169,8 @@ export function SendPayrollForApproval({
                         isCurrent
                           ? "text-blue-600"
                           : isDone
-                          ? "text-green-600"
-                          : "text-gray-500"
+                            ? "text-green-600"
+                            : "text-gray-500"
                       }`}
                     >
                       {step.role.replace(/_/g, " ")}

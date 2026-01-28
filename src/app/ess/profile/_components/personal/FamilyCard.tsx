@@ -6,7 +6,7 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import { EntitySheet } from "../EntitySheet";
 
 export function FamilyCard({

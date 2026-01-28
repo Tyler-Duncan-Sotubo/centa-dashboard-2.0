@@ -4,20 +4,20 @@ import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import Modal from "@/components/ui/modal";
+} from "@/shared/ui/select";
+import { Form, FormField, FormItem, FormMessage } from "@/shared/ui/form";
+import Modal from "@/shared/ui/modal";
 
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 const feedbackQuestionSchema = z.object({
   question: z.string().min(1, "Question is required"),

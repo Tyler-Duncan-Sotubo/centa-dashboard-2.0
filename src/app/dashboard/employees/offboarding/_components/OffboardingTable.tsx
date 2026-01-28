@@ -1,8 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/shared/ui/badge";
+import { DataTable } from "@/shared/ui/data-table";
 import { useState } from "react";
 import {
   Select,
@@ -10,12 +10,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatars } from "@/components/avatars";
+import { Button } from "@/shared/ui/button";
+import { Avatars } from "@/shared/ui/avatars";
 import { OffboardingSession } from "@/types/offboarding/offboarding.type";
-import { formatSource } from "@/utils/formatSource";
+import { formatSource } from "@/shared/utils/formatSource";
 import OffboardingChecklistModal from "./OffboardingChecklistModal";
 
 const columns: ColumnDef<OffboardingSession>[] = [
@@ -64,8 +64,8 @@ const columns: ColumnDef<OffboardingSession>[] = [
         status === "completed"
           ? "completed"
           : status === "in_progress"
-          ? "ongoing"
-          : "pending";
+            ? "ongoing"
+            : "pending";
       return (
         <Badge variant={variant}>{status ? formatSource(status) : null}</Badge>
       );
@@ -94,7 +94,7 @@ export default function OffboardingEmployeesTable({
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredData = data?.filter((item) =>
-    statusFilter === "all" ? true : item.status === statusFilter
+    statusFilter === "all" ? true : item.status === statusFilter,
   );
 
   return (

@@ -1,12 +1,12 @@
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/shared/ui/toaster";
 import { Suspense } from "react";
 import { Metadata } from "next";
 import "leaflet/dist/leaflet.css";
-import { NextAuthProvider } from "@/server/provider/nextAuthProvider";
-import ReactQueryProvider from "@/server/provider/ReactQueryProvider";
-import { WorkspaceProvider } from "@/context/workspace";
+import { NextAuthProvider } from "@/lib/provider/nextAuthProvider";
+import ReactQueryProvider from "@/lib/provider/ReactQueryProvider";
+import { WorkspaceProvider } from "@/shared/context/workspace";
 
 const nunito = Nunito({
   subsets: ["latin"],

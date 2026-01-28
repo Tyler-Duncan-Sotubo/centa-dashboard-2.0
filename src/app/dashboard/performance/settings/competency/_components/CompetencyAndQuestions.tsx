@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 import CompetencyList from "./CompetencyList";
 import QuestionList from "./QuestionList";
@@ -31,7 +31,7 @@ export default function Competencies() {
   } = useQuery({
     queryKey: ["competencies"],
     queryFn: fetchCompetencies,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const active =

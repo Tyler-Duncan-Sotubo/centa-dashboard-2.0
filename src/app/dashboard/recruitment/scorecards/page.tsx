@@ -1,13 +1,13 @@
 "use client";
 
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React from "react";
-import PageHeader from "@/components/pageHeader";
-import { Button } from "@/components/ui/button";
+import PageHeader from "@/shared/ui/page-header";
+import { Button } from "@/shared/ui/button";
 import { FaPlus } from "react-icons/fa6";
 import ScoreCardList from "./_components/ScoreCardList";
 import CreateScorecardModal from "./_components/CreateScorecardModal";
@@ -19,7 +19,7 @@ const ScoreCardSettingsPage = () => {
   const fetchPipelineTemplates = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/interviews/scorecards-templates"
+        "/api/interviews/scorecards-templates",
       );
       return res.data.data;
     } catch (error) {
@@ -36,7 +36,7 @@ const ScoreCardSettingsPage = () => {
   } = useQuery({
     queryKey: ["scoreCards"],
     queryFn: () => fetchPipelineTemplates(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoading) return <Loading />;

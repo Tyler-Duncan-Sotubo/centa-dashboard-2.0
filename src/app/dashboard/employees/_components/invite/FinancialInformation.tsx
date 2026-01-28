@@ -6,22 +6,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/shared/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { FormType } from "./EmployeeInvite";
 import React, { useEffect, useState } from "react";
-import { nigerianBanks } from "@/data/banks.data";
-import { useToast } from "@/hooks/use-toast";
+import { nigerianBanks } from "@/features/employees/config/banks.data";
+import { useToast } from "@/shared/hooks/use-toast";
 import axios from "axios";
-import { getErrorMessage } from "@/utils/getErrorMessage";
+import { getErrorMessage } from "@/shared/utils/getErrorMessage";
 
 const FinancialInformation = ({ form }: { form: FormType }) => {
   const [isVerifying, setIsVerifying] = useState(false);
@@ -49,7 +49,7 @@ const FinancialInformation = ({ form }: { form: FormType }) => {
 
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/employee-finance/verify-account/${accountNumber}/${bankCode}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/employee-finance/verify-account/${accountNumber}/${bankCode}`,
       );
 
       if (res.data?.status) {

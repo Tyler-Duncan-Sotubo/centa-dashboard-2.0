@@ -1,15 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/select";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Separator } from "@/shared/ui/separator";
+import FormError from "@/shared/ui/form-error";
 
 const QUESTION_TYPES = ["text", "select", "radio", "checkbox"];
 
@@ -41,7 +41,7 @@ export function AdditionalQuestionsForm({
   const handleChange = (
     index: number,
     key: keyof Question,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     const updated = [...questions];
     (updated[index][key] as typeof value) = value;
@@ -51,7 +51,7 @@ export function AdditionalQuestionsForm({
   const handleOptionChange = (
     qIndex: number,
     oIndex: number,
-    value: string
+    value: string,
   ) => {
     const updated = [...questions];
     updated[qIndex].options[oIndex] = value;
@@ -103,7 +103,7 @@ export function AdditionalQuestionsForm({
       <Separator />
 
       {questions.map((q, index) => (
-        <div key={index} className="space-y-2 border p-4 rounded-md shadow-sm">
+        <div key={index} className="space-y-2 border p-4 rounded-md shadow-2xs">
           <div className="flex gap-2 items-center">
             <Input
               value={q.question}

@@ -1,10 +1,9 @@
-import React from "react";
-import OfficeLocation from "./_components/OfficeLocation";
+import { OfficeLocationsContainer } from "@/features/company/offices/ui/OfficeLocationsContainer";
 
 const page = () => {
   return (
     <div className="px-4">
-      <OfficeLocation />
+      <OfficeLocationsContainer />
     </div>
   );
 };

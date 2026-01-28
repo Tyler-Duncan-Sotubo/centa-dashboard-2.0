@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import FeedbackSettings from "./_components/FeedbackSettings";
 import FeedbackQuestionPanel from "./_components/FeedbackQuestionPanel";
 

@@ -1,5 +1,4 @@
-import React from "react";
-import AttendanceChecklist from "./_components/AttendanceChecklist";
+import AttendanceChecklist from "@/features/attendance/checklist/attendance-checklist";
 
 const page = () => {
   return <AttendanceChecklist />;

@@ -1,15 +1,16 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/DataTable";
-import { Button } from "@/components/ui/button";
+import { DataTable } from "@/shared/ui/data-table";
+import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { FaEye, FaTrash } from "react-icons/fa";
-import { Avatars } from "@/components/avatars";
+import { Avatars } from "@/shared/ui/avatars";
 import { Feedback } from "@/types/performance/feedback.type";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import ViewFeedbackModal from "./ViewFeedbackModal";
 import { useState } from "react";
+import { FeedbackMobileRow } from "./feedback-mobile-row";
 
 type Props = {
   feedbacks: Feedback[];
@@ -19,8 +20,13 @@ type Props = {
 export default function FeedbackList({ feedbacks, disabledAction }: Props) {
   const [open, setOpen] = useState(false);
   const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(
-    null
+    null,
   );
+
+  const openView = (id: string) => {
+    setSelectedFeedbackId(id);
+    setOpen(true);
+  };
 
   const columns: ColumnDef<Feedback>[] = [
     {
@@ -37,10 +43,7 @@ export default function FeedbackList({ feedbacks, disabledAction }: Props) {
                 variant="link"
                 className="p-0 h-auto text-xmd"
                 type="button"
-                onClick={() => {
-                  setSelectedFeedbackId(row.original.id);
-                  setOpen(true);
-                }}
+                onClick={() => openView(row.original.id)}
               >
                 {row.original.employeeName}
               </Button>
@@ -91,18 +94,16 @@ export default function FeedbackList({ feedbacks, disabledAction }: Props) {
               size="sm"
               variant="link"
               type="button"
-              onClick={() => {
-                setSelectedFeedbackId(feedback.id);
-                setOpen(true);
-              }}
+              onClick={() => openView(feedback.id)}
             >
               <FaEye className="mr-1" />
             </Button>
+
             {!disabledAction && row.original.type === "self" ? (
               <DeleteIconDialog itemId={feedback.id} type="feedback" />
             ) : (
               <Button
-                variant={"link"}
+                variant="link"
                 size="sm"
                 disabled={disabledAction}
                 className="cursor-help"
@@ -118,7 +119,18 @@ export default function FeedbackList({ feedbacks, disabledAction }: Props) {
 
   return (
     <>
-      <DataTable columns={columns} data={feedbacks} />
+      <DataTable
+        columns={columns}
+        data={feedbacks}
+        mobileRow={(props) => (
+          <FeedbackMobileRow
+            {...props}
+            disabledAction={disabledAction}
+            onView={openView}
+          />
+        )}
+      />
+
       {open && selectedFeedbackId && (
         <ViewFeedbackModal
           open={open}

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/shared/ui/button";
+import { Separator } from "@/shared/ui/separator";
 import { ApplicationDetails } from "@/types/application";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -79,7 +79,7 @@ export function CandidateApplicationView({
                 getField("Start Date") && getField("End Date")
                   ? `${format(
                       new Date(getField("Start Date")!),
-                      "PPP"
+                      "PPP",
                     )} - ${format(new Date(getField("End Date")!), "PPP")}`
                   : "N/A"
               }

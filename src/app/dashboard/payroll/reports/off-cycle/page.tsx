@@ -4,9 +4,9 @@ import React from "react";
 import { isAxiosError } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import OffCyclePayrollReport from "./_components/OffCyclePayrollReport";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 const OffCycleReportPage = () => {
   const { data: session, status } = useSession();
@@ -30,7 +30,7 @@ const OffCycleReportPage = () => {
   } = useQuery({
     queryKey: ["off-cycle-report"],
     queryFn: fetchPayrollOffCycle,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   if (status === "loading" || isLoadingOffCycle) return <Loading />;

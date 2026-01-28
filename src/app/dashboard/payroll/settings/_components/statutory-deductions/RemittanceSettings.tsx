@@ -1,26 +1,26 @@
 "use client";
 
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Label } from "@/shared/ui/label";
+import { Switch } from "@/shared/ui/switch";
 import { Settings } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/shared/hooks/use-toast";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/shared/ui/card";
 import { useSession } from "next-auth/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
-import InfoTooltip from "@/components/InfoTooltip";
+import InfoTooltip from "@/shared/ui/info-tooltip";
 import { RemitReusableModal } from "./_components/RemitResuableModal";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export const RemittanceSettings = ({
   size = "md:w-2/3",
@@ -48,7 +48,7 @@ export const RemittanceSettings = ({
   const fetchTaxConfig = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/payroll-settings/statutory-deductions"
+        "/api/payroll-settings/statutory-deductions",
       );
       return res.data.data;
     } catch (error) {
@@ -191,7 +191,7 @@ export const RemittanceSettings = ({
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       if (res.status !== 200) throw new Error("Failed to update");

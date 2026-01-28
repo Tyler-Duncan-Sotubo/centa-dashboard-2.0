@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { Label } from "@/shared/ui/label";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/shared/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export default function TwoFactorAuthToggle() {
   const { data: session, status } = useSession();
@@ -19,7 +19,7 @@ export default function TwoFactorAuthToggle() {
   async function fetchTwoFactorSetting() {
     try {
       const res = await axiosInstance.get(
-        "/api/company-settings/two-factor-auth"
+        "/api/company-settings/two-factor-auth",
       );
       return res.data.data;
     } catch (error) {
@@ -54,7 +54,7 @@ export default function TwoFactorAuthToggle() {
           headers: {
             Authorization: `Bearer ${session?.backendTokens?.accessToken}`,
           },
-        }
+        },
       );
 
       toast({
@@ -75,7 +75,7 @@ export default function TwoFactorAuthToggle() {
 
   return (
     <div className="max-w-2xl">
-      <div className="flex items-center justify-between shadow-sm p-4 border border-monzo-textSecondary rounded-lg">
+      <div className="flex items-center justify-between shadow-2xs p-4 border border-monzo-textSecondary rounded-lg">
         <Label className="text-lg font-semibold">
           Two-Factor Authentication
         </Label>

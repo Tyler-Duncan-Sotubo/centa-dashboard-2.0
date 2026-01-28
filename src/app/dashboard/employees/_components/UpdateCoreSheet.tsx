@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import GenericSheet from "@/components/ui/generic-sheet";
-import { Button } from "@/components/ui/button";
+import GenericSheet from "@/shared/ui/generic-sheet";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -14,27 +14,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
-import Loading from "@/components/ui/loading";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
 import { FaEdit } from "react-icons/fa";
-import { LocationModal } from "@/components/LocationModal";
-import { PayGroupModal } from "@/components/PayGroupModal";
-import { Input } from "@/components/ui/input";
-import DepartmentModal from "../../company/departments/_components/DepartmentModal";
-import JobRoleModal from "../../company/job-roles/_components/JobRoleModal";
+import { LocationModal } from "@/features/company/offices/ui/LocationModal";
+import { PayGroupModal } from "@/features/payroll/settings/pay-group/ui/PayGroupModal";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+} from "@/shared/ui/select";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import DepartmentModal from "@/features/company/departments/ui/DepartmentModal";
+import JobRoleModal from "@/features/company/job-roles/ui/JobRoleModal";
 
 export const employeeProfile = z.object({
   employeeNumber: z.string().min(1),
@@ -42,7 +42,7 @@ export const employeeProfile = z.object({
   locationId: z.string(),
   payGroupId: z.string().min(1),
   jobRoleId: z.string().min(1),
-  costCenterId: z.string().min(1),
+  costCenterId: z.string().min(1).nullable(),
   companyRoleId: z.string().min(1),
   employmentStatus: z.enum([
     "probation",
@@ -79,7 +79,9 @@ export const UpdateCoreSheet = ({
 
   const form = useForm<z.infer<typeof employeeProfile>>({
     resolver: zodResolver(employeeProfile),
-    defaultValues: {},
+    defaultValues: {
+      costCenterId: "",
+    },
   });
 
   // Fetch company elements, this part stays the same
@@ -97,7 +99,7 @@ export const UpdateCoreSheet = ({
   const { data, isLoading, isError } = useQuery({
     queryKey: ["company-elements"],
     queryFn: fetchCompanyElements,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const updateEmployee = useUpdateMutation({
@@ -205,12 +207,12 @@ export const UpdateCoreSheet = ({
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={department.id}>
                               {department.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -240,12 +242,12 @@ export const UpdateCoreSheet = ({
                               id: string;
                               title: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={role.id}>
                               {role.title}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -263,7 +265,7 @@ export const UpdateCoreSheet = ({
                     <FormLabel required>Cost Center</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(value)}
-                      value={field.value}
+                      value={field.value || ""}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Cost Center" />
@@ -273,14 +275,14 @@ export const UpdateCoreSheet = ({
                           (
                             group: {
                               id: string;
-                              name: string;
+                              name: string | null;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={group.id}>
-                              {group.name}
+                              {group.name ?? ""}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -310,12 +312,12 @@ export const UpdateCoreSheet = ({
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={group.id}>
                               {group.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -345,12 +347,12 @@ export const UpdateCoreSheet = ({
                               id: string;
                               name: string;
                             },
-                            index: number
+                            index: number,
                           ) => (
                             <SelectItem key={index} value={role.id}>
                               {role.name}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -447,11 +449,12 @@ export const UpdateCoreSheet = ({
                                 .split("_")
                                 .map(
                                   (word) =>
-                                    word.charAt(0).toUpperCase() + word.slice(1)
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
                                 )
                                 .join(" ")}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>

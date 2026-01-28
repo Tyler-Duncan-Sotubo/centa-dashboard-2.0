@@ -4,11 +4,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { FormType } from "./EmployeeInvite";
 
 const BasicInformation = ({
@@ -47,7 +47,7 @@ const BasicInformation = ({
                       } catch (error) {
                         console.error(
                           "Failed to generate employee number:",
-                          error
+                          error,
                         );
                       }
                     }}

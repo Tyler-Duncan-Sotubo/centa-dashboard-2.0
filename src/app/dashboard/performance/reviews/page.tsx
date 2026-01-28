@@ -10,25 +10,25 @@ import {
   FaBuilding,
   FaCommentDots,
 } from "react-icons/fa";
-import PageHeader from "@/components/pageHeader";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PageHeader from "@/shared/ui/page-header";
+import { Input } from "@/shared/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/shared/ui/select";
+import { Button } from "@/shared/ui/button";
+import { Skeleton } from "@/shared/ui/skeleton";
 import ReviewList from "./_components/ReviewList";
 import { Review } from "@/types/performance/review.type";
 import ReviewFormModal from "./_components/ReviewFormModal";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 
 export default function ReviewsPage() {
   const { data: session } = useSession();
@@ -60,7 +60,7 @@ export default function ReviewsPage() {
       if (cycle !== "all") params.append("cycleId", cycle);
 
       const res = await axios.get(
-        `/api/performance-assessments/dashboard?${params}`
+        `/api/performance-assessments/dashboard?${params}`,
       );
       return res.data.data;
     },
@@ -80,7 +80,7 @@ export default function ReviewsPage() {
         cycles: cyclesRes.data.data,
       };
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: counts, isLoading: isLoadingCounts } = useQuery({

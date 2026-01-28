@@ -1,5 +1,4 @@
-import React from "react";
-import HolidaySettings from "./HolidaySettings";
+import HolidaySettings from "@/features/leave/settings/holidays/HolidaySettings";
 
 const page = () => {
   return (

@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import Loading from "@/components/ui/loading";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useSession } from "next-auth/react";
 import {
   RadarChart,
@@ -16,7 +16,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import { ReportFilters } from "../_components/ReportFilters";
 
 // --- Column definition for DataTable ---
@@ -47,7 +47,7 @@ export default function CompetencyHeatmapPage() {
         "/api/performance-report/competency-heatmap",
         {
           params,
-        }
+        },
       );
       return res.data.data;
     },
@@ -63,10 +63,10 @@ export default function CompetencyHeatmapPage() {
             competency,
             level,
             count: Number(count),
-          })
-        )
+          }),
+        ),
       ),
-    [heatmap]
+    [heatmap],
   );
 
   // --- Transform for RadarChart (sum all levels for each competency) ---
@@ -76,10 +76,10 @@ export default function CompetencyHeatmapPage() {
         competency,
         value: Object.values(levels as Record<string, string | number>).reduce(
           (a, b) => Number(a) + Number(b),
-          0
+          0,
         ),
       })),
-    [heatmap]
+    [heatmap],
   );
 
   if (isLoading) return <Loading />;

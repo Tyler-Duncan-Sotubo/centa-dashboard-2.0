@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Button } from "@/components/ui/button";
-import { RichTextEditor } from "@/components/RichTextEditor";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { Slider } from "@/shared/ui/slider";
+import { Label } from "@/shared/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { Button } from "@/shared/ui/button";
+import { RichTextEditor } from "@/shared/ui/rich-text-editor";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -17,11 +17,11 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
-import { CentaAISuggest } from "@/components/ui/centa-ai-suggest";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/alert-dialog";
+import { CentaAISuggest } from "@/shared/ui/centa-ai-suggest";
+import FormError from "@/shared/ui/form-error";
 import { AppraisalEntry } from "@/types/performance/appraisal.type";
-import RenderHtml from "@/components/ui/render-html";
+import RenderHtml from "@/shared/ui/render-html";
 
 interface EvaluationFormProps {
   appraisalId: string | null;

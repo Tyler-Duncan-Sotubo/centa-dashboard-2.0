@@ -6,9 +6,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
-} from "@/components/ui/table";
-import RenderHtml from "@/components/ui/render-html";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/table";
+import RenderHtml from "@/shared/ui/render-html";
+import { Button } from "@/shared/ui/button";
 import { CiExport } from "react-icons/ci";
 
 type Competency = {

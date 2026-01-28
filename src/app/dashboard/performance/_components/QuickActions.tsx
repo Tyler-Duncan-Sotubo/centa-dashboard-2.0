@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import CreateCycleModal from "./CreateCycleModal";
 import { MdLeaderboard, MdRateReview } from "react-icons/md";
 import { TbTarget } from "react-icons/tb";

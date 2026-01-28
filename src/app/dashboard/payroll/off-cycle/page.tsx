@@ -2,10 +2,10 @@
 
 import { isAxiosError } from "@/lib/axios";
 import React, { useEffect, useState } from "react";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import PageHeader from "@/components/pageHeader";
+import PageHeader from "@/shared/ui/page-header";
 import {
   Banknote,
   Calendar as CalendarIcon,
@@ -13,18 +13,14 @@ import {
   CheckSquare,
   Check,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/shared/ui/button";
+import { Calendar } from "@/shared/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { EmployeeDetail } from "@/types/payRunDetails";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { MdOutlineSync } from "react-icons/md";
 import { SendPayrollForApproval } from "../_components/SendPayrollForApproval";
 import {
@@ -32,10 +28,10 @@ import {
   PayrollOffCyclePicker,
 } from "./_components/PayrollOffCyclePicker";
 import { OffCyclePayrollTable } from "./_components/OffCycleEmployeesTable";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { OffCyclePayOverviewTable } from "./_components/OffCyclePayOverviewTable";
 import { OffCyclePayrollHistory } from "./_components/OffCyclePayrollHistory";
-import { ClientGuard } from "@/components/guard/ClientGuard";
+import { ClientGuard } from "@/lib/guard/ClientGuard";
 
 const steps = [
   { label: "Start", icon: <CalendarIcon className="h-5 w-5" /> },
@@ -65,7 +61,7 @@ export default function Payroll() {
       if (typeof window === "undefined") return [];
       const stored = window.localStorage.getItem("offCycleEmployees");
       return stored ? JSON.parse(stored) : [];
-    }
+    },
   );
   const [isLoadingReSync, setIsLoadingReSync] = React.useState(false);
 
@@ -198,7 +194,7 @@ export default function Payroll() {
   const isStepDisabled = [3, 4].includes(activeStep) || loadingStep;
 
   const employeesOnPayroll = payrollSummary.filter(
-    (employee) => employee.isLeaver === false && employee.isStarter === false
+    (employee) => employee.isLeaver === false && employee.isStarter === false,
   );
 
   return (
@@ -245,8 +241,8 @@ export default function Payroll() {
                         idx < activeStep
                           ? "border-brand bg-brand"
                           : idx === activeStep
-                          ? "border-brand bg-white"
-                          : "border-gray-300 bg-white"
+                            ? "border-brand bg-white"
+                            : "border-gray-300 bg-white",
                       )}
                     >
                       {idx < activeStep ? (
@@ -260,7 +256,7 @@ export default function Payroll() {
                         "text-sm mt-1",
                         idx <= activeStep
                           ? "text-brand"
-                          : "text-muted-foreground"
+                          : "text-muted-foreground",
                       )}
                     >
                       {step.label}
@@ -271,7 +267,7 @@ export default function Payroll() {
                     <div
                       className={cn(
                         "flex-1 self-center h-1.5 mb-5 mx-1", // slightly thicker
-                        idx < activeStep ? "bg-brand" : "bg-gray-300"
+                        idx < activeStep ? "bg-brand" : "bg-gray-300",
                       )}
                     />
                   )}
@@ -290,12 +286,12 @@ export default function Payroll() {
                 {activeStep === 0
                   ? "Calculate Payroll"
                   : activeStep === 1
-                  ? "Send for Approval"
-                  : activeStep === 2
-                  ? "Pay Employees "
-                  : activeStep === 3
-                  ? "Finalize"
-                  : ""}
+                    ? "Send for Approval"
+                    : activeStep === 2
+                      ? "Pay Employees "
+                      : activeStep === 3
+                        ? "Finalize"
+                        : ""}
               </Button>
             ) : null}
           </div>
@@ -313,7 +309,7 @@ export default function Payroll() {
                         variant="outline"
                         className={cn(
                           "w-[300px] justify-start text-left font-normal",
-                          !nextPayDate && "text-muted-foreground"
+                          !nextPayDate && "text-muted-foreground",
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -334,7 +330,7 @@ export default function Payroll() {
                             const yyyy = date.getFullYear();
                             const mm = String(date.getMonth() + 1).padStart(
                               2,
-                              "0"
+                              "0",
                             );
                             const dd = String(date.getDate()).padStart(2, "0");
                             setNextPayDate(`${yyyy}-${mm}-${dd}`);

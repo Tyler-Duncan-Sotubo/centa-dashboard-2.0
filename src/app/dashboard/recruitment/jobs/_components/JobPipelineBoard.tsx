@@ -4,16 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import Loading from "@/components/ui/loading";
-import { Badge } from "@/components/ui/badge";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import Loading from "@/shared/ui/loading";
+import { Badge } from "@/shared/ui/badge";
 import { cn } from "@/lib/utils";
 import { useCallback, useState } from "react";
-import { Separator } from "@/components/ui/separator";
-import { formatSource } from "@/utils/formatSource";
-import { Button } from "@/components/ui/button";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { formatDateHumanReadable } from "@/utils/formatDateHumanReadable";
+import { Separator } from "@/shared/ui/separator";
+import { formatSource } from "@/shared/utils/formatSource";
+import { Button } from "@/shared/ui/button";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { formatDateHumanReadable } from "@/shared/utils/formatDateHumanReadable";
 import Link from "next/link";
 
 import dynamic from "next/dynamic";
@@ -21,7 +21,7 @@ import { TemplateSelectionModal } from "../../offers/_components/TemplateSelecti
 
 const ScheduleInterviewModal = dynamic(
   () => import("../_components/ScheduleInterviewModalClient"),
-  { ssr: false }
+  { ssr: false },
 );
 
 interface resumeScore {
@@ -84,17 +84,17 @@ const DraggableCard = ({
     (el: HTMLDivElement | null) => {
       drag(el);
     },
-    [drag]
+    [drag],
   );
 
   return (
     <div
       ref={dragRef}
       className={cn(
-        "p-2 bg-white rounded-md shadow my-6 border space-y-4 hover:cursor-move",
+        "p-2 bg-white rounded-md shadow-xs my-6 border space-y-4 hover:cursor-move",
         {
           "opacity-50": isDragging,
-        }
+        },
       )}
     >
       <div className="flex justify-between items-center gap-2">
@@ -155,7 +155,7 @@ const DroppableStage = ({
     (node: HTMLTableCellElement | null) => {
       drop(node);
     },
-    [drop]
+    [drop],
   );
 
   return (
@@ -218,7 +218,7 @@ const JobPipelineBoard = ({ jobId }: { jobId: string }) => {
       const res = await axiosInstance.get(`/api/applications/list/${jobId}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const movingApplication = useUpdateMutation({

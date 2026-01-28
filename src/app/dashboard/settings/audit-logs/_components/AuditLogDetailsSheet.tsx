@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { FaEye } from "react-icons/fa";
-import GenericSheet from "@/components/ui/generic-sheet";
+import GenericSheet from "@/shared/ui/generic-sheet";
 import { AuditLog } from "@/types/audit.type";
 
 export function AuditLogDetailsSheet({

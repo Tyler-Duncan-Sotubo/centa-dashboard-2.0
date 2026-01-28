@@ -1,9 +1,9 @@
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Textarea } from "@/shared/ui/textarea";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Label } from "@/shared/ui/label";
 import { useForm } from "react-hook-form";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { Button } from "@/components/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
 
 type CommentFormData = {
   comment: string;

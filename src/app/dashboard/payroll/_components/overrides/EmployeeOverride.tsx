@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormControl,
@@ -12,12 +12,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import FormError from "@/components/ui/form-error";
+} from "@/shared/ui/form";
+import FormError from "@/shared/ui/form-error";
 import { Employee } from "@/types/employees.type";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
 
 export const overRideSchema = z.object({
   notes: z.string().min(1, "Note is required"),
@@ -60,7 +60,7 @@ export const EmployeeOverride = ({
           notes: values.notes,
         },
         setError,
-        () => {}
+        () => {},
       );
     } catch (err) {
       console.error(err);
@@ -71,7 +71,7 @@ export const EmployeeOverride = ({
   const filteredEmployees = inactiveEmployees?.filter((emp) =>
     `${emp.firstName} ${emp.lastName}`
       .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -110,7 +110,7 @@ export const EmployeeOverride = ({
                       onClick={() => {
                         form.setValue("employeeId", employee.id);
                         setSearchTerm(
-                          `${employee.firstName} ${employee.lastName}`
+                          `${employee.firstName} ${employee.lastName}`,
                         );
                       }}
                     >

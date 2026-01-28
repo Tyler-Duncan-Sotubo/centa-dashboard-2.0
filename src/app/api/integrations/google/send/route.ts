@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   try {
     const tokenRes = await axiosInstance.get(`/api/google`, {
       headers: {
-        Authorization: `Bearer ${session.backendTokens.accessToken}`,
+        Authorization: `Bearer ${session.backendTokens?.accessToken}`,
       },
     });
 
@@ -48,7 +48,7 @@ Subject: ${subject}
 Content-Type: text/plain; charset="UTF-8"
 
 ${body}
-    `.trim()
+    `.trim(),
     );
 
     const result = await gmail.users.messages.send({

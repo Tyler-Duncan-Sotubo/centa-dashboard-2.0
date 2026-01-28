@@ -13,9 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronUpDown } from "@/components/ui/chevron-up-down";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import {
   Table,
   TableBody,
@@ -23,13 +23,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { formatCurrency } from "@/utils/formatCurrency";
+} from "@/shared/ui/table";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { EmployeeDetail } from "@/types/payRunDetails";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { DeductionType } from "@/types/deduction.type";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 
 export function OffCyclePayOverviewTable({
   data,
@@ -51,7 +51,7 @@ export function OffCyclePayOverviewTable({
   >({
     queryKey: ["deductionTypes"],
     queryFn: fetchDeductionTypes,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const baseColumns: ColumnDef<EmployeeDetail>[] = [
@@ -125,7 +125,7 @@ export function OffCyclePayOverviewTable({
         // Calculate the total amount of all reimbursements using native JavaScript numbers
         const totalReimbursementAmount = reimbursements.reduce(
           (sum, reimbursement) => sum + (Number(reimbursement.amount) || 0),
-          0
+          0,
         );
 
         return (
@@ -150,12 +150,12 @@ export function OffCyclePayOverviewTable({
   const allColumns = React.useMemo(
     () => [...baseColumns, netSalaryColumn],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [deductionTypes]
+    [deductionTypes],
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -208,7 +208,7 @@ export function OffCyclePayOverviewTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -226,7 +226,7 @@ export function OffCyclePayOverviewTable({
                     <TableCell key={cell.id} className="py-2">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

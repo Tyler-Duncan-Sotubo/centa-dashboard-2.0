@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import {
   FiUser,
   FiCreditCard,
@@ -18,24 +18,24 @@ import { FamilyCard } from "../_components/personal/FamilyCard";
 import { CompensationCard } from "../_components/jobs/CompensationCard";
 import { FinancialsCard } from "../_components/jobs/FinancialsCard";
 import { EmploymentDetailsCard } from "../_components/jobs/EmploymentDetailsCard";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import LeaveBalanceAndRequest from "../_components/LeaveBalanceAndRequest";
 import PayslipDetailsTable from "../_components/PayslipDetails";
 import AttendanceComponent from "../_components/Attendance";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import BackButton from "@/components/ui/back-button";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import BackButton from "@/shared/ui/back-button";
 
 type Params = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 function useEmployeeSection(
   id: string,
   sections: string,
   enabled: boolean,
-  month?: string
+  month?: string,
 ) {
   const axios = useAxiosAuth();
   return useQuery({
@@ -52,41 +52,42 @@ function useEmployeeSection(
 }
 
 const EmployeeDetailPageDemo = ({ params }: Params) => {
+  const { id } = React.use(params);
   const { data: session, status } = useSession();
   const [tab, setTab] = React.useState("personal");
-  const enabled = !!session?.backendTokens?.accessToken && !!params.id;
+  const enabled = !!session?.backendTokens?.accessToken && !!id;
 
   // 1) Fetch everything needed for Personal tab up-front:
   // core, profile, history (education/employment), dependents (family), certifications
   const personalQ = useEmployeeSection(
-    params.id,
+    id,
     "core,profile,history,dependents,certifications",
-    enabled
+    enabled,
   );
 
   // 2) Lazy load the rest per tab
   const jobQ = useEmployeeSection(
-    params.id,
+    id,
     "compensation,finance",
-    !!personalQ.data && tab === "job"
+    !!personalQ.data && tab === "job",
   );
 
   const payrollQ = useEmployeeSection(
-    params.id,
+    id,
     "payslip",
-    !!personalQ.data && tab === "payroll"
+    !!personalQ.data && tab === "payroll",
   );
 
   const leaveQ = useEmployeeSection(
-    params.id,
+    id,
     "leave",
-    !!personalQ.data && tab === "leave"
+    !!personalQ.data && tab === "leave",
   );
 
   const attendanceQ = useEmployeeSection(
-    params.id,
+    id,
     "attendance",
-    !!personalQ.data && tab === "attendance"
+    !!personalQ.data && tab === "attendance",
   );
 
   // Initial gate
@@ -132,12 +133,12 @@ const EmployeeDetailPageDemo = ({ params }: Params) => {
         {/* Personal: already fully available from first query */}
         <TabsContent value="personal" className="space-y-6">
           <ProfileCard profile={data.profile} core={data.core} />
-          <HistoryCard history={data.history} employeeId={params.id} />
+          <HistoryCard history={data.history} employeeId={id} />
           <div className="grid gap-4 md:grid-cols-2">
-            <FamilyCard family={data.dependents} employeeId={params.id} />
+            <FamilyCard family={data.dependents} employeeId={id} />
             <CertificationsCard
               certifications={data.certifications}
-              employeeId={params.id}
+              employeeId={id}
             />
           </div>
         </TabsContent>
@@ -150,7 +151,7 @@ const EmployeeDetailPageDemo = ({ params }: Params) => {
             <>
               <EmploymentDetailsCard
                 details={data.core}
-                employeeId={params.id}
+                employeeId={id}
                 employeeName={`${data.core?.lastName ?? ""} ${
                   data.core?.firstName ?? ""
                 }`}
@@ -158,12 +159,9 @@ const EmployeeDetailPageDemo = ({ params }: Params) => {
               <div className="grid gap-4 md:grid-cols-2">
                 <CompensationCard
                   compensations={data.compensation}
-                  employeeId={params.id}
+                  employeeId={id}
                 />
-                <FinancialsCard
-                  financials={data.finance}
-                  employeeId={params.id}
-                />
+                <FinancialsCard financials={data.finance} employeeId={id} />
               </div>
             </>
           )}

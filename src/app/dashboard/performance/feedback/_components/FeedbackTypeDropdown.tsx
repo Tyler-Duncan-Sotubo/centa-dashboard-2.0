@@ -5,8 +5,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/dropdown-menu";
+import { Button } from "@/shared/ui/button";
 import { IoIosChatboxes } from "react-icons/io";
 
 type FeedbackType =

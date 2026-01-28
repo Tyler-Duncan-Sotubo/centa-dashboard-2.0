@@ -1,13 +1,13 @@
 "use client";
 
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
 import { isAxiosError } from "@/lib/axios";
 import { EmployeeDetail } from "@/types/payRunDetails";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import React from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { OffCycleDetailsTable } from "./OffCycleDetailsTable";
 
 export const OffCyclePayrollHistory = () => {
@@ -17,7 +17,7 @@ export const OffCyclePayrollHistory = () => {
   const fetchPayrollPreview = async () => {
     try {
       const res = await axiosInstance.get(
-        "/api/off-cycle-report/off-payroll-summary"
+        "/api/off-cycle-report/off-payroll-summary",
       );
       return res.data.data;
     } catch (error) {

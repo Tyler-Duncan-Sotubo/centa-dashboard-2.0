@@ -4,12 +4,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from "@/shared/ui/dialog";
+import { Badge } from "@/shared/ui/badge";
+import { Progress } from "@/shared/ui/progress";
+import { ScrollArea } from "@/shared/ui/scroll-area";
 import { CheckCircle, Clock } from "lucide-react";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 type ChecklistItem = {
   id: string;
@@ -97,7 +97,7 @@ export default function OnboardingChecklistModal({
                     </Badge>
                   ) : (
                     <button
-                      className="focus:outline-none"
+                      className="focus:outline-hidden"
                       onClick={() => handleChecklistUpdate(item.id)}
                       disabled={shouldDisable}
                     >

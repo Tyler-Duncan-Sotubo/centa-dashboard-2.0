@@ -6,19 +6,19 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { EmploymentType, JobType } from "@/types/enums";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Button } from "@/shared/ui/button";
+import { Form } from "@/shared/ui/form";
 import { FileText, ClipboardList, CheckCircle, Check } from "lucide-react"; // Lucide icons
 import { isAxiosError } from "@/lib/axios";
-import Loading from "@/components/ui/loading";
+import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import FormError from "@/components/ui/form-error";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
+import FormError from "@/shared/ui/form-error";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import Link from "next/link";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import JobDetailsForm from "../../_components/JobDetailsForm";
 import JobApplicationFormConfig from "../../_components/JobApplicationFormConfig";
 import JobPreview from "../../_components/JobPreview";
@@ -41,13 +41,13 @@ const formSchema = z.object({
   benefits: z.array(
     z.object({
       value: z.string().min(1, "Stage name is required"),
-    })
+    }),
   ),
   responsibilities: z
     .array(
       z.object({
         value: z.string().min(1, "Stage name is required"),
-      })
+      }),
     )
     .min(1, "At least one stage is required")
     .max(20, "Maximum 20 stages allowed"),
@@ -55,7 +55,7 @@ const formSchema = z.object({
     .array(
       z.object({
         value: z.string().min(1, "Stage name is required"),
-      })
+      }),
     )
     .min(1, "At least one stage is required")
     .max(20, "Maximum 20 stages allowed"),
@@ -191,7 +191,7 @@ const EditJobPage = () => {
   } = useQuery({
     queryKey: ["pipelineTemplates"],
     queryFn: () => fetchPipelineTemplates(),
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     retry: 2,
   });
 
@@ -202,7 +202,7 @@ const EditJobPage = () => {
   } = useQuery({
     queryKey: ["job", id],
     queryFn: fetchJobById,
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
     retry: 2,
   });
 
@@ -255,8 +255,8 @@ const EditJobPage = () => {
                     isCompleted
                       ? "bg-brand text-white border-brand"
                       : isActive
-                      ? "bg-white border-brand text-brand"
-                      : "bg-white border-gray-300 text-gray-400"
+                        ? "bg-white border-brand text-brand"
+                        : "bg-white border-gray-300 text-gray-400"
                   }`}
               >
                 {isCompleted ? <Check size={20} /> : <Icon size={20} />}
@@ -329,7 +329,7 @@ const EditJobPage = () => {
 
                   if (!draftData.pipelineTemplateId) {
                     setError(
-                      "Please select a pipeline template before saving draft."
+                      "Please select a pipeline template before saving draft.",
                     );
                     return;
                   }
@@ -339,7 +339,7 @@ const EditJobPage = () => {
                     salaryRangeFrom: Number(draftData.salaryRangeFrom),
                     salaryRangeTo: Number(draftData.salaryRangeTo),
                     responsibilities: draftData.responsibilities.map(
-                      (r) => r.value
+                      (r) => r.value,
                     ),
                     requirements: draftData.requirements.map((r) => r.value),
                     benefits: draftData.benefits.map((b) => b.value),

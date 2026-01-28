@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { Button } from "@/shared/ui/button";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useState } from "react";
 import { BiMailSend } from "react-icons/bi";
 

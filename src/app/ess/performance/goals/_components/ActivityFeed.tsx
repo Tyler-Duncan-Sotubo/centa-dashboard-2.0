@@ -2,21 +2,21 @@
 import React, { useState } from "react";
 import { Goal } from "@/types/performance/goals.type";
 import { format } from "date-fns";
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/shared/ui/progress";
 import { GoDotFill } from "react-icons/go";
 import Image from "next/image";
 import { FaEdit } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
-import { DeleteIconDialog } from "@/components/DeleteIconDialog";
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import { DeleteIconDialog } from "@/shared/ui/delete-icon-dialog";
 import { AttachmentModal } from "./AttachmentModal";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@/components/ui/accordion";
+} from "@/shared/ui/accordion";
 
 interface ActivityFeedProps {
   goal: Goal;
@@ -34,7 +34,7 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ goal }) => {
   const [editedText, setEditedText] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [editingAttachment, setEditingAttachment] = useState<string | null>(
-    null
+    null,
   );
 
   // Handle comment/attachment editing
@@ -83,7 +83,7 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ goal }) => {
 
     return [...updates, ...comments, ...attachments].sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
   };
 

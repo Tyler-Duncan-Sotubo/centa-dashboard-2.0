@@ -1,6 +1,19 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { useMemo, useState } from "react";
+import { Skeleton } from "@/shared/ui/skeleton";
+import PageHeader from "@/shared/ui/page-header";
+import Loading from "@/shared/ui/loading";
+import { TbMessageCircle } from "react-icons/tb";
+import FeedbackFormModal from "./_components/FeedbackFormModal";
+import FeedbackTypeDropdown from "./_components/FeedbackTypeDropdown";
+import FeedbackList from "./_components/FeedbackList";
+import { FilterChips } from "@/shared/ui/filter-chips";
+
 import {
   FaUsers,
   FaUserFriends,
@@ -8,17 +21,6 @@ import {
   FaUserTie,
   FaArchive,
 } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import PageHeader from "@/components/pageHeader";
-import Loading from "@/components/ui/loading";
-import { TbMessageCircle } from "react-icons/tb";
-import FeedbackFormModal from "./_components/FeedbackFormModal";
-import FeedbackTypeDropdown from "./_components/FeedbackTypeDropdown";
-import FeedbackList from "./_components/FeedbackList";
 
 type FeedbackType =
   | "self"
@@ -27,8 +29,10 @@ type FeedbackType =
   | "employee_to_manager"
   | "archived";
 
+type FeedbackTab = "all" | FeedbackType;
+
 export default function FeedbackPage() {
-  const [category, setCategory] = useState<FeedbackType | "all">("all");
+  const [category, setCategory] = useState<FeedbackTab>("all");
   const { data: session } = useSession();
   const axios = useAxiosAuth();
   const [open, setOpen] = useState(false);
@@ -40,11 +44,11 @@ export default function FeedbackPage() {
       const params = new URLSearchParams();
       if (category !== "all") params.append("type", category);
       const res = await axios.get(
-        `/api/feedback/employee/${session?.user.id}?${params.toString()}`
+        `/api/feedback/employee/${session?.user.id}?${params.toString()}`,
       );
       return res.data.data;
     },
-    enabled: !!session?.backendTokens.accessToken,
+    enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
   const { data: settings, isLoading: isLoadingSettings } = useQuery({
@@ -60,12 +64,33 @@ export default function FeedbackPage() {
     queryKey: ["feedback-counts"],
     queryFn: async () => {
       const res = await axios.get(
-        "/api/feedback/counts/employee/" + session?.user.id
+        "/api/feedback/counts/employee/" + session?.user.id,
       );
       return res.data.data;
     },
     enabled: !!session?.backendTokens?.accessToken,
   });
+
+  const chips = useMemo(
+    () =>
+      [
+        { value: "all", label: "All", count: counts?.all ?? 0 },
+        { value: "peer", label: "Peer", count: counts?.peer ?? 0 },
+        { value: "self", label: "Self", count: counts?.self ?? 0 },
+        {
+          value: "employee_to_manager",
+          label: "Employee",
+          count: counts?.employee_to_manager ?? 0,
+        },
+        {
+          value: "manager_to_employee",
+          label: "Manager",
+          count: counts?.manager_to_employee ?? 0,
+        },
+        { value: "archived", label: "Archived", count: counts?.archived ?? 0 },
+      ] as const,
+    [counts],
+  );
 
   if (isLoading || isLoadingSettings || isLoadingCounts) return <Loading />;
 
@@ -90,10 +115,20 @@ export default function FeedbackPage() {
 
       <Tabs
         value={category}
-        onValueChange={(value) => setCategory(value as "all" | FeedbackType)}
+        onValueChange={(value) => setCategory(value as FeedbackTab)}
         className="mt-6 space-y-4"
       >
-        <TabsList className="grid w-full grid-cols-6">
+        {/* ✅ Mobile filter chips */}
+        <FilterChips<FeedbackTab>
+          value={category}
+          onChange={setCategory}
+          chips={chips as any}
+          scrollable
+          className="sm:hidden"
+        />
+
+        {/* ✅ Desktop tabs */}
+        <TabsList className="hidden sm:grid w-full grid-cols-6">
           <TabsTrigger value="all">
             <FaUsers className="w-4 h-4 mr-2 text-monzo-brandDark" />
             All
@@ -103,6 +138,7 @@ export default function FeedbackPage() {
               </span>
             )}
           </TabsTrigger>
+
           <TabsTrigger value="peer">
             <FaUserFriends className="w-4 h-4 mr-2 text-monzo-secondary" />
             Peer
@@ -112,6 +148,7 @@ export default function FeedbackPage() {
               </span>
             )}
           </TabsTrigger>
+
           <TabsTrigger value="self">
             <FaUser className="w-4 h-4 mr-2 text-monzo-error" />
             Self
@@ -121,6 +158,7 @@ export default function FeedbackPage() {
               </span>
             )}
           </TabsTrigger>
+
           <TabsTrigger value="employee_to_manager">
             <FaUser className="w-4 h-4 mr-2 text-monzo-success" />
             Employee
@@ -130,6 +168,7 @@ export default function FeedbackPage() {
               </span>
             )}
           </TabsTrigger>
+
           <TabsTrigger value="manager_to_employee">
             <FaUserTie className="w-4 h-4 mr-2 text-monzo-monzoGreen" />
             Manager
@@ -139,6 +178,7 @@ export default function FeedbackPage() {
               </span>
             )}
           </TabsTrigger>
+
           <TabsTrigger value="archived">
             <FaArchive className="w-4 h-4 mr-2 text-muted-foreground" />
             Archived
@@ -161,6 +201,7 @@ export default function FeedbackPage() {
             <FeedbackList feedbacks={feedbacks} />
           )}
         </div>
+
         <FeedbackFormModal
           open={open}
           setOpen={setOpen}

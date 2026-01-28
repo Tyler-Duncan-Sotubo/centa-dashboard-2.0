@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import Modal from "@/components/ui/modal";
+import { Input } from "@/shared/ui/input";
+import Modal from "@/shared/ui/modal";
 import {
   Form,
   FormControl,
@@ -12,12 +12,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { PlusCircle } from "lucide-react";
-import { useCreateMutation } from "@/hooks/useCreateMutation";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
 import { useState } from "react";
-import FormError from "@/components/ui/form-error";
-import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import FormError from "@/shared/ui/form-error";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 
 interface CostCenterModalProps {
   isOpen: boolean;

@@ -8,17 +8,17 @@ import {
   FormItem,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/shared/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
-import useAxiosAuth from "@/hooks/useAxiosAuth";
-import { useToast } from "@/hooks/use-toast";
+import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import { useToast } from "@/shared/hooks/use-toast";
 import { isAxiosError } from "@/lib/axios";
 import StarRatingInput from "./StarRatingInput";
 import CommentForm from "./CommentForm";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/shared/ui/separator";
 
 type Question = {
   questionId: string;
@@ -49,15 +49,18 @@ export default function QuestionnaireForm({
 
   // Create Zod schema dynamically
   const schema = z.object(
-    flatQuestions.reduce((acc, q) => {
-      acc[q.questionId] =
-        q.type === "rating"
-          ? z.number().min(0).max(5).or(z.nan())
-          : q.type === "yes_no"
-          ? z.enum(["yes", "no"])
-          : z.string().optional(); // for text
-      return acc;
-    }, {} as Record<string, z.ZodTypeAny>)
+    flatQuestions.reduce(
+      (acc, q) => {
+        acc[q.questionId] =
+          q.type === "rating"
+            ? z.number().min(0).max(5).or(z.nan())
+            : q.type === "yes_no"
+              ? z.enum(["yes", "no"])
+              : z.string().optional(); // for text
+        return acc;
+      },
+      {} as Record<string, z.ZodTypeAny>,
+    ),
   );
 
   type FormValues = z.infer<typeof schema>;
@@ -82,7 +85,7 @@ export default function QuestionnaireForm({
           {
             questionId,
             response: String(response),
-          }
+          },
         );
         console.log(res);
         if (res.status === 201) {

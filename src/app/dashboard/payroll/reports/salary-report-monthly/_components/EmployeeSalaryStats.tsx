@@ -6,8 +6,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { formatCurrency } from "@/utils/formatCurrency";
+} from "@/shared/ui/chart";
+import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { Pie, PieChart } from "recharts";
 
 // Define all salary ranges (even if not in data)
@@ -109,7 +109,7 @@ export function SalaryDistribution({
   return (
     <section className="md:flex py-10 md:space-x-6 w-full">
       {/* Salary Distribution Chart */}
-      <div className="md:w-[60%] p-4 rounded-xl shadow-xs border border-background">
+      <div className="md:w-[60%] p-4 rounded-xl shadow-2xs border border-background">
         <div className="mb-6">
           <h3 className="text-xl my-1 font-semibold">Salary Distribution </h3>
           <p className="text-gray-500 text-sm">
@@ -130,7 +130,7 @@ export function SalaryDistribution({
       </div>
 
       {/* Salary Stats */}
-      <section className="md:w-[40%] mt-6 md:mt-0 flex justify-center flex-col items-center p-4 rounded-xl shadow-xs border border-background">
+      <section className="md:w-[40%] mt-6 md:mt-0 flex justify-center flex-col items-center p-4 rounded-xl shadow-2xs border border-background">
         <DepartmentDistribution spendByDepartment={spendByDepartment} />
         <div className="space-y-2 w-full">
           <h3 className="text-xl my-4 font-semibold">Salary Stats</h3>

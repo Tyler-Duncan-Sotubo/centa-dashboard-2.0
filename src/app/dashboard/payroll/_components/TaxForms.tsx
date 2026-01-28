@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/table";
+import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import Image from "next/image";
 
