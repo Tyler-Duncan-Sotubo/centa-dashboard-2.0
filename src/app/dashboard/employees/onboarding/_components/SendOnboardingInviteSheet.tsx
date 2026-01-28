@@ -44,7 +44,7 @@ export const employeeProfile = z.object({
   locationId: z.string(),
   payGroupId: z.string().min(1),
   jobRoleId: z.string().min(1),
-  costCenterId: z.string().min(1),
+  costCenterId: z.string().optional(),
   companyRoleId: z.string().min(1),
   onboardingTemplateId: z.string().min(1),
   offerLetterTemplateId: z.string().optional(),
