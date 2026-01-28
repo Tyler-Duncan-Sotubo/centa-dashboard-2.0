@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared/ui/button";
-import { Plus } from "lucide-react";
+import { Package, Plus } from "lucide-react";
 import PageHeader from "@/shared/ui/page-header";
 import { DataTable } from "@/shared/ui/data-table";
 import Loading from "@/shared/ui/loading";
@@ -54,11 +54,13 @@ export function EssAssetsView() {
 
       {/* Assigned Assets */}
       {assets.length === 0 ? (
-        <EmptyState
-          title="No Assets Found"
-          description="You have no active asset assigned at the moment."
-          image="https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585351/assets_c2e58v.svg"
-        />
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <EmptyState
+            title="No Assets Found"
+            description="It seems like you haven't added any assets yet. Click the button above to get started."
+            icon={<Package size={56} className="text-muted-foreground" />}
+          />
+        </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {assets.map((asset: Asset) => (

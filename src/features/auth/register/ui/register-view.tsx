@@ -200,9 +200,6 @@ export function RegisterView() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="nigeria">Nigeria</SelectItem>
-                          <SelectItem value="united Kingdom">
-                            United Kingdom
-                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -227,11 +224,6 @@ export function RegisterView() {
                       <SelectContent>
                         <SelectItem value="super_admin">Director</SelectItem>
                         <SelectItem value="hr_manager">HR Manager</SelectItem>
-                        <SelectItem value="manager">
-                          Manager/Supervisor
-                        </SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="recruiter">Recruiter</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -282,7 +274,7 @@ export function RegisterView() {
                   Back
                 </Button>
                 <Button type="submit" isLoading={form.formState.isSubmitting}>
-                  Start your 21-day free trial
+                  Start Free Trial
                 </Button>
               </div>
             </>

@@ -11,6 +11,7 @@ import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import EmptyState from "@/shared/ui/empty-state";
 import LeaveBalanceCarousel from "./LeaveBalanceCarousel";
 import LeaveRequestTable from "./LeaveRequestTable";
+import { FaUmbrellaBeach } from "react-icons/fa";
 
 export default function LeaveOverviewClient() {
   const { data: session } = useSession();
@@ -74,13 +75,15 @@ export default function LeaveOverviewClient() {
       </PageHeader>
 
       {!leaveBalance || Object.keys(leaveBalance).length === 0 ? (
-        <EmptyState
-          title="No Leave Balance Found"
-          description="It seems like you have no leave balances at the moment. You can request leave to start the process."
-          image={
-            "https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585350/onboarding_izogcj.svg"
-          }
-        />
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <EmptyState
+            title="No Leave Balance Found"
+            description="It seems like you have no leave balances at the moment. You can request leave to start the process."
+            icon={
+              <FaUmbrellaBeach size={56} className="text-muted-foreground" />
+            }
+          />
+        </div>
       ) : (
         <>
           <LeaveBalanceCarousel balance={leaveBalance} />

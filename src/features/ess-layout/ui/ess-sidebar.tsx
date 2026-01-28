@@ -69,7 +69,7 @@ export default function EssSidebar({ isCollapsed, onToggle }: SidebarProps) {
                   : "https://centa-hr.s3.eu-west-3.amazonaws.com/company-files/55df5e55-f3e0-44c6-a39f-390ef8466d56/9a3be800-ca54-4bf9-a3ed-72b68baf52f7/1768990158119-Centa%20Logo%20DesignArtboard%201%20copy%208@3x.png"
               }
               alt="Company Logo"
-              link="/dashboard"
+              link="/ess"
             />
           </div>
 
