@@ -147,6 +147,10 @@ const OfficeLocation = () => {
                           state: loc.state,
                           longitude: Number(loc.longitude),
                           latitude: Number(loc.latitude),
+                          locationType: loc.locationType as
+                            | "OFFICE"
+                            | "HOME"
+                            | "REMOTE",
                         }}
                       />
                       <Alert id={loc.id} name={loc.name} />
