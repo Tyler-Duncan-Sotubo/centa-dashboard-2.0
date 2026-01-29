@@ -18,7 +18,7 @@ export default function SettingsSection({
 }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+      <h2 className="text-sm font-semibold mb-4">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
         {items.map((item) => (
           <Link key={item.link} href={item.link}>
@@ -29,7 +29,7 @@ export default function SettingsSection({
                 </div>
               </div>
               <div>
-                <h2 className="text-lg text-brand font-semibold">
+                <h2 className="text-sm text-brand font-semibold">
                   {item.title}
                 </h2>
                 <p className="text-md text-muted-foreground">

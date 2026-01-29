@@ -51,7 +51,7 @@ const DEFAULT_CHECKLIST: Checklist = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
-    signIn: "/auth/login",
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",

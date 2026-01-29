@@ -57,7 +57,7 @@ export function useLogin() {
         // 2FA
         if (data.tempToken) {
           router.push(
-            `/auth/2fa?token=${data.tempToken}&email=${encodeURIComponent(email)}`,
+            `/2fa?token=${data.tempToken}&email=${encodeURIComponent(email)}`,
           );
           return;
         }

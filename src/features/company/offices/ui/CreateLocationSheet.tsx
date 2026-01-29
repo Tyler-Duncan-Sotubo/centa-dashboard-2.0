@@ -75,7 +75,7 @@ export function CreateLocationSheet() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6 mt-4"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 name="name"
                 control={form.control}
@@ -99,6 +99,30 @@ export function CreateLocationSheet() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                name="locationType"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel required>Location Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="OFFICE">Office</SelectItem>
+                        <SelectItem value="HOME">Home</SelectItem>
+                        <SelectItem value="REMOTE">Remote</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

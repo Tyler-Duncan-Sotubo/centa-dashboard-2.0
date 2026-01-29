@@ -101,7 +101,7 @@ export function useRegister() {
 
         if (res.status === 201) {
           toast({ variant: "success", title: "Account Created" });
-          router.push(`/auth/verify-email`);
+          router.push(`/verify-email`);
         }
       } catch (err) {
         if (isAxiosError(err) && err.response) {

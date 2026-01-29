@@ -7,4 +7,5 @@ export type officeLocation = {
   state: string;
   longitude: string;
   latitude: string;
+  locationType: string;
 };

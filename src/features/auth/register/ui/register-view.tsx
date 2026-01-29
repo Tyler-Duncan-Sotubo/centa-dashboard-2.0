@@ -284,7 +284,7 @@ export function RegisterView() {
 
           <p className="text-right text-textSecondary text-md">
             Already have an Account?{" "}
-            <Link href="/auth/login">
+            <Link href="/login">
               <Button
                 variant="link"
                 className="text-buttonPrimary px-0 font-bold"

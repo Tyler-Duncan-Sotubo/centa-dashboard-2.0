@@ -39,7 +39,7 @@ export function usePasswordResetConfirm(token: string) {
         });
 
         if (res.status === 200) {
-          router.push("/auth/login");
+          router.push("/login");
         }
       } catch (err) {
         if (isAxiosError(err) && err.response) {

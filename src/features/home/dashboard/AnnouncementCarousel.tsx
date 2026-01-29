@@ -40,7 +40,7 @@ export const AnnouncementCarousel: React.FC<Props> = ({
           <SwiperSlide key={banner.id}>
             <div className="bg-monzo-background text-monzo-textPrimary flex items-center justify-center min-h-25 transition-all duration-500 ease-in-out">
               <span className="mr-2 text-xl">{banner.icon}</span>
-              <p className="text-md text-monzo-textPrimary font-semibold">
+              <p className="text-sm text-monzo-textPrimary font-semibold">
                 {banner.message}
               </p>
             </div>

@@ -22,9 +22,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!session && status !== "loading") {
-      router.replace("/auth/login");
+      router.replace("/login");
     } else if (session && session.user.employmentStatus === "onboarding") {
-      router.replace("/auth/login");
+      router.replace("/login");
     }
   }, [session, status, router]);
 

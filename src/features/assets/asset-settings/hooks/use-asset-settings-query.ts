@@ -18,6 +18,5 @@ export function useAssetSettingsQuery() {
     queryKey: ["asset-approval-settings"],
     queryFn: fetchSettings,
     enabled: !!session?.backendTokens?.accessToken,
-    staleTime: 1000 * 60 * 60,
   });
 }

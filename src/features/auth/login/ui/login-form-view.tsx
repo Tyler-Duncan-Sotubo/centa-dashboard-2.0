@@ -95,7 +95,7 @@ export function LoginFormView() {
                 </label>
               </div>
 
-              <Link href="/auth/forgot-password">
+              <Link href="/forgot-password">
                 <Button
                   variant="link"
                   className="text-buttonPrimary px-0 font-bold text-sm"

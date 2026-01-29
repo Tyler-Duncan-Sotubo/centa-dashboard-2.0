@@ -40,7 +40,7 @@ export function useVerifyEmail() {
             title: "Email Verified",
             description: "Your email has been successfully verified!",
           });
-          router.push("/auth/login");
+          router.push("/login");
         }
       } catch (err) {
         if (isAxiosError(err) && err.response) {
@@ -63,7 +63,7 @@ export function useVerifyEmail() {
     try {
       // Adjust endpoint to whatever your backend uses.
       // Common options: /api/auth/resend-verification-email or /api/auth/resend-email-otp
-      const res = await axiosInstance.post("/api/auth/resend-verify-email");
+      const res = await axiosInstance.post("/api/resend-verify-email");
 
       if (res.status === 200 || res.status === 201) {
         setResendSuccess(true);

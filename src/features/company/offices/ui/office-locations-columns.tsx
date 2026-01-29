@@ -33,6 +33,7 @@ export const officeLocationsColumns: ColumnDef<officeLocation>[] = [
               state: loc.state,
               longitude: Number(loc.longitude),
               latitude: Number(loc.latitude),
+              locationType: loc.locationType as "OFFICE" | "HOME" | "REMOTE",
             }}
           />
 
