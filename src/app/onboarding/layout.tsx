@@ -13,7 +13,7 @@ export default function OnboardingLayout({
 
   useEffect(() => {
     if (status === "loading") return;
-    if (!session) return router.replace("/auth/login");
+    if (!session) return router.replace("/login");
     if (session.user.employmentStatus !== "onboarding")
       return router.replace("/dashboard");
   }, [session, status, router]);

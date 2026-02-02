@@ -29,7 +29,7 @@ export default function OnboardingPage() {
     successMessage: "Onboarding data sent successfully.",
     refetchKey: "onboarding",
     onSuccess: () => {
-      router.push("/auth/login");
+      router.push("/login");
     },
   });
 

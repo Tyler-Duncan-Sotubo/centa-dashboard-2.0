@@ -84,7 +84,7 @@ export function useVerifyInvitation(token: string) {
 
         if (res.status === 200) {
           // Prefer relative path; no need for NEXT_PUBLIC_CLIENT_URL inside the client router push
-          router.push("/auth/login");
+          router.push("/login");
         }
       } catch (err) {
         if (isAxiosError(err) && err.response) {

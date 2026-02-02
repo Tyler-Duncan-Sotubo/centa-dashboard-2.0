@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import ProfileSettings from "./ProfileSettings";
 import ApplicationLogo from "../../../shared/ui/applicationLogo";
@@ -15,7 +15,6 @@ import { PiMegaphoneFill } from "react-icons/pi";
 import NotificationSheet from "./NotificationSheet";
 import { WorkspaceSwitcher } from "../../../shared/ui/work-space-switcher";
 import { MdLogout } from "react-icons/md";
-import { Button } from "../../../shared/ui/button";
 
 const Navbar = ({ sidebarCollapsed }: { sidebarCollapsed: boolean }) => {
   const pathname = usePathname();
@@ -33,7 +32,7 @@ const Navbar = ({ sidebarCollapsed }: { sidebarCollapsed: boolean }) => {
       localStorage.removeItem("last_mgr");
       localStorage.removeItem("last_emp");
     }
-    await signOut({ callbackUrl: "/auth/login" });
+    await signOut({ callbackUrl: "/login" });
   };
 
   const raw = session?.permissions || [];
@@ -48,9 +47,6 @@ const Navbar = ({ sidebarCollapsed }: { sidebarCollapsed: boolean }) => {
       perms = [];
     }
   }
-
-  const tag = perms.find((p) => p.startsWith("trial.days_left:"));
-  const trialDaysLeft = tag ? Number(tag.split(":")[1]) : null;
 
   return (
     <div
@@ -167,27 +163,6 @@ const Navbar = ({ sidebarCollapsed }: { sidebarCollapsed: boolean }) => {
 
         {/* Right-side Icons */}
         <div className="hidden md:flex items-center space-x-6">
-          {/* Trial Ends */}
-          <div className="flex items-center">
-            {trialDaysLeft != null && (
-              <div
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  trialDaysLeft < 0 ? "bg-red-100 text-red-800" : ""
-                }`}
-              >
-                {trialDaysLeft > 0
-                  ? `Your trial ends in ${trialDaysLeft} ${
-                      trialDaysLeft === 1 ? "day" : "days"
-                    }`
-                  : trialDaysLeft === 0
-                    ? "Your trial ends today!"
-                    : "Your trial has ended. Please upgrade!"}
-              </div>
-            )}
-            {trialDaysLeft != null && (
-              <Button className="h-9 text-sm">Upgrade</Button>
-            )}
-          </div>
           <WorkspaceSwitcher />
           <NotificationSheet />
           <Link

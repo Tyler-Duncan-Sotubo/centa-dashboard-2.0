@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       await axiosInstance.post("/api/auth/logout", {}); // Call API to log out
       localStorage.removeItem("user"); // ✅ Clear storage on failure
       setUser(null); // Clear user state
-      router.replace("/auth/login"); // Redirect to login page
+      router.replace("/login"); // Redirect to login page
     } catch (error) {
       console.error("Logout failed", error);
     }

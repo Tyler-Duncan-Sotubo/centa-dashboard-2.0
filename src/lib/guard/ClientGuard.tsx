@@ -21,7 +21,7 @@ export function ClientGuard({
 
   if (status === "loading") return loading;
   if (!session) {
-    router.replace(`/auth/login?callbackUrl=${encodeURIComponent(pathname)}`);
+    router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
     return null;
   }
   const ok = need.every((p) => perms.includes(p));

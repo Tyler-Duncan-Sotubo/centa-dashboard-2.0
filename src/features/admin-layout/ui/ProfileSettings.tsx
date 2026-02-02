@@ -22,7 +22,7 @@ const ProfileSettings = () => {
       localStorage.removeItem("last_mgr");
       localStorage.removeItem("last_emp");
     }
-    await signOut({ callbackUrl: "/auth/login" });
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (
