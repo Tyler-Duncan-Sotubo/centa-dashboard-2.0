@@ -510,3 +510,11 @@ button.is_active {
 .driver-popover-arrow {
   @apply text-background;
 }
+
+/* Move Zendesk launcher up so it doesn't cover mobile bottom nav */
+@media (max-width: 768px) {
+  iframe#launcher {
+    bottom: 90px !important; /* set to your nav height + padding */
+    right: 16px !important;
+  }
+}

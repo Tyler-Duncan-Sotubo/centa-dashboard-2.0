@@ -15,6 +15,7 @@ import { AuthProvider } from "@/shared/context/AuthContext";
 import { EssMobileAppNav } from "@/features/ess-layout/ui/ess-mobile-app-nav";
 import { cn } from "@/lib/utils";
 import { MdLogout } from "react-icons/md";
+import { ZendeskWidget } from "@/shared/widgets/zendesk";
 export default function Layout({ children }: { children: ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { data: session, status } = useSession();
@@ -72,7 +73,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </header>
 
           <ScrollToTop />
-
+          <ZendeskWidget />
           <div className="sm:mt-[12vh] mt-[3vh] px-5 z-9999">{children}</div>
 
           {/* ✅ Mobile bottom nav */}

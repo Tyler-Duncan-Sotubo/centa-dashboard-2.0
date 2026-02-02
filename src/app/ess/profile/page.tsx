@@ -22,8 +22,6 @@ import { OrgChartEmployeeFocus } from "@/features/company/org-chart/ui/OrgChartE
 
 const EmployeeDetailPageDemo = () => {
   const { data: session, status } = useSession();
-
-  console.log("Session:", session);
   type TabKey = "personal" | "job" | "payroll" | "org-chart";
   const [tab, setTab] = React.useState("personal");
 

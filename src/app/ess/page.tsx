@@ -54,8 +54,6 @@ const Dashboard = () => {
     enabled,
   });
 
-  console.log("Dashboard data:", data);
-
   if (status === "loading" || isLoading) return <Loading />;
   if (isError) return <p>Error loading data</p>;
 
