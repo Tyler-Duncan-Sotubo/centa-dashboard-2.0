@@ -1,16 +1,14 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useWorkspace } from "@/shared/context/workspace";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 function mapTwinPath(path: string, to: "manager" | "employee") {
-  if (to === "manager") {
+  if (to === "manager")
     return path.replace(/^\/ess.*$/i, "/dashboard") || "/dashboard";
-  }
   return path.replace(/^\/dashboard.*$/i, "/ess") || "/ess";
 }
 
@@ -20,9 +18,6 @@ export const WorkspaceSwitcher = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-
-  // Switch is "checked" when in manager context
-  const checked = workspace === "manager";
 
   const canToggle = useMemo(
     () => canEmployee && canManager,
@@ -39,46 +34,65 @@ export const WorkspaceSwitcher = () => {
 
     setBusy(true);
     try {
-      // 1) Persist on NextAuth JWT so session.user.id flips server/client
       await update({ activeWorkspace: to });
 
-      // 2) Remember last route for each workspace
       const nextPath = mapTwinPath(pathname, to);
       const key = to === "manager" ? "last_mgr" : "last_emp";
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined")
         window.localStorage.setItem(key, nextPath);
-      }
 
-      // 3) Update local workspace context (keeps UI in sync instantly)
       setWorkspace(to);
-
-      // 4) Navigate
       router.push(nextPath);
     } finally {
       setBusy(false);
     }
   };
 
+  if (!canToggle) return null;
+
+  const active = workspace; // "manager" | "employee"
+
   return (
-    <>
-      {canToggle && (
-        <div className="flex items-center gap-3 rounded-lg px-3 py-2 bg-monzo-brand/40">
-          <Label htmlFor="workspace-switch" className="text-sm font-medium">
-            {checked ? "Work" : "My HR"}
-          </Label>
-          <Switch
-            id="workspace-switch"
-            checked={checked}
-            onCheckedChange={(on) => {
-              if (on) go("manager");
-              else go("employee");
-            }}
-            disabled={!canToggle || busy}
-            aria-label="Switch workspace"
-            aria-pressed={checked}
-          />
-        </div>
-      )}
-    </>
+    <div
+      className="inline-flex items-center rounded-lg bg-monzo-brand/40 p-1"
+      role="tablist"
+      aria-label="Workspace"
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected={active === "employee"}
+        disabled={busy}
+        onClick={() => go("employee")}
+        className={cn(
+          "px-3 py-1.5 text-sm font-medium rounded-md transition cursor-pointer",
+          active === "employee"
+            ? "bg-monzo-background text-white shadow"
+            : "text-white/80 hover:text-white",
+          busy && "opacity-60",
+        )}
+      >
+        My HR
+      </button>
+
+      <button
+        type="button"
+        role="tab"
+        aria-selected={active === "manager"}
+        disabled={busy}
+        onClick={() => go("manager")}
+        className={cn(
+          "px-3 py-1.5 text-sm font-medium rounded-md transition cursor-pointer",
+          active === "manager"
+            ? "bg-monzo-background text-white shadow"
+            : "text-white/80 hover:text-white",
+          busy && "opacity-60",
+        )}
+      >
+        Work
+      </button>
+
+      {busy && <span className="ml-2 text-xs text-white/80">Switching…</span>}
+    </div>
   );
 };

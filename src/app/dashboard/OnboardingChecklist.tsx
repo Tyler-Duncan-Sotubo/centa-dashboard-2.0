@@ -93,8 +93,6 @@ const OnboardingChecklist = ({
     enabled: !!session?.backendTokens?.accessToken && !onboardingTaskCompleted,
   });
 
-  console.log("Onboarding data:", onboarding);
-
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
@@ -190,7 +188,7 @@ const OnboardingChecklist = ({
                       <div className="font-bold text-md">
                         {taskMeta?.label || taskKey}
                       </div>
-                      <div className="text-md text-muted-foreground max-w-[300px]">
+                      <div className="text-md text-muted-foreground max-w-75">
                         {taskMeta?.description}
                       </div>
                     </div>
@@ -225,7 +223,7 @@ const OnboardingChecklist = ({
                       </div>
                       <div className="space-y-1">
                         <div className="font-bold text-md">{label}</div>
-                        <div className="text-md text-muted-foreground max-w-[300px]">
+                        <div className="text-md text-muted-foreground max-w-75">
                           {description}
                         </div>
                       </div>

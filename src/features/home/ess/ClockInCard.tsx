@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { useToast } from "@/shared/hooks/use-toast";
@@ -21,12 +21,19 @@ import {
 } from "@/shared/ui/alert-dialog";
 
 /* LocalStorage Helpers */
-const LS_KEY = "clock-in-timer";
+const LS_KEY_PREFIX = "clock-in-timer";
 type StoredState = { clockIn?: number; clockOut?: number; running: boolean };
 
-const saveState = (ci: Date | null, co: Date | null, running: boolean) =>
+const keyForUser = (userId: string) => `${LS_KEY_PREFIX}:${userId}`;
+
+const saveState = (
+  userId: string,
+  ci: Date | null,
+  co: Date | null,
+  running: boolean,
+) =>
   localStorage.setItem(
-    LS_KEY,
+    keyForUser(userId),
     JSON.stringify({
       clockIn: ci?.getTime(),
       clockOut: co?.getTime(),
@@ -34,13 +41,19 @@ const saveState = (ci: Date | null, co: Date | null, running: boolean) =>
     } as StoredState),
   );
 
-const loadState = (): StoredState => {
+const loadState = (userId: string): StoredState => {
   try {
-    const raw = localStorage.getItem(LS_KEY);
+    const raw = localStorage.getItem(keyForUser(userId));
     return raw ? (JSON.parse(raw) as StoredState) : { running: false };
   } catch {
     return { running: false };
   }
+};
+
+const clearState = (userId: string) => {
+  try {
+    localStorage.removeItem(keyForUser(userId));
+  } catch {}
 };
 
 /* ───────────── Geolocation helper ───────────── */
@@ -57,8 +70,11 @@ const getCurrentPosition = (): Promise<GeolocationPosition> =>
 
 export default function ClockInCard() {
   const { toast } = useToast();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
+
+  const userId = (session?.user as any)?.id as string | undefined;
+
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
@@ -67,52 +83,104 @@ export default function ClockInCard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
 
-  useLayoutEffect(() => {
+  /**
+   * Reset local UI state when the logged-in user changes.
+   * This prevents cross-user UI leakage during account switching.
+   */
+  useEffect(() => {
+    if (!userId) return;
+    setClockInTime(null);
+    setClockOutTime(null);
+    setIsRunning(false);
+    setCurrentTime(new Date());
+    setHydrated(false);
+  }, [userId]);
+
+  /**
+   * Sync from backend once we have a real userId AND session is authenticated.
+   * Falls back to localStorage per-user state on error.
+   */
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    if (!userId) return;
+
+    let cancelled = false;
+
     const syncStatus = async () => {
       try {
         const res = await axiosInstance.get(
-          `/api/clock-in-out/status/${session?.user.id}`,
+          `/api/clock-in-out/status/${userId}`,
         );
+
+        if (cancelled) return;
+
         if (res.data?.status === "success") {
           const { checkInTime, checkOutTime } = res.data.data;
-          setClockInTime(checkInTime ? new Date(checkInTime) : null);
-          setClockOutTime(checkOutTime ? new Date(checkOutTime) : null);
-          setIsRunning(Boolean(checkInTime && !checkOutTime));
+
+          const ci = checkInTime ? new Date(checkInTime) : null;
+          const co = checkOutTime ? new Date(checkOutTime) : null;
+
+          setClockInTime(ci);
+          setClockOutTime(co);
+          setIsRunning(Boolean(ci && !co));
+        } else {
+          const { clockIn, clockOut, running } = loadState(userId);
+          setClockInTime(clockIn ? new Date(clockIn) : null);
+          setClockOutTime(clockOut ? new Date(clockOut) : null);
+          setIsRunning(running);
         }
       } catch {
-        // fallback to localStorage
-        const { clockIn, clockOut, running } = loadState();
+        if (cancelled) return;
+
+        const { clockIn, clockOut, running } = loadState(userId);
         setClockInTime(clockIn ? new Date(clockIn) : null);
         setClockOutTime(clockOut ? new Date(clockOut) : null);
         setIsRunning(running);
       } finally {
-        setHydrated(true);
+        if (!cancelled) setHydrated(true);
       }
     };
 
     syncStatus();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status, userId, axiosInstance]);
 
   /* ── Live timer ── */
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval: ReturnType<typeof setInterval> | undefined;
+
     if (hydrated && isRunning && clockInTime && !clockOutTime) {
       interval = setInterval(() => setCurrentTime(new Date()), 1000);
     }
-    return () => clearInterval(interval);
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [hydrated, isRunning, clockInTime, clockOutTime]);
 
-  /* ── Persist to localStorage ── */
+  /* ── Persist to localStorage (per-user) ── */
   useEffect(() => {
-    if (hydrated) saveState(clockInTime, clockOutTime, isRunning);
-  }, [clockInTime, clockOutTime, isRunning, hydrated]);
+    if (!hydrated) return;
+    if (!userId) return;
+
+    // Optional: if clocked out, you can clear the stored running state
+    // if (!isRunning && clockOutTime) clearState(userId);
+
+    saveState(userId, clockInTime, clockOutTime, isRunning);
+  }, [clockInTime, clockOutTime, isRunning, hydrated, userId]);
 
   /* ── Clock-in handler ── */
   const handleClockIn = async () => {
+    if (!userId) return;
+
     setIsLoading(true);
     try {
       const pos = await getCurrentPosition();
       const { latitude, longitude } = pos.coords;
+
       const res = await axiosInstance.post("/api/clock-in-out/clock-in", {
         latitude: String(latitude),
         longitude: String(longitude),
@@ -123,6 +191,7 @@ export default function ClockInCard() {
         setClockInTime(now);
         setClockOutTime(null);
         setIsRunning(true);
+
         toast({
           title: "Clocked in",
           description: `at ${format(now, "HH:mm:ss")}`,
@@ -137,6 +206,7 @@ export default function ClockInCard() {
               err?.message?.includes?.("denied")
             ? "Location permission denied. Enable it to clock-in."
             : err?.response?.data?.error?.message || "Try again later.";
+
       toast({
         title: "Clock in failed",
         description: msg,
@@ -149,6 +219,8 @@ export default function ClockInCard() {
 
   /* ── Clock-out handler ── */
   const handleClockOut = async () => {
+    if (!userId) return;
+
     setIsLoading(true);
     try {
       const pos = await getCurrentPosition();
@@ -163,6 +235,7 @@ export default function ClockInCard() {
         const now = new Date();
         setClockOutTime(now);
         setIsRunning(false);
+
         toast({
           title: "Clocked out",
           description: `at ${format(now, "HH:mm:ss")}`,
@@ -174,6 +247,7 @@ export default function ClockInCard() {
         err?.code === 1
           ? "Location permission denied. Enable it to clock-out."
           : err?.response?.data?.error?.message || "Try again later.";
+
       toast({
         title: "Clock out failed",
         description: msg,
@@ -187,7 +261,8 @@ export default function ClockInCard() {
   const fmt = (d: Date) => format(d, "EEE, HH:mm:ss");
   const fmtDate = (d: Date) => format(d, "dd MMMM yyyy");
 
-  if (!hydrated) return null; // avoid hydration mismatch
+  if (status === "loading") return null;
+  if (!hydrated) return null;
 
   return (
     <section className="flex flex-col w-full gap-4 p-5 border rounded-lg max-h-28 bg-card">
@@ -200,6 +275,7 @@ export default function ClockInCard() {
                 ? "You are clocked in"
                 : "Clock In"}
           </div>
+
           <div className="text-xl font-bold">
             {clockOutTime
               ? fmt(clockOutTime)
@@ -207,10 +283,12 @@ export default function ClockInCard() {
                 ? fmt(currentTime)
                 : fmt(currentTime)}
           </div>
+
           <div className="text-base text-muted-foreground">
             {fmtDate(clockInTime ?? currentTime)}
           </div>
         </div>
+
         <div className="w-[50%]">
           {isRunning ? (
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>

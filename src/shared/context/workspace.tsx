@@ -1,4 +1,3 @@
-// lib/workspace.tsx
 "use client";
 import { useSession } from "next-auth/react";
 import React, {
@@ -24,49 +23,46 @@ const WorkspaceContext = createContext<Ctx | null>(null);
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
 
-  // ✅ no any
   const userPermissions = useMemo<readonly string[]>(
     () => session?.permissions ?? [],
-    [session?.permissions]
+    [session?.permissions],
   );
 
   const canManager = userPermissions.includes("dashboard.login");
   const canEmployee = userPermissions.includes("ess.login");
 
-  // ✅ default to employee
-  const [workspace, setWs] = useState<Workspace>(() => {
-    if (typeof window !== "undefined") {
-      const saved = window.localStorage.getItem(
-        "workspace"
-      ) as Workspace | null;
-      if (saved === "manager" || saved === "employee") return saved;
-    }
-    return "employee";
-  });
+  // Initial state: manager wins if allowed
+  const [workspace, setWs] = useState<Workspace>("employee");
 
   const setWorkspace = (w: Workspace) => {
     if ((w === "manager" && !canManager) || (w === "employee" && !canEmployee))
       return;
+
     setWs(w);
     if (typeof window !== "undefined") {
       window.localStorage.setItem("workspace", w);
     }
   };
 
+  /**
+   * 🔒 Resolve workspace deterministically whenever permissions change
+   */
   useEffect(() => {
     if (typeof window === "undefined") return;
+
     const saved = window.localStorage.getItem("workspace") as Workspace | null;
 
     let target: Workspace | null = null;
 
-    // saved preference if still allowed
+    // 1️⃣ Saved preference (only if still allowed)
     if (saved === "manager" && canManager) target = "manager";
     else if (saved === "employee" && canEmployee) target = "employee";
-    // ✅ prefer EMPLOYEE when both/no saved
-    else if (canEmployee) target = "employee";
-    // else manager if allowed
+    // 2️⃣ Manager ALWAYS takes precedence
     else if (canManager) target = "manager";
+    // 3️⃣ Fallback to employee
+    else if (canEmployee) target = "employee";
 
+    // 4️⃣ Apply if changed
     if (target && target !== workspace) {
       setWs(target);
       window.localStorage.setItem("workspace", target);

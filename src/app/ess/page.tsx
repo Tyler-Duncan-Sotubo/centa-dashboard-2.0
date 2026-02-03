@@ -39,7 +39,6 @@ const Dashboard = () => {
       const res = await axiosInstance.get(
         `/api/company/employee-summary/${id}`,
       );
-      console.log("Fetched employee summary:", res.data);
       return res.data.data;
     } catch (error) {
       if (isAxiosError(error) && error.response) {
