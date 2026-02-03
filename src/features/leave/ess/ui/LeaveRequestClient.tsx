@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
-import { FaChevronCircleLeft } from "react-icons/fa";
+import { FaChevronCircleLeft, FaUmbrellaBeach } from "react-icons/fa";
 import { CalendarIcon } from "lucide-react";
 
 import Loading from "@/shared/ui/loading";
@@ -103,17 +103,21 @@ export default function LeaveRequestPage() {
   if (!leaveBalance.length)
     return (
       <div className="w-full space-y-4">
-        <Link href="/dashboard">
+        <Link href="/ess/leave">
           <Button variant="link" className="px-0 text-md">
-            <FaChevronCircleLeft className="mr-2" /> Back to Dashboard
+            <FaChevronCircleLeft className="mr-2" /> Back to Leave
           </Button>
         </Link>
         <div className="mx-aut mt-24">
-          <EmptyState
-            title="No Leave Balance Found"
-            description="You currently have no leave balances available. Please contact HR for assistance."
-            image="https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757585350/onboarding_izogcj.svg"
-          />
+          <div className="flex min-h-[50vh] items-center justify-center">
+            <EmptyState
+              title="No Leave Balance Found"
+              description="It seems like you have no leave balances at the moment. You can request leave to start the process."
+              icon={
+                <FaUmbrellaBeach size={56} className="text-muted-foreground" />
+              }
+            />
+          </div>
         </div>
       </div>
     );
