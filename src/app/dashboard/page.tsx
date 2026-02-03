@@ -62,6 +62,7 @@ const DashboardPage = () => {
 
   const adminRoles = ["admin", "super_admin", "hr_manager"];
   const nonAdmin = !adminRoles.includes(session?.user.role || "");
+  const userName = session?.user.firstName;
 
   const fetchCompanySummary = async () => {
     try {
@@ -115,7 +116,7 @@ const DashboardPage = () => {
         <div>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-medium">
-              Good {timeOfDay}, {data?.companyName}!
+              Good {timeOfDay}, {userName}!
             </p>
           </div>
           <p className="text-sm text-textSecondary mb-6">{formattedDate}</p>

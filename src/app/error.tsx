@@ -14,7 +14,20 @@ export default function GlobalError({
   const router = useRouter();
 
   useEffect(() => {
-    // Log silently (Sentry, LogRocket, etc.)
+    // 🔐 Safe: client -> server -> Logtail
+    fetch("/api/log-client-error", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        message: error.message,
+        stack: error.stack,
+        digest: error.digest,
+        href: window.location.href,
+        userAgent: navigator.userAgent,
+      }),
+    }).catch(() => {});
+
+    // still useful locally
     console.error("Global error:", error);
   }, [error]);
 
@@ -34,7 +47,7 @@ export default function GlobalError({
           <div className="flex flex-col gap-3">
             <Button onClick={() => reset()}>Try again</Button>
 
-            <Button variant={"outline"} onClick={() => router.push("/login")}>
+            <Button variant="outline" onClick={() => router.push("/login")}>
               Go to login
             </Button>
 
