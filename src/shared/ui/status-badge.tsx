@@ -19,16 +19,18 @@ const squareBadgeVariants = cva(
         not_started: "bg-muted-foreground/85 border-muted-foreground",
         overdue: "bg-error/85 border-error",
         draft: "bg-monzo-textSecondary/85 border-monzo-textSecondary",
+        pending_approval: "bg-warning/85 border-warning",
       },
     },
     defaultVariants: {
       status: "not_started",
     },
-  }
+  },
 );
 
 export interface StatusBadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof squareBadgeVariants> {}
 
 export function StatusBadge({ status, className, ...props }: StatusBadgeProps) {

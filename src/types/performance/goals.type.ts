@@ -7,7 +7,7 @@ export type Goal = {
   cycleId: string;
   weight: number;
   progress: number; // Overall progress percentage
-  status: "draft" | "published" | "archived" | "active";
+  status: "draft" | "published" | "archived" | "active" | "pending_approval";
   kpiBased: boolean;
   type: string; // e.g., "personal", "team", "company"
   employee: string; // Full name of the employee

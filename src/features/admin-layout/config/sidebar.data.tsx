@@ -376,16 +376,10 @@ export const main: readonly MenuItem[] = [
         permissions: ["dashboard.login", "performance.reviews.read"],
       },
       {
-        title: "1:1 Check-In",
+        title: "Appraisals",
         link: "/dashboard/performance/reviews",
         icon: <FaCommentDots size={18} />,
         permissions: ["dashboard.login", "performance.reviews.read_team"],
-      },
-      {
-        title: "Appraisals",
-        link: "/dashboard/performance/appraisals",
-        icon: <FaClipboardCheck size={18} />,
-        permissions: ["dashboard.login", "performance.reviews.read"],
       },
       {
         title: "Goals",
@@ -423,22 +417,10 @@ export const main: readonly MenuItem[] = [
         permissions: ["dashboard.login", "performance.reviews.manage_all"],
       },
       {
-        title: "Competency",
-        link: "/dashboard/performance/settings/competency",
-        icon: <FaLightbulb size={18} />,
-        permissions: ["dashboard.login", "performance.reviews.manage_all"],
-      },
-      {
         title: "Templates",
         link: "/dashboard/performance/settings/templates",
         icon: <FaRegFileAlt size={18} />,
         permissions: ["dashboard.login", "performance.reviews.manage_all"],
-      },
-      {
-        title: "Appraisal Framework",
-        link: "/dashboard/performance/settings/framework",
-        icon: <TbLayoutGrid size={18} />,
-        permissions: ["dashboard.login", "performance.reviews.read"],
       },
       {
         title: "Divider",
@@ -522,7 +504,7 @@ export const main: readonly MenuItem[] = [
   },
 
   {
-    title: "Time Off",
+    title: "Leave",
     icon: <FaCalendarAlt size={20} />,
     link: "/dashboard/leave",
     permissions: ["dashboard.login", "leave.request.read_all"],

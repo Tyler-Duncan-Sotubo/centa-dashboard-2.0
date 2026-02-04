@@ -13,6 +13,7 @@ import Link from "next/link";
 import GoalModal from "./GoalFormModal";
 import { useState } from "react";
 import { StatusBadge } from "@/shared/ui/status-badge";
+import GoalApprovalActions from "./GoalApprovalActions";
 
 interface GoalTableProps {
   goals: Goal[];
@@ -100,7 +101,7 @@ export default function GoalTable({
                 <FaCheck />
               </span>
             ) : (
-              <span className="text-sm font-medium min-w-[32px]">{value}%</span>
+              <span className="text-sm font-medium min-w-8">{value}%</span>
             )}
           </div>
         );
@@ -133,6 +134,7 @@ export default function GoalTable({
 
         return (
           <div className="flex items-center">
+            <GoalApprovalActions goal={goal} />
             {goal.status !== "archived" && (
               <>
                 <Button
