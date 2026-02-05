@@ -42,14 +42,14 @@ export default function CreateCycleModal({
   });
 
   useEffect(() => {
-    if (initialData) {
-      form.reset({
-        name: initialData.name ?? "",
-        startDate: initialData.startDate ?? "",
-        endDate: initialData.endDate ?? "",
-      });
-    }
-  }, [initialData, form]);
+    if (!open) return;
+
+    form.reset({
+      name: initialData?.name ?? "",
+      startDate: initialData?.startDate ?? "",
+      endDate: initialData?.endDate ?? "",
+    });
+  }, [open, initialData, form]);
 
   const createCycle = useCreateMutation({
     endpoint: "/api/performance-cycle",

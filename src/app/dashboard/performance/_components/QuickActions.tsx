@@ -18,10 +18,6 @@ export default function QuickActions() {
         <MdLeaderboard /> Create Performance Cycle
       </Button>
 
-      <Button className="w-full border font-bold" variant={"ghost"}>
-        <MdRateReview /> Create New Review
-      </Button>
-
       <Button className="w-full font-bold" onClick={() => setGoalOpen(true)}>
         <TbTarget /> Create New Goal
       </Button>

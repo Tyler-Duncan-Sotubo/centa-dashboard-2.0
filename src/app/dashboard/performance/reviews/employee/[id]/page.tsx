@@ -6,12 +6,12 @@ import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { use, useState } from "react";
-import ReviewHeader from "../_components/ReviewHeader";
-import QuestionnaireSection from "../_components/QuestionnaireSection";
-import GoalsSection from "../_components/GoalsSection";
-import AttendanceSection from "../_components/AttendanceSection";
-import FeedbackSection from "../_components/FeedbackSection";
-import ConclusionSection from "../_components/Conclusion";
+import ReviewHeader from "../../_components/ReviewHeader";
+import QuestionnaireSection from "../../_components/QuestionnaireSection";
+import GoalsSection from "../../_components/GoalsSection";
+import AttendanceSection from "../../_components/AttendanceSection";
+import FeedbackSection from "../../_components/FeedbackSection";
+import ConclusionSection from "../../_components/Conclusion";
 import {
   FaBullseye,
   FaClock,

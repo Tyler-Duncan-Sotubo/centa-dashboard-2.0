@@ -43,7 +43,9 @@ export function usePasswordResetConfirm(token: string) {
         }
       } catch (err) {
         if (isAxiosError(err) && err.response) {
-          const msg = err.response.data?.message ?? "Failed to reset password";
+          console.error("Password reset error response:", err.response);
+          const msg =
+            err.response.data?.error.message ?? "Failed to reset password";
           setError(getErrorMessage(msg));
           return;
         }

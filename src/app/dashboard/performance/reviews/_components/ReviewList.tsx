@@ -113,20 +113,11 @@ const ReviewList = ({
                 <FaCheck />
               </span>
             ) : (
-              <span className="text-sm font-medium min-w-[32px]">{value}%</span>
+              <span className="text-sm font-medium min-w-8">{value}%</span>
             )}
           </div>
         );
       },
-    },
-
-    {
-      accessorKey: "dueDate",
-      header: "Due Date",
-      cell: ({ row }) =>
-        row.original.dueDate
-          ? format(new Date(row.original.dueDate), "MMM d, yyyy")
-          : "—",
     },
     {
       id: "actions",
@@ -140,7 +131,7 @@ const ReviewList = ({
 
             {!isComplete && (
               <Link
-                href={`/dashboard/performance/reviews/${row.original.id}`}
+                href={`/dashboard/performance/reviews/employee/${row.original.id}`}
                 className="text-monzo-brandDark"
               >
                 <Button

@@ -15,6 +15,7 @@ import {
 } from "@/shared/ui/form";
 
 import { usePasswordResetConfirm } from "../hooks/use-password-reset-confirm";
+import Link from "next/link";
 
 export function PasswordResetConfirmView({ token }: { token: string }) {
   const { form, error, onSubmit } = usePasswordResetConfirm(token);
@@ -33,14 +34,12 @@ export function PasswordResetConfirmView({ token }: { token: string }) {
               alt="Logo"
             />
           </div>
-
           <div>
             <h1 className="text-4xl font-bold">Reset Your Password</h1>
             <p className="text-gray-600 text-xl">
               Enter new password to reset your password.
             </p>
           </div>
-
           <div className="space-y-4 py-4">
             <FormField
               control={form.control}
@@ -80,16 +79,33 @@ export function PasswordResetConfirmView({ token }: { token: string }) {
               )}
             />
           </div>
+          <div className="text-xs col-span-1">
+            {error ? <FormError message={error} /> : null}
+          </div>
+          <div>
+            {error &&
+              (error.includes("Token is not valid") ||
+                error.includes("Token has already been used") ||
+                error.includes("Token has expired")) && (
+                <div>
+                  <Link href="/forgot-password">
+                    <Button variant="outline">
+                      Request a new password reset link
+                    </Button>
+                  </Link>
+                </div>
+              )}
+          </div>
 
-          {error ? <FormError message={error} /> : null}
-
-          <Button
-            type="submit"
-            isLoading={form.formState.isSubmitting}
-            className="w-full mt-6"
-          >
-            Reset Password
-          </Button>
+          {!error && (
+            <Button
+              type="submit"
+              isLoading={form.formState.isSubmitting}
+              className="w-full mt-6"
+            >
+              Reset Password
+            </Button>
+          )}
         </form>
       </Form>
     </section>
