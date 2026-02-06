@@ -16,9 +16,11 @@ import { EssMobileAppNav } from "@/features/ess-layout/ui/ess-mobile-app-nav";
 import { cn } from "@/lib/utils";
 import { MdLogout } from "react-icons/md";
 import { ZendeskWidget } from "@/shared/widgets/zendesk";
+import { WorkspaceSwitcher } from "@/shared/ui/work-space-switcher";
 export default function Layout({ children }: { children: ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { data: session, status } = useSession();
+  const employee = session?.user.role === "employee" ? session.user : null;
   const router = useRouter();
 
   useEffect(() => {
@@ -51,14 +53,15 @@ export default function Layout({ children }: { children: ReactNode }) {
           <EssNavbar sidebarCollapsed={sidebarCollapsed} />
 
           {/* Mobile Header */}
-          <header className="flex justify-between items-center px-3 md:hidden">
+          <header className="flex justify-between items-center p-3 md:hidden">
             <ApplicationLogo
-              className="h-16 w-28"
+              className="h-12 w-22"
               src="https://centa-hr.s3.eu-west-3.amazonaws.com/company-files/55df5e55-f3e0-44c6-a39f-390ef8466d56/9a3be800-ca54-4bf9-a3ed-72b68baf52f7/1768990436384-logo-CqG_6WrI.svg"
               alt="website logo"
               link="/ess"
             />
-            <div className="p-2 ">
+            {!employee && <WorkspaceSwitcher />}
+            <div className="p-2 flex items-center gap-2">
               <button
                 onClick={() => signOut()}
                 className={cn(

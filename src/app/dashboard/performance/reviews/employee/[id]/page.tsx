@@ -59,7 +59,7 @@ export default function ReviewDetailPage({ params }: Props) {
   return (
     <section className="px-4 mb-20">
       <BackButton
-        href="/dashboard/performance/reviews"
+        href={`/dashboard/performance/reviews/${review.cycleId}`}
         label="Back to Reviews"
       />
 
@@ -80,7 +80,7 @@ export default function ReviewDetailPage({ params }: Props) {
             <TabsList className="grid grid-cols-5 w-full">
               <TabsTrigger value="questions">
                 <FaListUl className="mr-2 w-4 h-4 text-monzo-brandDark" />
-                Questionnaire
+                Values
               </TabsTrigger>
 
               {review?.goals && (

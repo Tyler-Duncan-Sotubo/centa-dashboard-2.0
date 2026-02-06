@@ -101,42 +101,6 @@ export default function GoalTable({
       cell: ({ row }: GoalTableRowProps) =>
         format(new Date(row.original.dueDate), "MMMM do, yyyy"),
     },
-    !disabledAction && {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }: GoalTableRowProps) => {
-        const goal = row.original;
-
-        return (
-          <div className="flex items-center">
-            {goal.status !== "archived" && (
-              <>
-                <Button
-                  size="sm"
-                  variant="link"
-                  onClick={() => {
-                    setSelectedGoal(goal);
-                    setOpen(true);
-                  }}
-                >
-                  <FaEdit />
-                </Button>
-
-                <DeleteWithTwoIdsDialog
-                  id1={goal.id}
-                  id2={goal.employeeId}
-                  buildEndpoint={(goalId, employeeId) =>
-                    `/api/performance-goals/${goalId}/${employeeId}/archive`
-                  }
-                  successMessage="Goal archived successfully"
-                  refetchKey="goals"
-                />
-              </>
-            )}
-          </div>
-        );
-      },
-    },
   ].filter(Boolean) as ColumnDef<Goal>[];
 
   return (

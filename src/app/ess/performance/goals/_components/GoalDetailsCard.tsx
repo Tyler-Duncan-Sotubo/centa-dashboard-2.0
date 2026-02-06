@@ -23,7 +23,7 @@ export function InfoField({ label, children }: InfoFieldProps) {
   return (
     <div>
       <p className="text-muted-foreground text-md font-medium">{label}</p>
-      <p className="text-xmd">{children}</p>
+      <div className="text-xmd">{children}</div>
     </div>
   );
 }

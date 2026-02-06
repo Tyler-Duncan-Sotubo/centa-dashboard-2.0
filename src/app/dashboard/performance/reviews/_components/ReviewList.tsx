@@ -42,7 +42,7 @@ const ReviewList = ({
                 </div>
               ) : (
                 <Link
-                  href={`/dashboard/performance/reviews/${row.original.id}`}
+                  href={`/dashboard/performance/reviews/employee/${row.original.id}`}
                   className="text-monzo-brandDark"
                 >
                   <div className="capitalize font-semibold">

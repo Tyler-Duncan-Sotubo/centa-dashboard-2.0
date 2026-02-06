@@ -81,7 +81,7 @@ export default function AdminChromeLayout({
       />
 
       <div
-        className={`bg-white min-h-screen transition-all ease-in-out duration-500 ${
+        className={`bg-white min-h-screen transition-all ease-in-out duration-500 flex-1 w-full ml-0 ${
           sidebarCollapsed
             ? "md:ml-16 md:w-[calc(100%-4rem)]"
             : "md:ml-[16%] md:w-[84%]"

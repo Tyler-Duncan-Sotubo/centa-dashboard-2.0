@@ -1,12 +1,9 @@
-import { Badge } from "@/shared/ui/badge";
+import { Avatars } from "@/shared/ui/avatars";
 import { Progress } from "@/shared/ui/progress";
 import { Goal } from "@/types/performance/goals.type";
-import Image from "next/image";
 
 export default function EmployeeCard({ goal }: { goal: Goal }) {
-  const avatarUrl =
-    goal.avatarUrl ||
-    `https://res.cloudinary.com/dw1ltt9iz/image/upload/v1757584748/user-thumbnail_esajvk.gif`;
+  const avatarUrl = goal.avatarUrl;
   const progress = goal.updates?.[0]?.progress ?? 0;
 
   return (
@@ -15,11 +12,11 @@ export default function EmployeeCard({ goal }: { goal: Goal }) {
         <div className="flex items-center gap-4">
           {/* Avatar */}
           <div className="w-28 h-28 rounded-full overflow-hidden border relative">
-            <Image
+            <Avatars
               src={avatarUrl}
-              alt={goal.employee}
-              fill
-              className="object-cover w-full h-full"
+              name={goal.employee}
+              size="xlg"
+              className="absolute top-0 left-0"
             />
           </div>
           {/* Info */}
@@ -43,13 +40,6 @@ export default function EmployeeCard({ goal }: { goal: Goal }) {
         </div>
       </div>
       <div className="flex flex-col w-56">
-        <Badge>
-          {progress < 100 && goal.status === "active"
-            ? `In Progress`
-            : goal.status === "draft"
-              ? "Draft"
-              : "Completed"}
-        </Badge>
         <div className="space-y-4 mt-4 text-center bg-gray-100 p-4 rounded-lg">
           <h2>Progress</h2>
           <h3 className="text-2xl font-bold">{progress}%</h3>
