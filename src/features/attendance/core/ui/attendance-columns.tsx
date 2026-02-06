@@ -8,8 +8,50 @@ import { ChevronsUpDown, type LucideIcon } from "lucide-react";
 import { format } from "date-fns";
 import { formatToDisplay } from "@/shared/utils/formatToDisplay";
 import { Avatars } from "@/shared/ui/avatars";
-
 import type { AttendanceSummaryItem } from "@/features/attendance/core/types/attendance.type";
+
+export function safeFormatTime(
+  value?: string | Date | null,
+  fmt = "hh:mm a",
+  fallback = "--",
+) {
+  if (!value) return fallback;
+
+  // Date instance → safe
+  if (value instanceof Date) {
+    if (isNaN(value.getTime())) return fallback;
+    return format(value, fmt);
+  }
+
+  // String value
+  if (typeof value === "string") {
+    // ISO or parseable date string
+    if (value.includes("T")) {
+      const d = new Date(value);
+      if (!isNaN(d.getTime())) return format(d, fmt);
+    }
+
+    // Time-only string: "HH:mm" or "HH:mm:ss"
+    const m = value.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+    if (m) {
+      let hours = Number(m[1]);
+      const minutes = m[2];
+
+      const isPM = hours >= 12;
+      hours = hours % 12;
+      if (hours === 0) hours = 12;
+
+      const hh = fmt.includes("hh")
+        ? String(hours).padStart(2, "0")
+        : String(hours);
+      const mm = minutes;
+
+      return `${hh}:${mm} ${isPM ? "PM" : "AM"}`;
+    }
+  }
+
+  return fallback;
+}
 
 export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
   {
@@ -74,10 +116,7 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
         <ChevronUpDown />
       </Button>
     ),
-    cell: ({ row }) => {
-      const time = row.original.checkInTime;
-      return time ? format(new Date(time), "hh:mm a") : "--";
-    },
+    cell: ({ row }) => safeFormatTime(row.original.checkInTime),
   },
   {
     accessorKey: "totalWorkedMinutes",
@@ -99,10 +138,7 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
   {
     accessorKey: "checkOutTime",
     header: "Check Out",
-    cell: ({ row }) => {
-      const time = row.original.checkOutTime;
-      return time ? format(new Date(time), "hh:mm a") : "--";
-    },
+    cell: ({ row }) => safeFormatTime(row.original.checkOutTime),
   },
   {
     accessorKey: "status",

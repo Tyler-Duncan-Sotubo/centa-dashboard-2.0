@@ -67,10 +67,14 @@ export default function AttendanceDashboard({
     {
       title: "Attendance Rate",
       titleIcon: <FaClock />,
-      value:
-        typeof details?.attendanceRate === "number"
-          ? details?.attendanceRate
-          : "0%",
+      value: (() => {
+        const raw = details?.attendanceRate;
+        if (!raw) return "0%";
+
+        // extract numeric part safely
+        const n = Number(String(raw).replace("%", ""));
+        return n > 0 ? `${n}%` : "0%";
+      })(),
     },
   ];
 
