@@ -2,36 +2,40 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const colors = {
-  brand: "bg-brand hover:bg-brand/80",
-  success: "bg-success hover:bg-success/80",
-  warning: "bg-warning hover:bg-warning/80",
-  error: "bg-error hover:bg-error/80",
-};
-
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border capitalize px-3 py-1 text-xs font-semibold text-white shadow-xs transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  // ✅ Monday-like block
+  "inline-flex h-8 min-w-[92px] items-center justify-center rounded-md px-3 text-xs font-semibold capitalize text-white shadow-sm transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
-        pending: colors.warning,
-        ongoing: colors.warning,
-        paid: colors.success,
-        completed: colors.brand,
-        approved: colors.success,
-        rejected: colors.error,
+        // 🟡 attention
+        pending: "bg-amber-400 hover:bg-amber-500",
+        ongoing: "bg-amber-400 hover:bg-amber-500",
+
+        // 🟢 success
+        paid: "bg-emerald-500 hover:bg-emerald-600",
+        approved: "bg-emerald-500 hover:bg-emerald-600",
+
+        // 🔵 info
+        completed: "bg-sky-500 hover:bg-sky-600",
+
+        // 🔴 problem
+        rejected: "bg-rose-500 hover:bg-rose-600",
+
+        // ⚪ neutral
         outline:
-          "border-muted text-foreground bg-transparent hover:bg-muted/10", // New outline variant
+          "border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200",
       },
     },
     defaultVariants: {
       variant: "pending",
     },
-  }
+  },
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {

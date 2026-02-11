@@ -3,23 +3,33 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const squareBadgeVariants = cva(
-  "inline-block rounded-sm px-3 py-2 text-sm capitalize font-bold text-monzo-textPrimary text-center min-w-[80px] border-l-4",
+  // ✅ Monday.com style block
+  "inline-flex h-8 min-w-[92px] items-center justify-center rounded-md px-3 text-xs font-semibold capitalize text-white shadow-sm",
   {
     variants: {
       status: {
-        upcoming: "bg-monzo-secondary/85 border-monzo-secondary text-black",
-        active: "bg-success/85 border-success",
-        closed: "bg-success/85 border-success",
-        all: "bg-brand/85 border-brand",
-        archived: "bg-monzo-textSecondary/85 border-monzo-textSecondary",
-        submitted: "bg-success/85 border-success",
-        completed: "bg-success/85 border-success",
-        published: "bg-brand/85 border-brand",
-        in_progress: "bg-warning/85 border-warning",
-        not_started: "bg-muted-foreground/85 border-muted-foreground",
-        overdue: "bg-error/85 border-error",
-        draft: "bg-monzo-textSecondary/85 border-monzo-textSecondary",
-        pending_approval: "bg-warning/85 border-warning",
+        // 🟢 success
+        active: "bg-emerald-500 border-emerald-600",
+        closed: "bg-emerald-500 border-emerald-600",
+        submitted: "bg-emerald-500 border-emerald-600",
+        completed: "bg-emerald-500 border-emerald-600",
+
+        // 🟡 working / pending
+        in_progress: "bg-amber-400 border-amber-500",
+        pending_approval: "bg-amber-400 border-amber-500",
+
+        // 🔵 info
+        upcoming: "bg-sky-500 border-sky-600",
+        published: "bg-sky-500 border-sky-600",
+        all: "bg-sky-500 border-sky-600",
+
+        // 🔴 problem
+        overdue: "bg-rose-500 border-rose-600",
+
+        // ⚪ neutral
+        archived: "bg-slate-200 border-slate-300 text-slate-700",
+        draft: "bg-slate-200 border-slate-300 text-slate-700",
+        not_started: "bg-slate-200 border-slate-300 text-slate-700",
       },
     },
     defaultVariants: {
@@ -35,6 +45,7 @@ export interface StatusBadgeProps
 
 export function StatusBadge({ status, className, ...props }: StatusBadgeProps) {
   const label = status?.replace(/_/g, " ") ?? "unknown";
+
   return (
     <div className={cn(squareBadgeVariants({ status }), className)} {...props}>
       {label}

@@ -4,7 +4,7 @@ export interface AttendanceSummaryItem {
   department: string;
   checkInTime: string | null;
   checkOutTime: string | null;
-  status: "absent" | "clocked_in" | string;
+  status: "present" | "late" | "absent" | "weekend";
   isLate: boolean;
   employeeNumber: string;
   totalWorkedMinutes: number;

@@ -1,27 +1,13 @@
+// ✅ attendanceSummaryColumns.tsx
 import type { ColumnDef } from "@tanstack/react-table";
 import { differenceInMinutes, format } from "date-fns";
-import { Badge } from "@/shared/ui/badge";
 import type { AttendanceRecord } from "../types/employee-attendance.types";
+import { AttendanceStatusBadge } from "@/shared/ui/attendance-status-badge";
 
 const minutesToHHMM = (mins: number) => {
   const h = Math.floor(mins / 60);
   const m = mins % 60;
   return `${h}h ${m}m`;
-};
-
-const statusVariant = (status: AttendanceRecord["status"]) => {
-  switch (status) {
-    case "present":
-      return "approved";
-    case "late":
-      return "pending";
-    case "absent":
-      return "rejected";
-    case "weekend":
-      return "outline"; // ✅ supported by your Badge
-    default:
-      return "outline";
-  }
 };
 
 export const attendanceSummaryColumns: ColumnDef<AttendanceRecord>[] = [
@@ -72,9 +58,9 @@ export const attendanceSummaryColumns: ColumnDef<AttendanceRecord>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant={statusVariant(row.original.status)}>
-        {row.original.status}
-      </Badge>
+      <div className="flex justify-center p-1">
+        <AttendanceStatusBadge status={row.original.status} className="h-10" />
+      </div>
     ),
     meta: { className: "text-center" },
   },

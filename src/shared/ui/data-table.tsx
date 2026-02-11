@@ -27,6 +27,7 @@ import {
 } from "@/shared/ui/table";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { SlSocialDropbox } from "react-icons/sl";
 import { FaSearch } from "react-icons/fa";
 
@@ -34,6 +35,22 @@ export type DataTableMobileRowProps<TData> = {
   row: Row<TData>;
   table: TableType<TData>;
   onRowClick?: (row: TData) => void;
+};
+
+export type DataTableSelectionAction<TData> = {
+  label: string;
+  onClick: (args: {
+    selectedRows: Row<TData>[];
+    selectedData: TData[];
+    table: TableType<TData>;
+    clearSelection: () => void;
+  }) => void | Promise<void>;
+  variant?: React.ComponentProps<typeof Button>["variant"];
+  size?: React.ComponentProps<typeof Button>["size"];
+  disabled?: (args: {
+    selectedRows: Row<TData>[];
+    selectedData: TData[];
+  }) => boolean;
 };
 
 interface DataTableProps<TData, TValue> {
@@ -63,6 +80,10 @@ interface DataTableProps<TData, TValue> {
 
   /** optional */
   showSearch?: boolean;
+
+  /** ✅ selection */
+  enableSelection?: boolean; // default false
+  selectionActions?: DataTableSelectionAction<TData>[]; // actions shown when any selected
 }
 
 export function DataTable<TData, TValue>({
@@ -75,8 +96,8 @@ export function DataTable<TData, TValue>({
   toolbarRight,
   toolbarLeft,
 
-  defaultPageSize = 20,
-  pageSizeOptions = [10, 20, 50, 100],
+  defaultPageSize = 50,
+  pageSizeOptions = [50, 100, 150, 200],
   allowCustomPageSize = false,
 
   onRowClick,
@@ -87,6 +108,9 @@ export function DataTable<TData, TValue>({
   hideTableOnMobile = false,
 
   showSearch = true,
+
+  enableSelection = false,
+  selectionActions = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -104,9 +128,41 @@ export function DataTable<TData, TValue>({
   const [customOpen, setCustomOpen] = React.useState(false);
   const [customValue, setCustomValue] = React.useState<string>("");
 
+  const selectionColumn = React.useMemo<ColumnDef<TData, TValue>>(
+    () => ({
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+      meta: { className: "w-10 text-center" } as any,
+    }),
+    [],
+  );
+
+  const finalColumns = React.useMemo(() => {
+    if (!enableSelection || disableRowSelection) return columns;
+    return [selectionColumn, ...columns];
+  }, [columns, enableSelection, disableRowSelection, selectionColumn]);
+
   const table = useReactTable({
     data: data ?? [],
-    columns,
+    columns: finalColumns,
 
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -137,12 +193,61 @@ export function DataTable<TData, TValue>({
     if (Number.isFinite(n) && n > 0) table.setPageSize(n);
   };
 
+  const selectedRows = table.getSelectedRowModel().rows;
+  const selectedData = selectedRows.map((r) => r.original);
+  const hasSelection =
+    enableSelection && !disableRowSelection && selectedRows.length > 0;
+
+  const clearSelection = () => table.resetRowSelection();
+
   return (
     <div className="w-full mt-5">
       {/* Toolbar + optional filter */}
-      {(filterKey && showSearch) || toolbarLeft || toolbarRight ? (
+      {(filterKey && showSearch) ||
+      toolbarLeft ||
+      toolbarRight ||
+      hasSelection ? (
         <div className="flex w-full flex-col gap-3 pb-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">{toolbarLeft}</div>
+          <div className="flex items-center gap-2">
+            {toolbarLeft}
+
+            {/* ✅ Selection actions */}
+            {hasSelection && selectionActions.length > 0 ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {selectedRows.length} selected
+                </span>
+
+                {selectionActions.map((a) => {
+                  const isDisabled =
+                    a.disabled?.({ selectedRows, selectedData }) ?? false;
+
+                  return (
+                    <Button
+                      key={a.label}
+                      variant={a.variant ?? "outline"}
+                      size={a.size ?? "sm"}
+                      disabled={isDisabled}
+                      onClick={() =>
+                        a.onClick({
+                          selectedRows,
+                          selectedData,
+                          table,
+                          clearSelection,
+                        })
+                      }
+                    >
+                      {a.label}
+                    </Button>
+                  );
+                })}
+
+                <Button variant="ghost" size="sm" onClick={clearSelection}>
+                  Clear
+                </Button>
+              </div>
+            ) : null}
+          </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
             {filterKey && showSearch && (
@@ -198,7 +303,12 @@ export function DataTable<TData, TValue>({
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className={
+                        (header.column.columnDef.meta as any)?.className
+                      }
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -225,13 +335,31 @@ export function DataTable<TData, TValue>({
                     }
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-3 font-medium">
+                      <TableCell
+                        key={cell.id}
+                        className={`font-medium ${
+                          cell.column.id === "status" ? "p-0" : "py-1.5"
+                        } ${(cell.column.columnDef.meta as any)?.className ?? ""}`}
+                      >
                         {cell.column.id === "actions" ? (
                           <div
                             onClick={(e) => e.stopPropagation()}
                             onMouseDown={(e) => e.stopPropagation()}
                             onPointerDown={(e) => e.stopPropagation()}
                             onKeyDown={(e) => e.stopPropagation()}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </div>
+                        ) : cell.column.id === "select" ? (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
+                            className="flex justify-center"
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
@@ -251,7 +379,7 @@ export function DataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={finalColumns.length}
                     className="h-40 text-center"
                   >
                     <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">

@@ -1,13 +1,13 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { ChevronUpDown } from "@/shared/ui/chevron-up-down";
-import { ChevronsUpDown, type LucideIcon } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { format } from "date-fns";
 import { formatToDisplay } from "@/shared/utils/formatToDisplay";
 import { Avatars } from "@/shared/ui/avatars";
+import { AttendanceStatusBadge } from "@/shared/ui/attendance-status-badge"; // ✅ NEW
 import type { AttendanceSummaryItem } from "@/features/attendance/core/types/attendance.type";
 
 export function safeFormatTime(
@@ -17,21 +17,17 @@ export function safeFormatTime(
 ) {
   if (!value) return fallback;
 
-  // Date instance → safe
   if (value instanceof Date) {
     if (isNaN(value.getTime())) return fallback;
     return format(value, fmt);
   }
 
-  // String value
   if (typeof value === "string") {
-    // ISO or parseable date string
     if (value.includes("T")) {
       const d = new Date(value);
       if (!isNaN(d.getTime())) return format(d, fmt);
     }
 
-    // Time-only string: "HH:mm" or "HH:mm:ss"
     const m = value.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
     if (m) {
       let hours = Number(m[1]);
@@ -152,21 +148,13 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
         <ChevronUpDown />
       </Button>
     ),
-    cell: ({ row }) => {
-      const status = row.original.status;
-      return (
-        <Badge
-          variant={
-            status === "present"
-              ? "approved"
-              : status === "absent"
-                ? "rejected"
-                : "pending"
-          }
-        >
-          {status}
-        </Badge>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <AttendanceStatusBadge
+          status={row.original.status}
+          className="min-h-10"
+        />
+      </div>
+    ),
   },
 ];
