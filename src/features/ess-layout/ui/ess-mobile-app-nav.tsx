@@ -71,20 +71,13 @@ export function EssMobileAppNav() {
       icon: <PiSneakerMoveFill className="h-5 w-5" />,
       isActive: (p) => isLinkOrDescendant(p, "/ess/leave"),
     },
-    {
-      key: "assets",
-      label: "Assets",
-      href: findLinkByTitle("Assets") ?? "/ess/assets",
-      icon: <FaTags className="h-5 w-5" />,
-      isActive: (p) => isLinkOrDescendant(p, "/ess/assets"),
-    },
   ];
 
   return (
     <>
       {/* Bottom bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t bg-white py-1">
-        <div className="grid grid-cols-6 items-center">
+        <div className="grid grid-cols-5 items-center">
           {tabs.map((t) => {
             const active = t.isActive
               ? t.isActive(pathname)

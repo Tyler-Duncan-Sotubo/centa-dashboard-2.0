@@ -3,6 +3,7 @@ import { Badge } from "@/shared/ui/badge";
 import { DataTable } from "@/shared/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { FiCalendar, FiCheckCircle, FiXCircle, FiClock } from "react-icons/fi";
+import { AttendanceStatusBadge } from "@/shared/ui/attendance-status-badge";
 
 interface AttendanceEntry {
   date: string;
@@ -46,17 +47,9 @@ const attendanceColumns: ColumnDef<AttendanceEntry>[] = [
     cell: ({ row }) => {
       const status = row.getValue("status") as AttendanceEntry["status"];
       return (
-        <Badge
-          variant={
-            status === "present"
-              ? "approved"
-              : status === "absent"
-                ? "rejected"
-                : "pending"
-          }
-        >
-          {status}
-        </Badge>
+        <div className="py-1">
+          <AttendanceStatusBadge status={status} className="min-h-9" />
+        </div>
       );
     },
   },

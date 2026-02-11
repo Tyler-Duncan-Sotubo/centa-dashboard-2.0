@@ -101,6 +101,7 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
     ),
   },
   {
+    id: "checkInTime",
     accessorKey: "checkInTime",
     header: ({ column }) => (
       <Button
@@ -112,6 +113,23 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
         <ChevronUpDown />
       </Button>
     ),
+
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.checkInTime;
+      const b = rowB.original.checkInTime;
+
+      // nulls last
+      if (!a) return 1;
+      if (!b) return -1;
+
+      const toMinutes = (t: string) => {
+        const [h, m] = t.split(":").map(Number);
+        return h * 60 + m;
+      };
+
+      return toMinutes(a) - toMinutes(b);
+    },
+
     cell: ({ row }) => safeFormatTime(row.original.checkInTime),
   },
   {
@@ -152,7 +170,7 @@ export const attendanceColumns: ColumnDef<AttendanceSummaryItem>[] = [
       <div className="flex justify-center">
         <AttendanceStatusBadge
           status={row.original.status}
-          className="min-h-10"
+          className="min-h-11"
         />
       </div>
     ),

@@ -4,11 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --text-md: 0.9rem;
+  --text-md: 0.8rem;
   --text-xmd: 1rem;
   --text-lg: 1.1rem;
   --text-xl: 1.125rem;
-
   --color-monzo-error: #fe4b60;
   --color-monzo-brand: #00626f;
   --color-monzo-brandDark: #00626f;
@@ -155,7 +154,7 @@
 
 @layer utilities {
   :root {
-    --font-body: var(--font-nunito);
+    --font-body: var(--font-jakarta);
   }
 
   body {

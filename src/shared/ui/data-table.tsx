@@ -84,6 +84,9 @@ interface DataTableProps<TData, TValue> {
   /** ✅ selection */
   enableSelection?: boolean; // default false
   selectionActions?: DataTableSelectionAction<TData>[]; // actions shown when any selected
+
+  /** ✅ default sorting (applied once on mount) */
+  defaultSorting?: SortingState;
 }
 
 export function DataTable<TData, TValue>({
@@ -111,8 +114,15 @@ export function DataTable<TData, TValue>({
 
   enableSelection = false,
   selectionActions = [],
+
+  defaultSorting = [],
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  // ✅ apply defaultSorting ONCE (no useEffect to avoid infinite loops)
+  const initialSortingRef = React.useRef<SortingState>(defaultSorting);
+  const [sorting, setSorting] = React.useState<SortingState>(
+    initialSortingRef.current,
+  );
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -202,7 +212,6 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full mt-5">
-      {/* Toolbar + optional filter */}
       {(filterKey && showSearch) ||
       toolbarLeft ||
       toolbarRight ||
@@ -211,7 +220,6 @@ export function DataTable<TData, TValue>({
           <div className="flex items-center gap-2">
             {toolbarLeft}
 
-            {/* ✅ Selection actions */}
             {hasSelection && selectionActions.length > 0 ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
@@ -269,7 +277,6 @@ export function DataTable<TData, TValue>({
       ) : null}
 
       <div className="rounded-md border">
-        {/* ✅ Mobile cards */}
         {MobileRow ? (
           <div className="block sm:hidden">
             {rows.length ? (
@@ -294,7 +301,6 @@ export function DataTable<TData, TValue>({
           </div>
         ) : null}
 
-        {/* ✅ Desktop table (and optionally mobile too) */}
         <div
           className={hideTableOnMobile || MobileRow ? "hidden sm:block" : ""}
         >
@@ -394,7 +400,6 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      {/* Footer */}
       {!disableRowSelection && (
         <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-muted-foreground">

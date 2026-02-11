@@ -42,6 +42,7 @@ export function Timesheet({
           data={
             (attendanceSummary?.length ? attendanceSummary : summaryList) ?? []
           }
+          defaultSorting={[{ id: "checkInTime", desc: false }]}
           filterKey="name"
           filterPlaceholder="Search by employee"
           toolbarLeft={

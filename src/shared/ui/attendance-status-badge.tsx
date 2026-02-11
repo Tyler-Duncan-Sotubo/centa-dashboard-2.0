@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const attendanceStatusVariants = cva(
   // Monday-like: full-height pill/rect, centered, compact text
-  "inline-flex h-full min-w-[92px] items-center justify-center rounded-md px-2 text-xs font-semibold capitalize leading-none",
+  "inline-flex h-full min-w-[100px] items-center justify-center rounded-md px-2 text-xs font-semibold capitalize leading-none",
   {
     variants: {
       status: {

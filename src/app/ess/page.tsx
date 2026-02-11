@@ -15,12 +15,13 @@ import PendingTasksWidget from "@/features/home/ess/PendingTasksWidget";
 import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useAuth } from "@/shared/context/AuthContext";
-import { useWorkspace } from "@/shared/context/workspace";
+import ClockInTimeOffCard from "@/features/home/ess/clock-in-time-off-card";
+import MyTeamCard from "@/features/home/ess/my-team-card";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
-  const { workspace } = useWorkspace();
+  const name = session?.user?.firstName;
 
   const accessToken = session?.backendTokens?.accessToken;
   const employeeId = session?.employeeId ?? session?.user?.id ?? null;
@@ -58,39 +59,30 @@ const Dashboard = () => {
 
   return (
     <div>
-      <PageHeader
-        title="Dashboard"
-        description="Welcome to your dashboard. Here you can find an overview of your profile, leave balances, clock-in status, and company announcements."
-      />
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 mt-5">
-        {/* Middle Column – ClockInCard + Announcements */}
-        <div className="md:col-span-4 space-y-6 order-1">
-          {/* Pending Tasks Widget */}
+      <div className="mt-10">
+        <p className="text-xl md:text-2xl font-bold">
+          Hi {name}, glad you're here 👋🏽
+        </p>
+      </div>
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-5 mb-10 mt-20">
+        {/* LEFT column: ClockIn + Profile + Announcements + Leave */}
+        <div className="md:col-span-8 space-y-6">
           {data.pendingChecklists && data.pendingChecklists.length > 0 && (
-            <div className="md:col-span-12 space-y-6 order-4">
-              <PendingTasksWidget checklist={data.pendingChecklists} />
-            </div>
+            <PendingTasksWidget checklist={data.pendingChecklists} />
           )}
-          <ClockInCard />
-          <EmployeeProfileCard employee={user} />
-        </div>
 
-        {/* Left Column – Profile (on desktop), shown after leave on mobile */}
-        <div className="md:col-span-5 space-y-6 order-2">
+          <ClockInTimeOffCard employee={user} />
+          <MyTeamCard />
+
           {data.announcements && data.announcements.length > 0 ? (
             <AnnouncementsCard announcements={data.announcements} />
           ) : (
             <Skeleton className="h-40 w-full" />
           )}
-          {data.leaveBalance ? (
-            <LeaveManagementCard leaves={data.leaveBalance} />
-          ) : (
-            <Skeleton className="h-56 w-full" />
-          )}
         </div>
 
-        {/* Right Column – Calendar + LeaveManagementCard (only on md+) */}
-        <div className="md:col-span-3 space-y-6 order-3">
+        {/* RIGHT column: Calendar */}
+        <div className="md:col-span-4 space-y-6">
           <InteractiveCalendarCard data={data} />
         </div>
       </section>

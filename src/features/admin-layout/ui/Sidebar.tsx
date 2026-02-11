@@ -138,7 +138,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                       <TooltipTrigger asChild>
                         <Link
                           href={item.link || "#"}
-                          className={`flex items-center gap-2 px-3 py-2 rounded transition-colors ${
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded transition-colors ${
                             isActive
                               ? "text-monzo-monzoGreen font-semibold"
                               : "hover:bg-monzo-brand"
@@ -176,7 +176,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                 </Link>
 
                 {!isCollapsed && (
-                  <div className="px-3 mt-4 mb-2 text-xs uppercase text-textSecondary font-bold">
+                  <div className="px-3 mt-3 mb-2 text-xs uppercase text-textSecondary font-bold">
                     {activeMenu.title}
                   </div>
                 )}
@@ -187,7 +187,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
                       !isCollapsed && (
                         <li
                           key={sub.name}
-                          className="text-xs uppercase text-textSecondary px-3 py-2 my-2"
+                          className="text-xs uppercase text-textSecondary px-3 py-2 my-1"
                         >
                           {sub.name}
                         </li>

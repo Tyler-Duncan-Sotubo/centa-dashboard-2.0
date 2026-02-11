@@ -1,4 +1,4 @@
-import { Nunito } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/shared/ui/toaster";
 import { Suspense } from "react";
@@ -8,11 +8,10 @@ import { NextAuthProvider } from "@/lib/provider/nextAuthProvider";
 import ReactQueryProvider from "@/lib/provider/ReactQueryProvider";
 import { WorkspaceProvider } from "@/shared/context/workspace";
 
-const nunito = Nunito({
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  variable: "--font-nunito",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -24,8 +23,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${nunito.variable} font-sans antialiased`}>
+    <html lang="en" className={jakarta.variable}>
+      <body className="antialiased">
         <NextAuthProvider>
           <WorkspaceProvider>
             <ReactQueryProvider>
