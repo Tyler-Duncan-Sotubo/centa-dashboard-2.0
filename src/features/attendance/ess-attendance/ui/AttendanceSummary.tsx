@@ -8,10 +8,13 @@ import type { AttendanceRecord } from "../types/employee-attendance.types";
 type Props = { records: AttendanceRecord[] };
 
 export function AttendanceSummary({ records }: Props) {
-  const total = records.length;
-  const present = records.filter((r) => r.status === "present").length;
-  const late = records.filter((r) => r.status === "late").length;
-  const absent = records.filter((r) => r.status === "absent").length;
+  // ✅ exclude weekends from totals
+  const workingDays = records.filter((r) => r.status !== "weekend");
+
+  const total = workingDays.length;
+  const present = workingDays.filter((r) => r.status === "present").length;
+  const late = workingDays.filter((r) => r.status === "late").length;
+  const absent = workingDays.filter((r) => r.status === "absent").length;
 
   const items = [
     {

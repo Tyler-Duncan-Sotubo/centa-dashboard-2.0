@@ -4,7 +4,7 @@ export const attendanceRecordSchema = z.object({
   date: z.string(),
   checkInTime: z.string().nullable(),
   checkOutTime: z.string().nullable(),
-  status: z.enum(["present", "late", "absent"]),
+  status: z.enum(["present", "late", "absent", "weekend"]),
 });
 
 export const attendanceMonthResponseSchema = z.object({

@@ -9,6 +9,21 @@ const minutesToHHMM = (mins: number) => {
   return `${h}h ${m}m`;
 };
 
+const statusVariant = (status: AttendanceRecord["status"]) => {
+  switch (status) {
+    case "present":
+      return "approved";
+    case "late":
+      return "pending";
+    case "absent":
+      return "rejected";
+    case "weekend":
+      return "outline"; // ✅ supported by your Badge
+    default:
+      return "outline";
+  }
+};
+
 export const attendanceSummaryColumns: ColumnDef<AttendanceRecord>[] = [
   {
     accessorKey: "date",
@@ -57,15 +72,7 @@ export const attendanceSummaryColumns: ColumnDef<AttendanceRecord>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.status === "present"
-            ? "approved"
-            : row.original.status === "absent"
-              ? "rejected"
-              : "pending"
-        }
-      >
+      <Badge variant={statusVariant(row.original.status)}>
         {row.original.status}
       </Badge>
     ),
