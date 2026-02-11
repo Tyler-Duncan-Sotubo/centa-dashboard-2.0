@@ -30,6 +30,7 @@ interface Props {
 export default function ReviewDetailPage({ params }: Props) {
   const { id } = use(params);
   const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const axios = useAxiosAuth();
   const [conclusion, setConclusion] = useState({
     summary: "",
@@ -173,6 +174,7 @@ export default function ReviewDetailPage({ params }: Props) {
                   }
                   questions={review.questions}
                   employeeName={review.revieweeName}
+                  role={userRole}
                 />
               </TabsContent>
             </div>

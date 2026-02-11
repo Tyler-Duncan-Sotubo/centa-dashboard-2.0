@@ -73,18 +73,7 @@ export const departmentsColumns: ColumnDef<Department>[] = [
               style={{ zIndex: 10 - idx }}
               title={emp.name}
             >
-              {emp.avatarUrl ? (
-                <Image
-                  src={emp.avatarUrl}
-                  alt={emp.name}
-                  width={48}
-                  height={40}
-                  className="rounded-full object-cover"
-                  style={{ display: "block" }}
-                />
-              ) : (
-                <Avatars name={emp.name} />
-              )}
+              <Avatars name={emp.name} src={emp.avatarUrl} />
             </Link>
           ))}
 
