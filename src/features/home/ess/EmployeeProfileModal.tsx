@@ -39,7 +39,7 @@ export default function EmployeeProfileModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md w-[85%]">
         <DialogHeader>
           <DialogTitle className="sr-only">Employee Profile</DialogTitle>
         </DialogHeader>

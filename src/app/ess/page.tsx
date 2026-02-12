@@ -77,7 +77,7 @@ const Dashboard = () => {
           {data.announcements && data.announcements.length > 0 ? (
             <AnnouncementsCard announcements={data.announcements} />
           ) : (
-            <Skeleton className="h-40 w-full" />
+            ""
           )}
         </div>
 

@@ -479,7 +479,7 @@ button.is_active {
 }
 
 .driver-popover .driver-popover-next-btn {
-  @apply px-5 py-2.5 text-sm min-h-[44px];
+  @apply px-5 py-2.5 text-sm min-h-11;
 }
 
 .driver-popover .driver-popover-prev-btn,

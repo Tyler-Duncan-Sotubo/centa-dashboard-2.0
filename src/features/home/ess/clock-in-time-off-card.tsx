@@ -354,7 +354,7 @@ export default function ClockInTimeOffCard({
             <div className="text-xs font-semibold text-foreground">
               {fmtStatus()}
             </div>
-            <div className="md:text-2xl text-xl font-bold text-foreground break-words">
+            <div className="md:text-2xl text-xl font-bold text-foreground wrap-break-word">
               {fmtMainTime()}
             </div>
           </div>
