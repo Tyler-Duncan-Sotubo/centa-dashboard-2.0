@@ -346,19 +346,20 @@ export default function ClockInTimeOffCard({
         <div className="text-xl text-monzo-brand font-bold">{fmtDate()}</div>
       </div>
 
-      <div className="flex items-stretch justify-between gap-4">
+      {/* ✅ GRID ensures left / divider / right are always aligned */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] md:items-center gap-4">
         {/* LEFT: My Clock */}
-        <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="flex h-full min-w-0 flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
             <div className="text-xs font-semibold text-foreground">
               {fmtStatus()}
             </div>
-            <div className="text-2xl font-bold text-foreground wrap-break-word">
+            <div className="md:text-2xl text-xl font-bold text-foreground break-words">
               {fmtMainTime()}
             </div>
           </div>
 
-          <div className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto sm:self-center">
             {isRunning ? (
               <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <AlertDialogTrigger asChild>
@@ -411,21 +412,31 @@ export default function ClockInTimeOffCard({
           </div>
         </div>
 
-        {/* Divider */}
-        <Separator orientation="vertical" className="h-auto" />
+        {/* Divider: vertical on md+, horizontal on mobile */}
+        <div className="hidden md:flex h-full items-stretch justify-center">
+          <Separator orientation="vertical" className="h-full" />
+        </div>
+        <div className="md:hidden">
+          <Separator orientation="horizontal" />
+        </div>
 
         {/* RIGHT: Time Off */}
-        <div className="flex-1 flex md:flex-row flex-col items-start md:items-center md:justify-between gap-4">
-          <div>
+        <div className="flex h-full min-w-0 flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="min-w-0">
             <div className="text-xs font-semibold text-foreground">Leave</div>
             <p className="text-xl font-bold text-foreground">Time Off</p>
           </div>
 
-          <Link href={requestTimeOffHref}>
-            <Button variant="outline" className="text-monzo-brand w-44">
-              Request
-            </Button>
-          </Link>
+          <div className="w-full md:w-auto md:self-center">
+            <Link href={requestTimeOffHref} className="block">
+              <Button
+                variant="outline"
+                className="text-monzo-brand w-full md:w-44"
+              >
+                Request
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </Card>
