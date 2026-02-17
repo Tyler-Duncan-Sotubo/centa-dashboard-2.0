@@ -30,6 +30,7 @@ const squareBadgeVariants = cva(
         archived: "bg-slate-200 border-slate-300 text-slate-700",
         draft: "bg-slate-200 border-slate-300 text-slate-700",
         not_started: "bg-slate-200 border-slate-300 text-slate-700",
+        not_submitted: "bg-slate-200 border-slate-300 text-slate-700",
       },
     },
     defaultVariants: {

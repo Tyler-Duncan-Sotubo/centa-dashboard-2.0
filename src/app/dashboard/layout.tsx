@@ -13,7 +13,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { TourProvider } from "@/features/tour/TourProvider";
-import { ZendeskWidget } from "@/shared/widgets/zendesk";
+// import { ZendeskWidget } from "@/shared/widgets/zendesk";
 
 const ADMIN_ROLES = ["admin", "super_admin", "hr_manager", "manager"] as const;
 
@@ -91,7 +91,7 @@ export default function AdminChromeLayout({
           <Navbar sidebarCollapsed={sidebarCollapsed} />
           <ScrollToTop />
 
-          <ZendeskWidget />
+          {/* <ZendeskWidget /> */}
 
           <TourProvider>
             <div className="mt-[9vh]">{children}</div>

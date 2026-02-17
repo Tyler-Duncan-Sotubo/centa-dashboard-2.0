@@ -79,7 +79,7 @@ export default function PerformanceSettings() {
         {/* Auto Create Cycles */}
         <div className="flex items-center justify-between">
           <Label htmlFor="auto-cycles" className="text-lg">
-            Auto Create Cycles
+            Auto Create App Cycles
           </Label>
           <div className="flex items-center">
             <Switch
@@ -95,27 +95,11 @@ export default function PerformanceSettings() {
         </div>
 
         {/* Auto Create Appraisal Cycles */}
-        <div className="flex items-center justify-between">
-          <Label htmlFor="auto-cycles-appraisals" className="text-lg">
-            Auto Create Appraisal Cycles
-          </Label>
-          <div className="flex items-center">
-            <Switch
-              id="auto-cycles-appraisals"
-              checked={settings.autoCreateAppraisals}
-              onCheckedChange={(val) => {
-                setSettings({ ...settings, autoCreateAppraisals: val });
-                updateSetting("auto_create_appraisals", val);
-              }}
-            />
-            <Saved k="auto_create_appraisals" />
-          </div>
-        </div>
 
         {/* Review Frequency */}
         <div>
           <Label className="mb-3 flex items-center justify-between text-lg ">
-            Review Frequency
+            Appraisal Frequency
             <Saved k="review_frequency" />
           </Label>
           <Select
@@ -123,31 +107,6 @@ export default function PerformanceSettings() {
             onValueChange={(val) => {
               setSettings({ ...settings, reviewFrequency: val });
               updateSetting("review_frequency", val);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="quarterly">Quarterly</SelectItem>
-              <SelectItem value="biannual">Biannual</SelectItem>
-              <SelectItem value="annual">Annual</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Review Frequency */}
-        <div>
-          <Label className="mb-3 flex items-center justify-between text-lg ">
-            Appraisal Frequency
-            <Saved k="appraisals_frequency" />
-          </Label>
-          <Select
-            value={settings.appraisalFrequency}
-            onValueChange={(val) => {
-              setSettings({ ...settings, appraisalFrequency: val });
-              updateSetting("appraisals_frequency", val);
             }}
           >
             <SelectTrigger>

@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="md:max-w-2xl w-[95%] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">{title}</DialogTitle>
+          <DialogTitle className="text-xl">{title}</DialogTitle>
         </DialogHeader>
 
         <div>{children}</div>

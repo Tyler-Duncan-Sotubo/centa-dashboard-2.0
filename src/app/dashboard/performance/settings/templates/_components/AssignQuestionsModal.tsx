@@ -78,7 +78,7 @@ export default function AssignQuestionsModal({
       isLoading={form.formState.isSubmitting}
     >
       <Form {...form}>
-        <ScrollArea className="h-[400px] pr-4">
+        <ScrollArea className="h-100 pr-4">
           <div className="space-y-6">
             <FormField
               control={form.control}

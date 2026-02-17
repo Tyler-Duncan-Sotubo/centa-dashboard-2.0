@@ -1,114 +1,147 @@
 "use client";
 
-import BackButton from "@/shared/ui/back-button";
 import Loading from "@/shared/ui/loading";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import PageHeader from "@/shared/ui/page-header";
-import { FaUser, FaUserTie } from "react-icons/fa";
-import { FaBriefcase, FaBuilding } from "react-icons/fa6";
-import CompletedAppraisalResult from "../_components/CompletedAppraisalResult";
-import EntryForm from "../_components/EmployeeEntryForm";
 import { use } from "react";
+import BackButton from "@/shared/ui/back-button";
+import { Button } from "@/shared/ui/button";
 
-interface PageProps {
+import { FaBullseye, FaListUl, FaFlagCheckered } from "react-icons/fa6";
+import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
+import ReviewHeader from "@/app/dashboard/performance/reviews/_components/ReviewHeader";
+import QuestionnaireSection from "@/app/dashboard/performance/reviews/_components/QuestionnaireSection";
+import GoalsSection from "@/app/dashboard/performance/reviews/_components/GoalsSection";
+import SelfSummarySection from "../_components/SelfSummarySection";
+import { useCreateMutation } from "@/shared/hooks/useCreateMutation";
+
+interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default function AppraisalSelfPage({ params }: PageProps) {
+export default function EssSelfAssessmentDetailPage({ params }: Props) {
   const { id } = use(params);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const axios = useAxiosAuth();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["participants", id],
+  const {
+    data: review,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["assessment", id],
     queryFn: async () => {
-      const res = await axios.get(`/api/appraisals/${id}`);
+      const res = await axios.get(`/api/performance-assessments/${id}`);
       return res.data.data;
     },
-    enabled: !!session?.backendTokens?.accessToken && !!id,
+    enabled: Boolean(session?.backendTokens?.accessToken) && !!id,
   });
 
-  const {
-    data: entries,
-    isLoading: isLoadingEntries,
-    isError: isErrorEntries,
-  } = useQuery({
-    queryKey: ["appraisal-entries", id],
-    queryFn: async () =>
-      (await axios.get(`/api/appraisals/${id}/entries`)).data.data,
-    enabled: !!session?.backendTokens?.accessToken && !!id,
+  const startReview = useUpdateMutation({
+    endpoint: `/api/performance-assessments/${id}/start`,
+    successMessage: "Self assessment started",
+    refetchKey: "assessment",
   });
 
-  const {
-    data: levelOptions,
-    isLoading: isLoadingLevels,
-    isError: isErrorLevels,
-  } = useQuery({
-    queryKey: ["competency-levels"],
-    queryFn: async () => {
-      const res = await axios.get("/api/performance-seed/competency-levels");
-      return res.data.data;
-    },
-    enabled: !!session?.backendTokens?.accessToken,
+  const submitSelf = useCreateMutation({
+    endpoint: `/api/performance-assessments/self/${id}/submit`,
+    successMessage: "Self assessment submitted",
+    refetchKey: "assessment",
   });
 
-  if (status === "loading" || isLoading || isLoadingEntries || isLoadingLevels)
-    return <Loading />;
-  if (isError || isErrorEntries || isErrorLevels)
-    return <p className="p-4 text-red-600">Error loading appraisal</p>;
+  if (isLoading) return <Loading />;
+  if (isError || !review)
+    return <p className="p-4 text-red-600">Error loading assessment</p>;
 
-  // Show results when the manager has submitted OR appraisal is finalized.
-  const showResults =
-    !!data?.finalNote ||
-    (!!data?.submittedByManager && !!data?.submittedByEmployee);
+  const isSubmitted = review.status === "submitted";
 
   return (
-    <div className="mb-20">
+    <section className="mb-20">
       <BackButton
         href={`/ess/performance/reviews`}
-        className="mb-4"
         label="Back to Appraisals"
       />
 
-      <PageHeader
-        title={`Your Appraisal`}
-        icon={<FaUser size={30} className="text-monzo-success" />}
-        description="Complete your self-assessment. You'll see results once your manager submits."
-      />
+      <section className="space-y-8">
+        <ReviewHeader review={review} />
 
-      {/* Context strip */}
-      <div className="flex gap-6 mt-6 flex-wrap">
-        <div className="flex items-center gap-2">
-          <FaUserTie size={18} className="text-monzo-error" />
-          <span className="font-medium">Manager:</span>
-          <span className="font-bold">{data?.managerName ?? "—"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <FaBuilding size={18} className="text-muted-foreground" />
-          <span className="font-medium">Department:</span>
-          <span className="font-bold">{data?.departmentName ?? "—"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <FaBriefcase size={18} className="text-muted-foreground" />
-          <span className="font-medium">Job Role:</span>
-          <span className="font-bold">{data?.jobRoleName ?? "—"}</span>
-        </div>
-      </div>
+        {review.status === "not_started" ? (
+          <div className="p-8 flex justify-center flex-col items-center h-[50vh] space-y-4">
+            <h2 className="text-xl font-semibold">
+              Self assessment not started
+            </h2>
+            <p className="text-muted-foreground">Click below to begin.</p>
+            <Button onClick={() => startReview()}>Start</Button>
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-end">
+              <Button
+                onClick={() => submitSelf()}
+                disabled={isSubmitted}
+                variant={isSubmitted ? "outline" : "default"}
+              >
+                {isSubmitted ? "Submitted" : "Submit Self Assessment"}
+              </Button>
+            </div>
 
-      {showResults ? (
-        <CompletedAppraisalResult
-          competencies={entries}
-          finalScore={data.finalScore}
-          recommendation={data.recommendation}
-          finalNote={data.finalNote}
-        />
-      ) : (
-        <div className="mt-16">
-          <EntryForm entries={entries} levels={levelOptions} appraisalId={id} />
-        </div>
-      )}
-    </div>
+            <Tabs defaultValue="questions" className="w-full">
+              <TabsList className="grid grid-cols-3 w-full">
+                <TabsTrigger value="questions">
+                  <FaListUl className="mr-2 w-4 h-4" />
+                  Questionnaire
+                </TabsTrigger>
+
+                <TabsTrigger value="goals">
+                  <FaBullseye className="mr-2 w-4 h-4" />
+                  Goals
+                </TabsTrigger>
+
+                <TabsTrigger value="summary">
+                  <FaFlagCheckered className="mr-2 w-4 h-4" />
+                  Summary
+                </TabsTrigger>
+              </TabsList>
+
+              <div className="pt-4">
+                <TabsContent value="questions">
+                  <QuestionnaireSection
+                    questions={review.questions}
+                    assessmentId={id}
+                    comment={
+                      review.sectionComments?.find(
+                        (c: any) => c.section === "questionnaire",
+                      )?.comment ?? ""
+                    }
+                  />
+                </TabsContent>
+
+                <TabsContent value="goals">
+                  <GoalsSection
+                    goals={review.goals ?? []}
+                    assessmentId={id}
+                    comment={
+                      review.sectionComments?.find(
+                        (c: any) => c.section === "goals",
+                      )?.comment ?? ""
+                    }
+                  />
+                </TabsContent>
+
+                <TabsContent value="summary">
+                  <SelfSummarySection
+                    assessmentId={id}
+                    initialSummary={review.selfSummary?.summary ?? ""}
+                    disabled={isSubmitted}
+                  />
+                </TabsContent>
+              </div>
+            </Tabs>
+          </>
+        )}
+      </section>
+    </section>
   );
 }

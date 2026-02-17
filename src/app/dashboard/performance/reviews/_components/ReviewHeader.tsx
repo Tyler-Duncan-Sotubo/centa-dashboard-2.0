@@ -10,8 +10,8 @@ export default function ReviewHeader({ review }: { review: Review }) {
         <StatusBadge status={review.status} />
 
         {review.submittedAt && (
-          <span className="text-sm text-muted-foreground">
-            Submitted: {format(new Date(review.submittedAt), "PPP")}
+          <span className="text-sm text-muted-foreground ml-2">
+            {format(new Date(review.submittedAt), "PPP")}
           </span>
         )}
       </div>

@@ -423,6 +423,12 @@ export const main: readonly MenuItem[] = [
         permissions: ["dashboard.login", "performance.reviews.manage_all"],
       },
       {
+        title: "Values & Competencies",
+        link: "/dashboard/performance/settings/competency",
+        icon: <FaLightbulb size={18} />,
+        permissions: ["dashboard.login", "performance.reviews.manage_all"],
+      },
+      {
         title: "Divider",
         name: "Reports",
         type: "divider",

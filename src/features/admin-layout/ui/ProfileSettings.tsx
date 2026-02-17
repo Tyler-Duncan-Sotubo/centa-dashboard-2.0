@@ -6,12 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { CgProfile } from "react-icons/cg";
-import { LogOut } from "lucide-react";
+import { LogOut, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { accountItems } from "@/features/admin-layout/config/account.data";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
+import { Avatars } from "@/shared/ui/avatars";
 
 const ProfileSettings = () => {
   const { data: session } = useSession();
@@ -27,21 +26,21 @@ const ProfileSettings = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="focus:outline-hidden ">
-        <>
-          {session?.user.avatar ? (
-            <Image
-              src={session?.user.avatar || ""}
-              alt={session?.user.id}
-              width={28}
-              height={28}
-              className="rounded-full"
-            />
-          ) : (
-            <CgProfile size={23} />
-          )}
-        </>
+      {/* 👇 group is important for styling based on state */}
+      <DropdownMenuTrigger className="focus:outline-hidden group flex items-center gap-2">
+        <Avatars
+          size="sm"
+          name={session?.user.name || ""}
+          src={session?.user.avatar || ""}
+        />
+
+        {/* 👇 rotates when open */}
+        <ChevronDown
+          size={18}
+          className="transition-transform duration-200 group-data-[state=open]:rotate-180"
+        />
       </DropdownMenuTrigger>
+
       <DropdownMenuContent className="mr-6 capitalize w-60 font-bold space-y-2 py-4">
         {accountItems.map((item) => (
           <DropdownMenuItem
@@ -57,9 +56,11 @@ const ProfileSettings = () => {
             </Link>
           </DropdownMenuItem>
         ))}
+
         <div className="border-t-2" />
+
         <DropdownMenuItem className="px-5 py-2">
-          <Link href="" onClick={() => handleLogout()}>
+          <Link href="" onClick={handleLogout}>
             <div className="flex items-center gap-4">
               <LogOut size={25} className="text-textPrimary" />
               <p className="text-md">Logout</p>

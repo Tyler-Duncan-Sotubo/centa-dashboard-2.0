@@ -101,9 +101,9 @@ const FormLabel = React.forwardRef<
       htmlFor={formItemId}
       {...props}
     >
-      <div className="flex">
+      <div className="flex mb-2">
         <p className="text-md font-normal"> {children}</p>
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-red-500 ml-1 ">*</span>}
       </div>
     </Label>
   );

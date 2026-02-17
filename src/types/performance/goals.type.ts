@@ -24,6 +24,7 @@ export type Goal = {
   office: string; // Office location of the employee
   manager: string; // Full name of the manager
   avatarUrl: string; // URL to the employee's avatar
+  isRecurring: boolean; // Whether the goal is recurring
   updates: {
     id: string;
     progress: number; // Progress percentage
