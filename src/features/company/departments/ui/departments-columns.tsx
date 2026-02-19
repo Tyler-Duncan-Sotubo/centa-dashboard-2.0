@@ -40,15 +40,7 @@ export const departmentsColumns: ColumnDef<Department>[] = [
       const head = row.original.head;
       return head ? (
         <div className="flex items-center gap-2">
-          {head.avatarUrl && (
-            <Image
-              src={head.avatarUrl}
-              alt={head.name}
-              width={32}
-              height={32}
-              className="rounded-full object-cover border"
-            />
-          )}
+          {head.avatarUrl && <Avatars name={head.name} src={head.avatarUrl} />}
           <span className="capitalize font-medium">{head.name}</span>
         </div>
       ) : (

@@ -103,6 +103,8 @@ const EmployeeDetailPageDemo = ({ params }: Params) => {
     ...(attendanceQ.data || {}),
   } as any;
 
+  const avatarUrl = data?.avatarUrl as string | undefined;
+
   return (
     <div className="px-5 mb-20">
       <BackButton label="Back to Employees" href="/dashboard/employees" />
@@ -132,7 +134,11 @@ const EmployeeDetailPageDemo = ({ params }: Params) => {
 
         {/* Personal: already fully available from first query */}
         <TabsContent value="personal" className="space-y-6">
-          <ProfileCard profile={data.profile} core={data.core} />
+          <ProfileCard
+            profile={data.profile}
+            core={data.core}
+            avatarUrl={avatarUrl}
+          />
           <HistoryCard history={data.history} employeeId={id} />
           <div className="grid gap-4 md:grid-cols-2">
             <FamilyCard family={data.dependents} employeeId={id} />

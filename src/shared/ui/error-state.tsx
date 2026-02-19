@@ -2,7 +2,7 @@ import { GoAlertFill } from "react-icons/go";
 import { Button } from "@/shared/ui/button";
 
 interface ErrorStateProps {
-  message: string;
+  message?: string;
   onRetry: () => void;
   isLoading: boolean;
 }

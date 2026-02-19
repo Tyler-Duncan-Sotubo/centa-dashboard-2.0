@@ -45,7 +45,7 @@ export interface Employee {
   email: string;
   phone?: string;
   role: string; // e.g., "Employee", "Manager"
-
+  avatarUrl?: string;
   job_title: string;
   employmentStatus: string;
   start_date: string;

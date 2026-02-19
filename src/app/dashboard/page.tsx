@@ -17,6 +17,8 @@ import { payrollOverview } from "@/types/analytics.type";
 import DashboardBanner from "@/features/home/dashboard/DashboardBanner";
 import OnboardingChecklist from "./OnboardingChecklist";
 import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
+import ErrorState from "@/shared/ui/error-state";
+import { useRouter } from "next/navigation";
 
 export interface SummaryData {
   totalEmployees: number;
@@ -59,7 +61,7 @@ export interface SummaryData {
 const DashboardPage = () => {
   const { data: session, status } = useSession();
   const axiosAuth = useAxiosAuth();
-
+  const router = useRouter();
   const adminRoles = ["admin", "super_admin", "hr_manager"];
   const nonAdmin = !adminRoles.includes(session?.user.role || "");
   const userName = session?.user.firstName;
@@ -100,6 +102,7 @@ const DashboardPage = () => {
     data: nextPayDate,
     isLoading: isLoadingNextPayDate,
     isError: isErrorNextPayDate,
+    refetch: refetchNextPayDate,
   } = useQuery({
     queryKey: ["nextPayDate"],
     queryFn: fetchNextPayDate,
@@ -108,7 +111,17 @@ const DashboardPage = () => {
 
   if (status === "loading" || isLoading || isLoadingNextPayDate)
     return <Loading />;
-  if (isError || isErrorNextPayDate) return <p>Error loading data</p>;
+  if (isError || isErrorNextPayDate)
+    return (
+      <ErrorState
+        onRetry={() => {
+          if (isError) refetchNextPayDate(); // your main query refetch
+          if (isErrorNextPayDate) refetchNextPayDate();
+          router.refresh();
+        }}
+        isLoading={isLoading || isLoadingNextPayDate}
+      />
+    );
 
   return (
     <section className="px-4">

@@ -4,6 +4,7 @@ import { FiUser, FiPhone, FiMail } from "react-icons/fi";
 import { format, parseISO, isValid as isValidDate } from "date-fns";
 import { EntitySheet } from "../EntitySheet";
 import { ProfileForm } from "../../schema/fields";
+import { Avatars } from "@/shared/ui/avatars";
 
 export interface Profile {
   id: string;
@@ -59,9 +60,10 @@ interface ProfileCardProps {
   profile?: Partial<Profile> | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   core: any; // expects at least { id, firstName, lastName, employeeNumber, email }
+  avatarUrl?: string;
 }
 
-export function ProfileCard({ profile, core }: ProfileCardProps) {
+export function ProfileCard({ profile, core, avatarUrl }: ProfileCardProps) {
   // Safeguard: profile can be undefined while data is loading
   const p = profile ?? {};
 
@@ -121,18 +123,11 @@ export function ProfileCard({ profile, core }: ProfileCardProps) {
         {/* Left: Avatar + Major Details */}
         <div className="flex items-center space-x-6">
           <div className="w-44 h-44 relative shrink-0">
-            {p.avatarUrl ? (
-              <Image
-                src={p.avatarUrl}
-                alt={`${core?.firstName ?? ""} ${core?.lastName ?? ""}`}
-                fill
-                className="rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-                <FiUser size={48} className="text-gray-500" />
-              </div>
-            )}
+            <Avatars
+              src={avatarUrl ?? p.avatarUrl}
+              name={`${core?.firstName ?? ""} ${core?.lastName ?? ""}`}
+              size="2xl"
+            />
           </div>
 
           <div>

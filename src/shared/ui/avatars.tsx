@@ -24,13 +24,14 @@ const getColorClass = (name: string) => {
   return avatarColors[hash % avatarColors.length];
 };
 
-type Size = "sm" | "md" | "lg" | "xlg";
+type Size = "sm" | "md" | "lg" | "xlg" | "2xl";
 
 const SIZE_MAP: Record<Size, { container: string; text: string }> = {
   sm: { container: "w-8 h-8", text: "text-[10px]" },
   md: { container: "w-10 h-10", text: "text-xs" },
   lg: { container: "w-12 h-12", text: "text-sm" },
   xlg: { container: "w-28 h-28", text: "text-4xl" },
+  "2xl": { container: "w-40 h-40", text: "text-5xl" },
 };
 
 type Props = {

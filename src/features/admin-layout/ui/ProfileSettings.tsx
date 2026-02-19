@@ -30,8 +30,8 @@ const ProfileSettings = () => {
       <DropdownMenuTrigger className="focus:outline-hidden group flex items-center gap-2">
         <Avatars
           size="sm"
-          name={session?.user.name || ""}
-          src={session?.user.avatar || ""}
+          name={`${session?.user.firstName ?? ""} ${session?.user.lastName ?? ""}`}
+          src={session?.user.avatar ?? undefined}
         />
 
         {/* 👇 rotates when open */}

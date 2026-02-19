@@ -48,7 +48,11 @@ export const employeeColumns: ColumnDef<Employee | undefined>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          {Avatars({ name })}
+          <Avatars
+            name={name}
+            src={row.original?.avatarUrl || undefined}
+            size="md"
+          />
           <div>
             <Link
               href={`/dashboard/employees/${row.original?.id}`}

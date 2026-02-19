@@ -57,19 +57,6 @@ const useAxiosAuth = () => {
         // Log other errors (and optionally 401 after refresh attempt)
         // Skip cancellations / aborted requests
         const code = error?.code;
-        if (code !== "ERR_CANCELED") {
-          logClientEvent("error", "API request failed", {
-            kind: "axios_error",
-            url,
-            method,
-            status,
-            code,
-            message: error?.message,
-            responseData: error?.response?.data,
-            // Never send Authorization headers (client-logger sanitizes too)
-            headers: prevRequest?.headers,
-          });
-        }
 
         return Promise.reject(error);
       },
