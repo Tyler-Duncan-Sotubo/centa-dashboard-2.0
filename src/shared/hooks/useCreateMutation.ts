@@ -3,7 +3,6 @@ import { extractErrorMessage } from "@/shared/utils/errorHandler";
 import { useToast } from "@/shared/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { logClientEvent } from "@/lib/logger/client-logger";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type CreateMutationParams<T> = {
@@ -73,13 +72,6 @@ export function useCreateMutation<T>({
       }
     } catch (error) {
       const errorMessage = extractErrorMessage(error);
-
-      logClientEvent("error", "Create mutation failed", {
-        kind: "mutation_error",
-        action: "create",
-        endpoint,
-        message: errorMessage,
-      });
 
       // Display error in UI
       setError?.(errorMessage);

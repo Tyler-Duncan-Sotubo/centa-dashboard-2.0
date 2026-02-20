@@ -3,7 +3,6 @@ import { extractErrorMessage } from "@/shared/utils/errorHandler";
 import { useToast } from "@/shared/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { logClientEvent } from "@/lib/logger/client-logger";
 
 type DeleteMutationParams = {
   endpoint: string;
@@ -63,13 +62,6 @@ export function useDeleteMutation({
       }
     } catch (error) {
       const errorMessage = extractErrorMessage(error);
-
-      logClientEvent("error", "Delete mutation failed", {
-        kind: "mutation_error",
-        action: "delete",
-        endpoint,
-        message: errorMessage,
-      });
 
       // Display error in UI
       setError?.(errorMessage);
