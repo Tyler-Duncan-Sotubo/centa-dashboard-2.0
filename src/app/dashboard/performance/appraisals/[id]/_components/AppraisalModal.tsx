@@ -97,7 +97,7 @@ export default function AppraisalModal({
         <div className="space-y-4 min-h-[200px]">
           <EmployeeSingleSelect
             name="employeeId"
-            placeholder="Select employee"
+            placeholder="Search employee"
             className="z-50"
           />
 

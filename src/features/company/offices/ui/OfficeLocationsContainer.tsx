@@ -6,8 +6,12 @@ import { DataTable } from "@/shared/ui/data-table";
 import { officeLocationsColumns } from "./office-locations-columns";
 import { useOfficeLocations } from "../hooks/use-office-locations";
 import { CreateLocationSheet } from "./CreateLocationSheet";
+import { useState } from "react";
+import { Button } from "@/shared/ui/button";
+import LocationAssignModal from "./location-assign-modal";
 
 export function OfficeLocationsContainer() {
+  const [openAssignModal, setOpenAssignModal] = useState(false);
   const {
     status,
     officeLocations,
@@ -26,12 +30,19 @@ export function OfficeLocationsContainer() {
         description="Manage office locations and their geo-coordinates."
         tooltip="Office locations are used to define the physical locations of your offices, including their addresses and geo-coordinates. This information is important for attendance tracking and reporting purposes."
       >
+        <Button onClick={() => setOpenAssignModal(true)}>
+          Assign Remote Location
+        </Button>
         <CreateLocationSheet />
       </PageHeader>
 
       <div className="my-2 space-y-4 py-6 mt-10">
         <DataTable columns={officeLocationsColumns} data={officeLocations} />
       </div>
+      <LocationAssignModal
+        isOpen={openAssignModal}
+        onClose={() => setOpenAssignModal(false)}
+      />
     </section>
   );
 }

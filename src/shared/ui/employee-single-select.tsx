@@ -159,7 +159,7 @@ export const EmployeeSingleSelect: React.FC<EmployeeSelectProps> = ({
                   {selectedOption ? (
                     <Badge variant="completed">
                       <span
-                        className="truncate max-w-[240px]"
+                        className="truncate max-w-60"
                         title={selectedOption.label}
                       >
                         {selectedOption.label}

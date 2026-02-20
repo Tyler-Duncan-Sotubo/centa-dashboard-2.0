@@ -394,7 +394,7 @@ export default function EmployeeGroupFormModal({
             {/* Members Multi-Select -> stores Option[] when showName, ids[] otherwise */}
             <EmployeeMultiSelect
               name="employeeIds"
-              placeholder="Search and select employees…"
+              placeholder="Search and Search employees…"
               label="Team Members"
               showName
             />

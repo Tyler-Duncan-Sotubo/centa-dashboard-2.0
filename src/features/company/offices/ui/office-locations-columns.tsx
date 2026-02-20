@@ -4,15 +4,56 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { officeLocation } from "@/types/location.type";
 import { DeleteOfficeLocationDialog } from "./DeleteOfficeLocationDialog";
 import { EditLocationSheet } from "./EditLocationSheet";
+import { Badge } from "@/shared/ui/badge";
+
+const formatCoordinate = (value: string | number | null | undefined) => {
+  if (!value) return "-";
+  const num = Number(value);
+  if (Number.isNaN(num)) return "-";
+  return num.toFixed(6); // 6 decimal places
+};
 
 export const officeLocationsColumns: ColumnDef<officeLocation>[] = [
   { accessorKey: "name", header: "Location Name" },
+
+  {
+    accessorKey: "locationType",
+    header: "Type",
+    cell: ({ row }) => {
+      const type = row.original.locationType;
+
+      return (
+        <Badge
+          variant={
+            type === "OFFICE"
+              ? "approved"
+              : type === "REMOTE"
+                ? "ongoing"
+                : "outline"
+          }
+        >
+          {type}
+        </Badge>
+      );
+    },
+  },
+
   { accessorKey: "country", header: "Country" },
-  { accessorKey: "street", header: "Street" },
   { accessorKey: "city", header: "City" },
   { accessorKey: "state", header: "State" },
-  { accessorKey: "longitude", header: "Longitude" },
-  { accessorKey: "latitude", header: "Latitude" },
+
+  {
+    accessorKey: "latitude",
+    header: "Latitude",
+    cell: ({ row }) => formatCoordinate(row.original.latitude),
+  },
+
+  {
+    accessorKey: "longitude",
+    header: "Longitude",
+    cell: ({ row }) => formatCoordinate(row.original.longitude),
+  },
+
   {
     id: "actions",
     header: () => <div className="text-center">Actions</div>,
@@ -28,12 +69,12 @@ export const officeLocationsColumns: ColumnDef<officeLocation>[] = [
               id: loc.id,
               name: loc.name,
               country: loc.country,
-              street: loc.street,
               city: loc.city,
               state: loc.state,
               longitude: Number(loc.longitude),
               latitude: Number(loc.latitude),
               locationType: loc.locationType as "OFFICE" | "HOME" | "REMOTE",
+              street: loc.street,
             }}
           />
 

@@ -131,7 +131,7 @@ const AssignMangerModal = ({
                   defaultValue={field.value}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Employee" />
+                    <SelectValue placeholder="Search employee" />
                   </SelectTrigger>
                   <SelectContent
                     side="bottom"

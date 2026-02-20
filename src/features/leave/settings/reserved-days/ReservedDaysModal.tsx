@@ -152,7 +152,7 @@ export function ReservedDaysModal({
           <EmployeeSingleSelect
             name="employeeId"
             label="Employee"
-            placeholder="Select Employee"
+            placeholder="Search employee"
           />
 
           <div className="grid grid-cols-2 gap-4">

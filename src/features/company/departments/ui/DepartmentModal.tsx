@@ -95,7 +95,7 @@ const DepartmentModal = ({
           <EmployeeSingleSelect
             name="headId"
             label="Head of Department"
-            placeholder="Select Employee"
+            placeholder="Search employee"
           />
         </form>
       </Form>
