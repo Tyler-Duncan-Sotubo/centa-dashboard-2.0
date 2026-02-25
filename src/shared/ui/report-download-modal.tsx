@@ -13,6 +13,8 @@ import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 const reportOptions = [
   { label: "Bank Advice", value: "bank" },
   { label: "Internal Summary", value: "internal" },
+  { label: "Pay Schedule", value: "payment_schedule" },
+  { label: "Daily Schedule", value: "daily_schedule" },
   { label: "Paye Report", value: "paye" },
   { label: "Pension Summary", value: "pension" },
   { label: "Nhf Summary", value: "nhf" },

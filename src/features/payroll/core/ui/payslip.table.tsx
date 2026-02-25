@@ -36,6 +36,38 @@ export function PayslipTable({
     enabled: Boolean(session?.backendTokens?.accessToken),
   });
 
+  // ---------- show/hide column flags ----------
+  const showSalaryAdvance = React.useMemo(
+    () => data.some((e) => Number(e.salaryAdvance ?? 0) > 0),
+    [data],
+  );
+
+  const showBonuses = React.useMemo(
+    () => data.some((e) => Number(e.bonuses ?? 0) > 0),
+    [data],
+  );
+
+  const showReimbursements = React.useMemo(() => {
+    return data.some((e) => {
+      const rs = e.reimbursements ?? [];
+      return (
+        rs.reduce((sum, r) => sum + (Number((r as any).amount) || 0), 0) > 0
+      );
+    });
+  }, [data]);
+
+  const visibleDeductionTypes = React.useMemo(() => {
+    if (!deductionTypes?.length) return [];
+    return deductionTypes.filter((type) =>
+      data.some((emp) =>
+        (emp.voluntaryDeductions ?? []).some(
+          (d) => d.typeId === type.id && Number(d.amount ?? 0) > 0,
+        ),
+      ),
+    );
+  }, [deductionTypes, data]);
+
+  // ---------- columns ----------
   const baseColumns: ColumnDef<EmployeeDetail>[] = [
     {
       accessorKey: "name",
@@ -89,34 +121,42 @@ export function PayslipTable({
         </div>
       ),
     },
-    {
-      accessorKey: "bonuses",
-      header: () => <div className="text-right">Bonus</div>,
-      cell: ({ row }) => (
-        <div className="text-right font-medium">
-          {formatCurrency(row.getValue("bonuses"))}
-        </div>
-      ),
-    },
-    {
-      id: "reimbursements",
-      header: () => <div className="text-right">Reimbursements</div>,
-      cell: ({ row }) => {
-        const reimbursements = row.original.reimbursements || [];
-
-        const totalReimbursementAmount = reimbursements.reduce(
-          (sum, reimbursement) => sum + (Number(reimbursement.amount) || 0),
-          0,
-        );
-
-        return (
-          <div className="text-right font-medium">
-            {formatCurrency(totalReimbursementAmount)}
-          </div>
-        );
-      },
-    },
   ];
+
+  const bonusesColumn: ColumnDef<EmployeeDetail> = {
+    accessorKey: "bonuses",
+    header: () => <div className="text-right">Bonus</div>,
+    cell: ({ row }) => (
+      <div className="text-right font-medium">
+        {formatCurrency(Number(row.original.bonuses ?? 0))}
+      </div>
+    ),
+  };
+
+  const reimbursementsColumn: ColumnDef<EmployeeDetail> = {
+    id: "reimbursements",
+    header: () => <div className="text-right">Reimbursements</div>,
+    cell: ({ row }) => {
+      const reimbursements = row.original.reimbursements || [];
+      const total = reimbursements.reduce(
+        (sum, r: any) => sum + (Number(r.amount) || 0),
+        0,
+      );
+      return (
+        <div className="text-right font-medium">{formatCurrency(total)}</div>
+      );
+    },
+  };
+
+  const salaryAdvanceColumn: ColumnDef<EmployeeDetail> = {
+    accessorKey: "salaryAdvance",
+    header: () => <div className="text-right">Salary Advance</div>,
+    cell: ({ row }) => (
+      <div className="text-right font-medium text-error">
+        {formatCurrency(Number(row.original.salaryAdvance ?? 0))}
+      </div>
+    ),
+  };
 
   const netSalaryColumn: ColumnDef<EmployeeDetail> = {
     id: "netSalary",
@@ -138,34 +178,40 @@ export function PayslipTable({
   };
 
   const voluntaryDeductionColumns: ColumnDef<EmployeeDetail>[] =
-    deductionTypes?.map((type) => ({
+    visibleDeductionTypes.map((type) => ({
       id: `voluntary-${type.id}`,
       header: () => <div className="text-right">{type.name}</div>,
       cell: ({ row }) => {
         const deductions = row.original.voluntaryDeductions || [];
         const deduction = deductions.find((d) => d.typeId === type.id);
         return (
-          <div className="text-right font-medium">
+          <div className="text-right font-medium text-error">
             {formatCurrency(Number(deduction?.amount ?? 0))}
           </div>
         );
       },
-    })) ?? [];
+    }));
 
-  const allColumns = React.useMemo(
-    () => [
-      ...baseColumns,
-      ...voluntaryDeductionColumns,
-      netSalaryColumn,
-      payStubColumn,
-    ],
-    // important: depend on deductionTypes so voluntary columns update
-    [deductionTypes],
-  );
+  const allColumns = React.useMemo(() => {
+    const cols: ColumnDef<EmployeeDetail>[] = [...baseColumns];
 
-  if (isLoadingTypes) {
-    return <div>Loading deduction types...</div>;
-  }
+    if (showBonuses) cols.push(bonusesColumn);
+    if (showReimbursements) cols.push(reimbursementsColumn);
+    if (showSalaryAdvance) cols.push(salaryAdvanceColumn);
+
+    cols.push(...voluntaryDeductionColumns);
+    cols.push(netSalaryColumn, payStubColumn);
+
+    return cols;
+  }, [
+    showBonuses,
+    showReimbursements,
+    showSalaryAdvance,
+    voluntaryDeductionColumns,
+    deductionTypes,
+  ]);
+
+  if (isLoadingTypes) return <div>Loading deduction types...</div>;
 
   return (
     <div className="w-full">

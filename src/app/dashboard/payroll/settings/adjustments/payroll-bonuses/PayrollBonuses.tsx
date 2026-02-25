@@ -129,7 +129,6 @@ const BonusSettings = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Type</TableHead>
-                <TableHead>Payroll Month</TableHead>
                 <TableHead>Employee Name</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead className="text-center">Actions</TableHead>
@@ -140,9 +139,6 @@ const BonusSettings = () => {
                 bonus.map((bonus: Bonus) => (
                   <TableRow key={bonus.id}>
                     <TableCell>{bonus.bonus_type}</TableCell>
-                    <TableCell className="py-4">
-                      {formatPayrollMonth(bonus.payroll_month)}
-                    </TableCell>
                     <TableCell className="py-4">
                       {bonus.first_name} {bonus.last_name}
                     </TableCell>

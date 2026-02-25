@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Loading from "@/shared/ui/loading";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { isAxiosError } from "@/lib/axios";
 import PageHeader from "@/shared/ui/page-header";
@@ -26,7 +26,6 @@ import PaySummary from "./_components/PaySummary";
 import { useUpdateMutation } from "@/shared/hooks/useUpdateMutation";
 import { FinalPayRunTable } from "./_components/FinalPayrunTable";
 import { PayrollHistory } from "./_components/PayrollHistory";
-import { PayrollOverride } from "./_components/PayrollOverride";
 import { MdOutlineSync } from "react-icons/md";
 import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
 import { FaTrash } from "react-icons/fa6";
@@ -43,11 +42,14 @@ const steps = [
 export default function Payroll() {
   const { data: session, status } = useSession();
   const axiosInstance = useAxiosAuth();
+  const queryClient = useQueryClient();
+
   const [activeStep, setActiveStep] = useState<number>(() => {
     if (typeof window === "undefined") return 0;
     const saved = localStorage.getItem("payrollActiveStep");
     return saved ? parseInt(saved, 10) : 0;
   });
+
   const [loadingStep, setLoadingStep] = useState(false);
   const [nextPayDate, setNextPayDate] = useState<string | undefined>(undefined);
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -71,11 +73,11 @@ export default function Payroll() {
     try {
       const res = await axiosInstance.get("/api/pay-schedules/next-pay-date");
       const raw = res.data.data as string | null | undefined;
-      // normalize whatever we get to YYYY-MM-DD
       const dateOnly = raw ? raw.slice(0, 10) : "";
       return dateOnly;
     } catch (error) {
       if (isAxiosError(error) && error.response) return "";
+      return "";
     }
   };
 
@@ -84,9 +86,8 @@ export default function Payroll() {
       const res = await axiosInstance.get(`/api/payroll/approval-status/${id}`);
       return res.data.data;
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return "";
-      }
+      if (isAxiosError(error) && error.response) return "";
+      return "";
     }
   };
 
@@ -95,10 +96,18 @@ export default function Payroll() {
     return res.data.data as EmployeeDetail[];
   };
 
-  const { data: fetchedSummary, isLoading: isSummaryLoading } = useQuery({
+  // ✅ CHANGE: keep refetch handle
+  const {
+    data: fetchedSummary,
+    isLoading: isSummaryLoading,
+    refetch: refetchSummary,
+  } = useQuery({
     queryKey: ["payrollSummary", payrollRunId],
     enabled: !!payrollRunId && !!session?.backendTokens?.accessToken,
     queryFn: () => fetchPayrollSummary(payrollRunId as string),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
   });
 
   const { data: finalSummary, isLoading: isFinalSummaryLoading } = useQuery({
@@ -106,6 +115,9 @@ export default function Payroll() {
     enabled:
       activeStep === 4 && !!finalRunId && !!session?.backendTokens?.accessToken,
     queryFn: () => fetchPayrollSummary(finalRunId as string),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -117,16 +129,14 @@ export default function Payroll() {
   }, [fetchedSummary]);
 
   const { data, isLoading: isLoadingStatus } = useQuery({
-    queryKey: ["payrollStatus"],
+    queryKey: ["payrollStatus", payrollRunId],
     queryFn: async () => {
-      if (!payrollRunId || !session?.backendTokens?.accessToken) {
-        return null;
-      }
-      const data = await fetchApprovalStatus(payrollRunId);
-      if (data?.approvalStatus === "approved" && activeStep === 2) {
+      if (!payrollRunId || !session?.backendTokens?.accessToken) return null;
+      const statusData = await fetchApprovalStatus(payrollRunId);
+      if (statusData?.approvalStatus === "approved" && activeStep === 2) {
         setActiveStep(3);
       }
-      return data;
+      return statusData;
     },
     refetchInterval: activeStep === 2 ? 5000 : false,
     enabled: !!payrollRunId && !!session?.backendTokens?.accessToken,
@@ -136,10 +146,13 @@ export default function Payroll() {
     queryKey: ["nextPayDate"],
     queryFn: async () => {
       const dateOnly = await fetchNextPayDate();
-      setNextPayDate(dateOnly); // keep state as YYYY-MM-DD only
+      setNextPayDate(dateOnly);
       return dateOnly;
     },
     enabled: !!session?.backendTokens?.accessToken,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
   });
 
   const createPayroll = useCreateMutation({
@@ -147,7 +160,6 @@ export default function Payroll() {
     successMessage: "Payroll created successfully",
     refetchKey: "payroll pay-date",
     onSuccess: (created) => {
-      // New backend shape: { data: { payrollRunId, payrollDate, employeeCount, ... } }
       const { data } = created as {
         data: {
           payrollRunId: string;
@@ -161,10 +173,7 @@ export default function Payroll() {
       }
       setActiveStep(1);
     },
-
-    onError: (error) => {
-      console.error(error);
-    },
+    onError: (error) => console.error(error),
   });
 
   const completePayRun = useUpdateMutation({
@@ -172,10 +181,8 @@ export default function Payroll() {
     successMessage: "Payroll completed successfully",
     refetchKey: "payroll pay-date",
     onSuccess: () => {
-      // keep it only in memory for Step 4
       setFinalRunId(payrollRunId);
 
-      // drop persisted state so it won’t survive reloads
       if (payrollRunId) {
         localStorage.removeItem("payrollRunId");
         localStorage.removeItem(`payrollSent:${payrollRunId}`);
@@ -184,40 +191,33 @@ export default function Payroll() {
       setPayrollRunId(null);
       setActiveStep(4);
     },
-    onError: (error) => {
-      console.error(error);
-    },
+    onError: (error) => console.error(error),
   });
 
   const reSyncPayroll = useCreateMutation({
     endpoint: `/api/payroll/calculate-payroll-for-company/${payrollSummary[0]?.payrollDate}?includeLeavers=true`,
     successMessage: "Payroll synced successfully",
     refetchKey: "payroll pay-date",
-    onSuccess: (created) => {
+    onSuccess: async (created) => {
       const { data } = created as {
-        data: { payrollRunId: string } | EmployeeDetail[];
+        data: { payrollRunId?: string } | EmployeeDetail[];
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const newId = (data as any)?.payrollRunId as string | undefined;
+
+      const newId = Array.isArray(data)
+        ? data?.[0]?.payrollRunId
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (data as any)?.payrollRunId;
+
       if (newId && newId !== payrollRunId) {
         localStorage.setItem("payrollRunId", newId);
         setPayrollRunId(newId);
       }
 
-      // If API returns an array (legacy), keep UI working:
-      if (Array.isArray(data)) {
-        setPayrollSummary(data);
-        const maybeId = data?.[0]?.payrollRunId;
-        if (maybeId && maybeId !== payrollRunId) {
-          localStorage.setItem("payrollRunId", maybeId);
-          setPayrollRunId(maybeId);
-        }
-      }
+      // ✅ CHANGE: force refetch of summary after sync (covers both same-id & new-id)
+      await queryClient.invalidateQueries({ queryKey: ["payrollSummary"] });
+      await refetchSummary();
     },
-
-    onError: (error) => {
-      console.error(error);
-    },
+    onError: (error) => console.error(error),
   });
 
   const discardPayrun = useDeleteMutation({
@@ -228,7 +228,7 @@ export default function Payroll() {
         localStorage.removeItem("payrollRunId");
         localStorage.removeItem(`payrollSent:${payrollRunId}`);
       }
-      localStorage.removeItem("payrollActiveStep"); // if you still have this
+      localStorage.removeItem("payrollActiveStep");
       setFinalRunId(null);
       setPayrollRunId(null);
       setPayrollSummary([]);
@@ -236,9 +236,11 @@ export default function Payroll() {
     },
   });
 
+  // ✅ CHANGE: always refetch summary after resync
   const handleResync = async () => {
     setIsLoadingReSync(true);
     await reSyncPayroll();
+    await refetchSummary();
     setIsLoadingReSync(false);
   };
 
@@ -270,6 +272,7 @@ export default function Payroll() {
       console.error(err);
     }
   };
+
   const isStepDisabled = [0, 1, 3, 4].includes(activeStep) || loadingStep;
 
   const employeesOnPayroll = payrollSummary.filter(
@@ -295,10 +298,8 @@ export default function Payroll() {
           />
         </div>
 
-        {/* Progress Indicator */}
         <div className="w-full mt-16 flex justify-center">
           <div className="w-full flex items-center justify-between">
-            {/* Back on the left */}
             <Button
               variant="outline"
               onClick={() => {
@@ -306,7 +307,6 @@ export default function Payroll() {
                   setPayrollSummary([]);
                   setActiveStep(0);
                 } else {
-                  // otherwise just go back one step
                   setActiveStep((prev) => Math.max(prev - 1, 0));
                 }
               }}
@@ -315,7 +315,6 @@ export default function Payroll() {
               Back
             </Button>
 
-            {/* Steps in the center */}
             <div className="flex-1 flex items-center max-w-lg justify-center space-x-6 mx-4">
               {steps.map((step, idx) => (
                 <React.Fragment key={step.label}>
@@ -351,7 +350,7 @@ export default function Payroll() {
                   {idx < steps.length - 1 && (
                     <div
                       className={cn(
-                        "flex-1 self-center h-1.5 mb-5 mx-1", // slightly thicker
+                        "flex-1 self-center h-1.5 mb-5 mx-1",
                         idx < activeStep ? "bg-brand" : "bg-gray-300",
                       )}
                     />
@@ -359,8 +358,6 @@ export default function Payroll() {
                 </React.Fragment>
               ))}
             </div>
-
-            {/* Next on the right */}
 
             {activeStep < steps.length ? (
               <Button onClick={handleNext} isLoading={loadingStep}>
@@ -380,7 +377,6 @@ export default function Payroll() {
           </div>
         </div>
 
-        {/* Calendar Picker */}
         {activeStep === 0 && (
           <section className="flex justify-center mt-16">
             <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -388,7 +384,7 @@ export default function Payroll() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-[300px] justify-start text-left font-normal",
+                    "w-75 justify-start text-left font-normal",
                     !nextPayDate && "text-muted-foreground",
                   )}
                 >
@@ -406,7 +402,6 @@ export default function Payroll() {
                   selected={nextPayDate ? new Date(nextPayDate) : undefined}
                   onSelect={(date: Date | undefined) => {
                     if (date) {
-                      // build a pure “YYYY-MM-DD” string in local time
                       const yyyy = date.getFullYear();
                       const mm = String(date.getMonth() + 1).padStart(2, "0");
                       const dd = String(date.getDate()).padStart(2, "0");
@@ -420,7 +415,6 @@ export default function Payroll() {
             </Popover>
           </section>
         )}
-        {/* History */}
 
         {activeStep === 0 && (
           <section className="mt-12">
@@ -428,7 +422,6 @@ export default function Payroll() {
           </section>
         )}
 
-        {/* Preview Section */}
         {payrollSummary.length > 0 && activeStep === 1 && (
           <section className="mt-12">
             <div className="flex space-x-4 justify-between">
@@ -439,7 +432,6 @@ export default function Payroll() {
                 </Button>
               </div>
               <div className="space-x-3">
-                <PayrollOverride payrollDate={payrollSummary[0]?.payrollDate} />
                 <Button
                   onClick={() => handleResync()}
                   isLoading={isLoadingReSync}
@@ -450,16 +442,31 @@ export default function Payroll() {
                 </Button>
               </div>
             </div>
-            <PayslipTable data={employeesOnPayroll} name="" />
+
+            {/* ✅ CHANGE: force remount when run changes */}
+            <PayslipTable
+              key={payrollRunId ?? "no-run-main"}
+              data={employeesOnPayroll}
+              name=""
+            />
             {startersOnPayroll.length > 0 && (
-              <PayslipTable data={startersOnPayroll} name="New Starters" />
+              <PayslipTable
+                key={(payrollRunId ?? "no-run") + "-starters"}
+                data={startersOnPayroll}
+                name="New Starters"
+              />
             )}
 
             {leaversOnPayroll.length > 0 && (
-              <PayslipTable data={leaversOnPayroll} name="Leavers" />
+              <PayslipTable
+                key={(payrollRunId ?? "no-run") + "-leavers"}
+                data={leaversOnPayroll}
+                name="Leavers"
+              />
             )}
           </section>
         )}
+
         {activeStep === 2 && (
           <section className="mt-12">
             <SendPayrollForApproval payrollRunId={payrollRunId!} data={data} />
