@@ -20,10 +20,32 @@ import { FiUser, FiBriefcase, FiCreditCard, FiFileText } from "react-icons/fi";
 import { FilterChip, FilterChips } from "@/shared/ui/filter-chips";
 import { OrgChartEmployeeFocus } from "@/features/company/org-chart/ui/OrgChartEmployeeFocus";
 
+type TabKey = "personal" | "job" | "payroll" | "org-chart";
+
+function useEmployeeSection(params: {
+  employeeId: string; // ✅ backend employee id (NOT user.id)
+  sections: string;
+  enabled: boolean;
+  month?: string;
+}) {
+  const { employeeId, sections, enabled, month } = params;
+  const axios = useAxiosAuth();
+
+  return useQuery({
+    queryKey: ["employee", employeeId, sections, month],
+    enabled: enabled && !!employeeId,
+    queryFn: async () => {
+      const res = await axios.get(`/api/employees/${employeeId}/full`, {
+        params: { sections, month },
+      });
+      return res.data.data.data as Record<string, unknown>;
+    },
+  });
+}
+
 const EmployeeDetailPageDemo = () => {
   const { data: session, status } = useSession();
-  type TabKey = "personal" | "job" | "payroll" | "org-chart";
-  const [tab, setTab] = React.useState("personal");
+  const [tab, setTab] = React.useState<TabKey>("personal");
 
   const tabChips = React.useMemo(
     () =>
@@ -38,69 +60,61 @@ const EmployeeDetailPageDemo = () => {
 
   const chips = tabChips as unknown as FilterChip<TabKey>[];
 
-  function useEmployeeSection(
-    id: string,
-    sections: string,
-    enabled: boolean,
-    month?: string,
-  ) {
-    const axios = useAxiosAuth();
-    return useQuery({
-      queryKey: ["employee", id, sections, month],
-      enabled,
-      queryFn: async () => {
-        const res = await axios.get(
-          `/api/employees/${session?.employeeId}/full`,
-          {
-            params: { sections, month },
-          },
-        );
-        return res.data.data.data as Record<string, unknown>;
-      },
-      staleTime: 60_000,
-    });
-  }
+  // ✅ Session readiness gates
+  const isAuthed = status === "authenticated";
+  const hasAccessToken = !!session?.backendTokens?.accessToken;
 
-  const enabled = !!session?.backendTokens?.accessToken && !!session?.user.id;
+  // ✅ Keep BOTH IDs
+  const userId = session?.user?.id ?? ""; // auth user id
+  const employeeId = (session as any)?.employeeId ?? ""; // employee id (different from user.id)
 
-  const userId = session?.user.id ?? "";
+  // ✅ Only run queries when session is ready + token + employeeId
+  const canFetch = isAuthed && hasAccessToken && !!employeeId;
 
-  const personalQ = useEmployeeSection(
-    userId,
-    "core,profile,history,dependents,certifications",
-    enabled,
-  );
+  const personalQ = useEmployeeSection({
+    employeeId,
+    sections: "core,profile,history,dependents,certifications",
+    enabled: canFetch,
+  });
 
-  // 2) Lazy load the rest per tab
-  const jobQ = useEmployeeSection(
-    userId,
-    "compensation,finance",
-    !!personalQ.data && tab === "job",
-  );
+  const jobQ = useEmployeeSection({
+    employeeId,
+    sections: "compensation,finance",
+    enabled: canFetch && !!personalQ.data && tab === "job",
+  });
 
-  const payrollQ = useEmployeeSection(
-    userId,
-    "payslip",
-    !!personalQ.data && tab === "payroll",
-  );
+  const payrollQ = useEmployeeSection({
+    employeeId,
+    sections: "payslip",
+    enabled: canFetch && !!personalQ.data && tab === "payroll",
+  });
 
-  const leaveQ = useEmployeeSection(
-    userId,
-    "leave",
-    !!personalQ.data && tab === "leave",
-  );
+  // If you don't have these tabs, remove them. Kept disabled to avoid accidental calls.
+  const leaveQ = useEmployeeSection({
+    employeeId,
+    sections: "leave",
+    enabled: false,
+  });
 
-  const attendanceQ = useEmployeeSection(
-    userId,
-    "attendance",
-    !!personalQ.data && tab === "attendance",
-  );
+  const attendanceQ = useEmployeeSection({
+    employeeId,
+    sections: "attendance",
+    enabled: false,
+  });
 
-  // Initial gate
-  if (status === "loading" || personalQ.isLoading) return <Loading />;
+  // ✅ Don’t render data UI until session is resolved
+  if (status === "loading") return <Loading />;
+
+  // ✅ Don’t allow queries / rendering if not authenticated
+  if (!isAuthed || !hasAccessToken) return <p>Not authenticated</p>;
+
+  // ✅ If authenticated but missing employeeId, show a clear error (prevents calls)
+  if (!employeeId) return <p>Missing employee id</p>;
+
+  // ✅ Now safe to check query states
+  if (personalQ.isLoading) return <Loading />;
   if (personalQ.isError) return <p>Error loading employee</p>;
 
-  // Merge results
   const data = {
     ...(personalQ.data || {}),
     ...(jobQ.data || {}),
@@ -117,19 +131,20 @@ const EmployeeDetailPageDemo = () => {
         title="My Profile"
         description="View and manage employee details, job information, payroll, and more."
       />
-      {/* Tabs */}
+
       <Tabs
         value={tab}
         onValueChange={(v) => setTab(v as TabKey)}
         className="space-y-4"
       >
         <FilterChips<TabKey>
-          value={tab as TabKey}
-          onChange={setTab} // ✅ now perfectly typed
+          value={tab}
+          onChange={setTab}
           chips={chips}
           scrollable
           className="sm:hidden"
         />
+
         <TabsList className="hidden sm:flex">
           <TabsTrigger value="personal" icon={<FiUser size={16} />}>
             Personal
@@ -144,51 +159,40 @@ const EmployeeDetailPageDemo = () => {
             Org Chart
           </TabsTrigger>
         </TabsList>
-        {/* Personal Info */}
+
         <TabsContent value="personal" className="space-y-6">
           <ProfileCard
             profile={data.profile}
             core={data.core}
             avatarUrl={avatarUrl}
           />
-          <HistoryCard
-            history={data.history}
-            employeeId={session?.user.id as string}
-          />
+          <HistoryCard history={data.history} employeeId={userId} />
           <div className="grid gap-4 md:grid-cols-2">
-            <FamilyCard
-              family={data.dependents}
-              employeeId={session?.user.id as string}
-            />
+            <FamilyCard family={data.dependents} employeeId={userId} />
             <CertificationsCard
               certifications={data.certifications}
-              employeeId={session?.user.id as string}
+              employeeId={userId}
             />
           </div>
         </TabsContent>
+
         <TabsContent value="job" className="space-y-6">
           {jobQ.isLoading ? (
             <Loading />
           ) : (
             <>
-              <EmploymentDetailsCard
-                details={data.core}
-                employeeId={session?.user.id as string}
-              />
+              <EmploymentDetailsCard details={data.core} employeeId={userId} />
               <div className="grid gap-4 md:grid-cols-2">
                 <CompensationCard
                   compensations={data.compensation}
-                  employeeId={session?.user.id as string}
+                  employeeId={userId}
                 />
-                <FinancialsCard
-                  financials={data.finance}
-                  employeeId={session?.user.id as string}
-                />
+                <FinancialsCard financials={data.finance} employeeId={userId} />
               </div>
             </>
           )}
         </TabsContent>
-        {/* Payroll */}
+
         <TabsContent value="payroll">
           {payrollQ.isLoading ? (
             <Loading />
@@ -196,7 +200,7 @@ const EmployeeDetailPageDemo = () => {
             <PayslipDetailsTable payslipSummary={data.payslipSummary} />
           )}
         </TabsContent>
-        {/* Org Chart */}
+
         <TabsContent value="org-chart">
           <OrgChartEmployeeFocus />
         </TabsContent>
