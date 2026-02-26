@@ -5,7 +5,6 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import type { DataTableMobileRowProps } from "@/shared/ui/data-table";
 
-
 import { FaDownload } from "react-icons/fa";
 import { formatCurrency } from "@/shared/utils/formatCurrency";
 import { Payslip } from "./PayslipDetails";
@@ -17,7 +16,7 @@ function PayrollStatusBadge({ status }: { status?: string | null }) {
   const variant =
     s === "paid" || s === "successful"
       ? "approved"
-      : s === "pending"
+      : s === "pending" || s === "in-progress"
         ? "pending"
         : s === "failed" || s === "rejected"
           ? "rejected"
@@ -91,16 +90,18 @@ export function PayslipSummaryMobileRow({
         <div className="shrink-0 flex flex-col items-end gap-2">
           <PayrollStatusBadge status={p.paymentStatus} />
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1"
-            onClick={onDownload}
-            disabled={!p.payslip_pdf_url}
-          >
-            <FaDownload className="w-3 h-3" />
-            PDF
-          </Button>
+          {p.payslip_pdf_url && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1"
+              onClick={onDownload}
+              disabled={!p.payslip_pdf_url}
+            >
+              <FaDownload className="w-3 h-3" />
+              PDF
+            </Button>
+          )}
         </div>
       </div>
 

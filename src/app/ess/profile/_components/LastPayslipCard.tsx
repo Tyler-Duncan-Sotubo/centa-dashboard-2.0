@@ -70,17 +70,19 @@ export default function LastPayslipCard({ lastPayslip }: Props) {
             {paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)}
           </Badge>
         </div>
-        <Link
-          href={payslip_pdf_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          download
-        >
-          <Button variant="outline" className="gap-2">
-            <FaDownload className="w-4 h-4" />
-            PDF
-          </Button>
-        </Link>
+        {payslip_pdf_url && (
+          <Link
+            href={payslip_pdf_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+          >
+            <Button variant="outline" className="gap-2">
+              <FaDownload className="w-4 h-4" />
+              PDF
+            </Button>
+          </Link>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-y-2 text-md">

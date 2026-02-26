@@ -165,12 +165,16 @@ export const payslipColumns: ColumnDef<Payslip>[] = [
     cell: ({ row }) => {
       const url = row.original.payslip_pdf_url;
       return (
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="gap-1">
-            <FaDownload className="w-3 h-3" />
-            PDF
-          </Button>
-        </a>
+        <>
+          {row.original.payslip_pdf_url && (
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="gap-1">
+                <FaDownload className="w-3 h-3" />
+                PDF
+              </Button>
+            </a>
+          )}
+        </>
       );
     },
   },
