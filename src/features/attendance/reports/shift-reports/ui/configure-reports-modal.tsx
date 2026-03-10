@@ -122,7 +122,7 @@ export function ConfigureReportModal({
                   }))
                 }
               >
-                <SelectTrigger className="w-[120px]">
+                <SelectTrigger className="w-30">
                   <SelectValue placeholder="Year" />
                 </SelectTrigger>
                 <SelectContent>
@@ -143,7 +143,7 @@ export function ConfigureReportModal({
                   }))
                 }
               >
-                <SelectTrigger className="w-[120px]">
+                <SelectTrigger className="w-30">
                   <SelectValue placeholder="Month" />
                 </SelectTrigger>
                 <SelectContent>

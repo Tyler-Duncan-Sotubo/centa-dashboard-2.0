@@ -461,7 +461,7 @@ export const main: readonly MenuItem[] = [
         permissions: ["dashboard.login", "attendance.manage"],
       },
       {
-        title: "Rotas & Shifts",
+        title: "Rota",
         link: "/dashboard/attendance/rota-shifts",
         icon: <FaCalendarAlt size={18} />,
         permissions: ["dashboard.login", "attendance.manage"],

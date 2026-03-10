@@ -34,7 +34,8 @@ const columns: ColumnDef<ShiftBreakdownRow>[] = [
         className="px-0 hover:bg-transparent"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Name <ChevronsUpDown className="ml-1 h-4 w-4" />
+        Employee
+        <ChevronsUpDown className="ml-1 h-4 w-4" />
       </Button>
     ),
     cell: ({ row }) => {
@@ -61,9 +62,7 @@ const columns: ColumnDef<ShiftBreakdownRow>[] = [
       );
     },
   },
-  { accessorKey: "employeeName", header: "Employee" },
   { accessorKey: "shiftName", header: "Shift" },
-  { accessorKey: "locationName", header: "Location" },
   {
     header: "Time",
     cell: ({ row }) => (

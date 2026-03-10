@@ -66,9 +66,11 @@ export function ShiftModal({
     initialData?.employeeId,
   );
 
-  const filteredShifts = (shifts ?? []).filter(
-    (shift) => initialData?.locationId === shift.locationId,
-  );
+  const filteredShifts = [...(shifts ?? [])].sort((a, b) => {
+    const aMatch = a.locationId === initialData?.locationId ? 1 : 0;
+    const bMatch = b.locationId === initialData?.locationId ? 1 : 0;
+    return bMatch - aMatch;
+  });
 
   const onSubmit = async (values: ShiftModalSchema) => {
     if (!initialData?.date) return;

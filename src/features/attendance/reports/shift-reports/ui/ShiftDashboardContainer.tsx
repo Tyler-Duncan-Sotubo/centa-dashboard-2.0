@@ -81,7 +81,7 @@ export function ShiftDashboardContainer() {
           <ReportExportButton
             isLoading={isExporting}
             onExport={() =>
-              exportAttendanceReport("gen-daily-attendance-summary", yearMonth)
+              exportAttendanceReport("gen-shift-summary", yearMonth)
             }
             endpointLabel="Shift Summary"
           />
