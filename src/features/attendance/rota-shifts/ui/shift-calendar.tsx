@@ -93,7 +93,7 @@ export function ShiftCalendar() {
             {initials}
           </AvatarFallback>
         </Avatar>
-        <p className="capitalize text-sm font-semibold">{name}</p>
+        <p className="capitalize text-xs font-semibold">{name}</p>
       </div>
     );
   };
@@ -137,7 +137,7 @@ export function ShiftCalendar() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="table-fixed min-w-full border">
+          <table className="table-fixed min-w-full border text-xs">
             <thead>
               <tr>
                 <th className="w-40 border p-2 text-left bg-gray-50">

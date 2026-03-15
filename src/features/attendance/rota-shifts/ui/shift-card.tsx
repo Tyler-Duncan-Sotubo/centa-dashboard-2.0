@@ -45,19 +45,20 @@ export function ShiftCard({ shift }: { shift: ShiftEvent }) {
     >
       <GripVertical className="w-3 h-4 mt-0.5 text-muted-foreground shrink-0" />
 
-      <div className="flex flex-col">
-        <p className="font-bold text-sm lowercase leading-tight">
+      <div className="flex flex-col min-w-0">
+        <p className="font-bold text-xs lowercase leading-tight">
           {start} – {end}
         </p>
-        <p className="text-[10px] text-muted-foreground capitalize truncate">
-          {shift.jobTitle}
+        <p className="text-[8px] text-muted-foreground capitalize">
+          {shift.jobTitle?.substring(0, 20)}
+          {(shift.jobTitle?.length ?? 0) > 20 ? "…" : ""}
         </p>
       </div>
 
       <button
         onClick={() => deleteShift()}
         aria-label="Delete shift"
-        className="hidden opacity-0 group-hover:opacity-100 group-hover:block transition-opacity"
+        className="hidden opacity-0 group-hover:opacity-100 group-hover:block transition-opacity cursor-pointer"
       >
         <Trash2 className="w-4 h-4 text-red-500" />
       </button>
