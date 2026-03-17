@@ -49,6 +49,9 @@ const DEFAULT_CHECKLIST: Checklist = {
   leave: false,
 };
 
+const REFRESH_TOKEN_EXPIRY_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
+const ROTATE_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000; // rotate if < 7 days left
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/login",
@@ -95,7 +98,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      // Initial sign-in
+      // ─── Initial sign-in ───────────────────────────────────────────────
       if (user) {
         const u = user as CustomUser;
 
@@ -125,10 +128,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.accessTokenExpires =
           Date.now() + (u.backendTokens?.expiresIn ?? 0) * 1000;
 
+        // ✅ stamp when the refresh token was issued
+        token.refreshTokenIssuedAt = Date.now();
+
         return token;
       }
 
-      // Workspace switch update (client calls `useSession().update({ activeWorkspace: ... })`)
+      // ─── Workspace switch ──────────────────────────────────────────────
       if (trigger === "update") {
         const ws = (session as any)?.activeWorkspace as Workspace | undefined;
 
@@ -141,6 +147,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               : (token.employeeId ?? (token.user as any)?.id);
 
           token.user = { ...(token.user as any), id: nextId };
+        }
+      }
+
+      // ─── Proactive refresh token rotation ─────────────────────────────
+      const issuedAt = (token.refreshTokenIssuedAt as number) ?? 0;
+      const age = Date.now() - issuedAt;
+      const timeLeft = REFRESH_TOKEN_EXPIRY_MS - age;
+
+      if (timeLeft < ROTATE_THRESHOLD_MS) {
+        try {
+          const resp = await fetch(
+            `${process.env.BACKEND_URL}/api/auth/rotate-refresh`,
+            {
+              method: "POST",
+              headers: {
+                authorization: `Refresh ${(token.backendTokens as BackendTokens)?.refreshToken}`,
+              },
+            },
+          );
+
+          if (resp.ok) {
+            const rotated: BackendTokens = await resp.json();
+            token.backendTokens = {
+              ...(token.backendTokens as BackendTokens),
+              refreshToken: rotated.refreshToken,
+            };
+            token.refreshTokenIssuedAt = Date.now(); // ✅ reset the 90-day clock
+          }
+        } catch (e) {
+          console.error("Refresh token rotation failed", e);
         }
       }
 

@@ -1,5 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, {
   createContext,
   useContext,
@@ -16,12 +17,14 @@ type Ctx = {
   canEmployee: boolean;
   canManager: boolean;
   userPermissions: readonly string[];
+  isSwitching: boolean; // ✅ expose so UI can block renders during switch
 };
 
 const WorkspaceContext = createContext<Ctx | null>(null);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession(); // ✅ pull update
+  const router = useRouter();
 
   const userPermissions = useMemo<readonly string[]>(
     () => session?.permissions ?? [],
@@ -31,16 +34,30 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const canManager = userPermissions.includes("dashboard.login");
   const canEmployee = userPermissions.includes("ess.login");
 
-  // Initial state: manager wins if allowed
   const [workspace, setWs] = useState<Workspace>("employee");
+  const [isSwitching, setIsSwitching] = useState(false); // ✅ switching guard
 
-  const setWorkspace = (w: Workspace) => {
+  const setWorkspace = async (w: Workspace) => {
     if ((w === "manager" && !canManager) || (w === "employee" && !canEmployee))
       return;
 
-    setWs(w);
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("workspace", w);
+    if (w === workspace) return; // ✅ no-op if already on this workspace
+
+    setIsSwitching(true);
+    try {
+      setWs(w);
+
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("workspace", w);
+      }
+
+      // ✅ sync NextAuth session so user.id, activeWorkspace update server-side
+      await update({ activeWorkspace: w });
+      await update(); // force re-fetch so client session is fresh
+
+      router.refresh(); // ✅ re-runs server components with updated session
+    } finally {
+      setIsSwitching(false);
     }
   };
 
@@ -62,7 +79,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     // 3️⃣ Fallback to employee
     else if (canEmployee) target = "employee";
 
-    // 4️⃣ Apply if changed
+    // 4️⃣ Apply if changed — no need to call update() here, this is
+    //    initial resolution on mount, not a user-triggered switch
     if (target && target !== workspace) {
       setWs(target);
       window.localStorage.setItem("workspace", target);
@@ -78,6 +96,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         canEmployee,
         canManager,
         userPermissions,
+        isSwitching,
       }}
     >
       {children}

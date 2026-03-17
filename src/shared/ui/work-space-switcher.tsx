@@ -5,6 +5,7 @@ import { useWorkspace } from "@/shared/context/workspace";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import Loading from "./loading";
 
 function mapTwinPath(path: string, to: "manager" | "employee") {
   if (to === "manager")
@@ -13,7 +14,8 @@ function mapTwinPath(path: string, to: "manager" | "employee") {
 }
 
 export const WorkspaceSwitcher = () => {
-  const { workspace, setWorkspace, canEmployee, canManager } = useWorkspace();
+  const { workspace, setWorkspace, canEmployee, canManager, isSwitching } =
+    useWorkspace();
   const { update } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -49,7 +51,7 @@ export const WorkspaceSwitcher = () => {
   };
 
   if (!canToggle) return null;
-
+  if (isSwitching) return <Loading />;
   const active = workspace; // "manager" | "employee"
 
   return (

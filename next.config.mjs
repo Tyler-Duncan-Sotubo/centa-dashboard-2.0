@@ -8,6 +8,9 @@ const nextConfig = {
       "res.cloudinary.com",
     ], // ✅ Add your image hostname here
   },
+  httpAgentOptions: {
+    keepAlive: false, // ✅ don't reuse stale TCP connections
+  },
 
   experimental: {
     serverActions: {
