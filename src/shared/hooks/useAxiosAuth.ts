@@ -30,6 +30,27 @@ const useAxiosAuth = () => {
         const status = error?.response?.status;
         const url = prevRequest?.url;
         const method = prevRequest?.method;
+        const code = error?.code;
+
+        // ✅ Retry on Railway DNS/connection blips before anything else
+        if (
+          (code === "ERR_NAME_NOT_RESOLVED" ||
+            code === "ERR_NETWORK" ||
+            code === "ECONNREFUSED") &&
+          !prevRequest?._retried
+        ) {
+          prevRequest._retried = true;
+          await new Promise((res) => setTimeout(res, 1500));
+
+          logClientEvent("warn", "Network blip — retrying request", {
+            kind: "network_retry",
+            url,
+            method,
+            code,
+          });
+
+          return axiosInstance(prevRequest);
+        }
 
         // Handle refresh flow
         if (status === 401 && !prevRequest?.sent) {
@@ -41,7 +62,6 @@ const useAxiosAuth = () => {
               `Bearer ${session?.backendTokens?.accessToken}`;
             return axiosInstance(prevRequest);
           } catch (refreshErr) {
-            // Refresh failed -> log this (high signal)
             logClientEvent("error", "Auth refresh failed", {
               kind: "auth_refresh_failed",
               url,
@@ -53,10 +73,6 @@ const useAxiosAuth = () => {
             return Promise.reject(refreshErr);
           }
         }
-
-        // Log other errors (and optionally 401 after refresh attempt)
-        // Skip cancellations / aborted requests
-        const code = error?.code;
 
         return Promise.reject(error);
       },
