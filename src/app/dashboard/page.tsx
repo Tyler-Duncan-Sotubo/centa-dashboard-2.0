@@ -3,7 +3,6 @@
 import CompanySummary from "../../features/home/dashboard/CompanySummary";
 import { isAxiosError } from "@/lib/axios";
 import { useSession } from "next-auth/react";
-import Loading from "@/shared/ui/loading";
 import { useQuery } from "@tanstack/react-query";
 import { EmployeesTable } from "@/features/employees/core/ui/employees.table";
 import { formattedDate, timeOfDay } from "@/shared/utils/formatDate";
@@ -17,7 +16,6 @@ import { payrollOverview } from "@/types/analytics.type";
 import DashboardBanner from "@/features/home/dashboard/DashboardBanner";
 import OnboardingChecklist from "./OnboardingChecklist";
 import useAxiosAuth from "@/shared/hooks/useAxiosAuth";
-import ErrorState from "@/shared/ui/error-state";
 import { useRouter } from "next/navigation";
 
 export interface SummaryData {
@@ -62,98 +60,126 @@ const DashboardPage = () => {
   const { data: session, status } = useSession();
   const axiosAuth = useAxiosAuth();
   const router = useRouter();
+
   const adminRoles = ["admin", "super_admin", "hr_manager"];
   const nonAdmin = !adminRoles.includes(session?.user.role || "");
   const userName = session?.user.firstName;
 
-  const fetchCompanySummary = async () => {
-    try {
-      const res = await axiosAuth.get("/api/company/summary");
-      return res.data.data;
-    } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return [];
-      }
-    }
-  };
+  const enabled = !!session?.backendTokens?.accessToken;
 
-  async function fetchNextPayDate() {
-    try {
-      const res = await axiosAuth.get("/api/pay-schedules/next-pay-date");
-      if (!res.data?.data || isAxiosError(res.data)) {
-        throw new Error("No next pay date");
-      }
-
-      return res.data.data as string;
-    } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return "";
-      }
-    }
-  }
-
-  const { data, isLoading, isError } = useQuery<SummaryData>({
+  const {
+    data: summary,
+    isLoading: isSummaryLoading,
+    isError: isSummaryError,
+    refetch: refetchSummary,
+  } = useQuery<SummaryData>({
     queryKey: ["company-summary"],
-    queryFn: fetchCompanySummary,
-    enabled: !!session?.backendTokens?.accessToken,
+    queryFn: async () => {
+      try {
+        const res = await axiosAuth.get("/api/company/summary");
+        return res.data.data;
+      } catch (error) {
+        if (isAxiosError(error) && error.response) return null;
+        throw error;
+      }
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000,
   });
 
   const {
     data: nextPayDate,
-    isLoading: isLoadingNextPayDate,
-    isError: isErrorNextPayDate,
-    refetch: refetchNextPayDate,
-  } = useQuery({
+    isLoading: isNextPayLoading,
+    isError: isNextPayError,
+    refetch: refetchNextPay,
+  } = useQuery<string>({
     queryKey: ["nextPayDate"],
-    queryFn: fetchNextPayDate,
-    enabled: !!session?.backendTokens?.accessToken,
+    queryFn: async () => {
+      try {
+        const res = await axiosAuth.get("/api/pay-schedules/next-pay-date");
+        if (!res.data?.data || isAxiosError(res.data)) return "";
+        return res.data.data as string;
+      } catch (error) {
+        if (isAxiosError(error) && error.response) return "";
+        throw error;
+      }
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000,
   });
 
-  if (status === "loading" || isLoading || isLoadingNextPayDate)
-    return <Loading />;
-  if (isError || isErrorNextPayDate)
+  // ✅ Only block on session loading — not on data loading
+  if (status === "loading") {
     return (
-      <ErrorState
-        onRetry={() => {
-          if (isError) refetchNextPayDate(); // your main query refetch
-          if (isErrorNextPayDate) refetchNextPayDate();
-          router.refresh();
-        }}
-        isLoading={isLoading || isLoadingNextPayDate}
-      />
+      <section className="px-4 space-y-4 animate-pulse">
+        <div className="h-8 w-48 bg-muted rounded" />
+        <div className="h-4 w-32 bg-muted rounded" />
+        <div className="grid grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-32 bg-muted rounded-xl" />
+          ))}
+        </div>
+      </section>
     );
+  }
 
   return (
     <section className="px-4">
+      {/* Header */}
       <section>
         <div>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-medium">
-              Good {timeOfDay}, {userName}!
+              Good {timeOfDay}, {userName ?? "..."}!
             </p>
           </div>
           <p className="text-sm text-textSecondary mb-6">{formattedDate}</p>
         </div>
       </section>
+
+      {/* Error banner — non-blocking */}
+      {(isSummaryError || isNextPayError) && (
+        <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive flex items-center justify-between">
+          <span>Some data failed to load.</span>
+          <button
+            className="underline text-xs"
+            onClick={() => {
+              if (isSummaryError) refetchSummary();
+              if (isNextPayError) refetchNextPay();
+              router.refresh();
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       <div className="md:flex md:justify-between md:items-start gap-4">
         <div className="space-y-4 md:w-[70%]">
           <DashboardBanner
             nextPayDate={nextPayDate}
-            announcements={data?.announcements}
+            announcements={summary?.announcements}
           />
-          <CompanySummary data={data} />
+
+          {/* CompanySummary — shows skeleton internally when data is null */}
+          <CompanySummary data={summary} />
+
           {!nonAdmin && (
-            <PayrollOverview payrollSummary={data?.payrollSummary} dashboard />
+            <PayrollOverview
+              payrollSummary={summary?.payrollSummary}
+              dashboard
+            />
           )}
         </div>
+
         <div className="md:w-[35%]">
-          {data?.recentLeaves && data.recentLeaves.length > 0 && (
-            <EmployeesOnLeaveCard data={data?.recentLeaves} />
+          {summary?.recentLeaves && summary.recentLeaves.length > 0 && (
+            <EmployeesOnLeaveCard data={summary.recentLeaves} />
           )}
           {!nonAdmin && (
             <QuickActions
               nextPayDate={nextPayDate}
-              totalEmployees={data?.totalEmployees}
+              totalEmployees={summary?.totalEmployees}
             />
           )}
         </div>
@@ -161,17 +187,28 @@ const DashboardPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
         <div className="col-span-1 sm:col-span-2">
-          <AttendanceChart data={data?.attendanceSummary} />
+          <AttendanceChart data={summary?.attendanceSummary} />
         </div>
-        <EmployeeDepartmentPieChart data={data?.allDepartments} />
+        <EmployeeDepartmentPieChart data={summary?.allDepartments} />
       </div>
-      <section className="md:flex py-5 gap-4 w-full"></section>
+
+      <section className="md:flex py-5 gap-4 w-full" />
 
       {!nonAdmin && (
         <>
-          <EmployeesTable data={data?.allEmployees} />
+          {/* ✅ Show skeleton table while loading */}
+          {isSummaryLoading ? (
+            <div className="mt-4 space-y-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="h-12 bg-muted rounded animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <EmployeesTable data={summary?.allEmployees} />
+          )}
+
           <OnboardingChecklist
-            onboardingTaskCompleted={data?.onboardingTaskCompleted}
+            onboardingTaskCompleted={summary?.onboardingTaskCompleted}
           />
         </>
       )}
